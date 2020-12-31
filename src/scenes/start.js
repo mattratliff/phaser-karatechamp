@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-// import leaderboard from '../assets/backgrounds/start/leaderboard.png';
 import mainmenu from '../assets/backgrounds/start/mainmenu.png';
 import hand from '../assets/backgrounds/start/hand.png';
 import audio from '../assets/backgrounds/start/audio.png';
@@ -15,6 +14,8 @@ const center = {
 };
 
 const assetScale = SCALE;
+const timeBeforeShowingLanding = 1000;
+
  var cursors;
  var counter = 0;
 
@@ -54,8 +55,9 @@ export default class Start extends Phaser.Scene {
     this.playMusic();
   }
   startGame(){
+    sounds.stop(this.title_track);
     this.scene.stop('Start');
-    this.scene.start('GameBoard');
+    this.scene.start('DojoBoard');
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);
@@ -65,9 +67,13 @@ export default class Start extends Phaser.Scene {
   addComponents(){
     var audiox = center.width+300;
     var audioy = center.height-280;
+    
+    //pointer for choosing 1 or 2 players
     this.hand = this.add
     .image(center.width-110, center.height+90, 'hand')
     .setScale(assetScale);
+
+    //audio icons
     this.audio = this.add
       .image(audiox, audioy, 'audio')
       .setScale(assetScale);
@@ -84,13 +90,16 @@ export default class Start extends Phaser.Scene {
     counter = 0;
   }
   update() {
-    //if more than 20 seconds on main menu then render leaderboard... on mouse move on leaderboard navigate back to main menu
     counter++;
-    if(counter > 1000){
+    
+    //transition to leaderboard if no input detected
+    if(counter > timeBeforeShowingLanding){
       this.scene.switch('LeaderBoard');
       this.showleaderboard = true;
       counter = 0;
     }
+
+    //input handling
     if (cursors.up.isDown)
     {
       this.hand.y = center.height + 90;
@@ -103,19 +112,19 @@ export default class Start extends Phaser.Scene {
   render() {}
 
   playMusic = () => {
-    this.title_track = sounds.play('Main_Menu');
-    sounds.loop(true, this.title_track);
-    sounds.volume(0.6, this.title_track);
+    this.backgroundMusic = sounds.play('Main_Menu');
+    sounds.loop(true, this.backgroundMusic);
+    sounds.volume(0.6, this.backgroundMusic);
   };
 
   stopMusic() {
     if(this.musicplaying){
-      sounds.volume(0, this.title_track);
+      sounds.volume(0, this.backgroundMusic);
       this.audio.visible = false;
       this.noaudio.visible = true;
     }
     else{
-      sounds.volume(0.6, this.title_track);
+      sounds.volume(0.6, this.backgroundMusic);
       this.audio.visible = true;
       this.noaudio.visible = false;
     }

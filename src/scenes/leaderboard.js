@@ -35,7 +35,6 @@ export default class LeaderBoard extends Phaser.Scene {
     this.add
       .image(center.width, center.height, 'leaderboard')
       .setScale(scale);
-      this.add
   }
   createBorder(scale){
     const RIGHTEDGE = center.width+400;
