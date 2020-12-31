@@ -1,4 +1,6 @@
-# Karate Champ Phaser
+# Karate Champ Phaser 3
+
+![Screenshot](karate_champ.png)
 
 ## Description
 

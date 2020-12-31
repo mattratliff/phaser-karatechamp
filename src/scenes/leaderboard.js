@@ -1,10 +1,12 @@
 import Phaser from 'phaser';
-import person from '../assets/backgrounds/start/person.png';
-import bull from '../assets/backgrounds/start/bull-1.png';
+import person from '../assets/backgrounds/start/person2.png';
+import platform from '../assets/backgrounds/start/platform.png';
+import bull from '../assets/backgrounds/start/bull-sprites.png';
 import border from '../assets/backgrounds/start/border.png';
 import leaderboard from '../assets/backgrounds/start/leaderboard.png';
 import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
+import { linearScale } from '../utils';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -36,11 +38,13 @@ export default class LeaderBoard extends Phaser.Scene {
       this.add
   }
   createBorder(scale){
+    const RIGHTEDGE = center.width+400;
+    const LEFTEDGE = center.width-400;
     this.add
-    .image(center.width-173, center.height-72, 'leftborder')
+    .image(LEFTEDGE-12, center.height-240, 'leftborder')
     .setScale(scale);
     this.add
-    .image(center.width+173, center.height-72, 'rightborder')
+    .image(RIGHTEDGE+12, center.height-240, 'rightborder')
     .setScale(scale);
   }
 
@@ -48,7 +52,11 @@ export default class LeaderBoard extends Phaser.Scene {
     cursors = this.input.keyboard.createCursorKeys();
     this.load.image('person-1', person);
     this.load.image('person-2', person);
-    this.load.image('bull', bull);
+    this.load.image('platform', platform);
+    this.load.spritesheet('bull',
+      bull,
+      { frameWidth: 177, frameHeight: 120 }
+      );
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
     this.preloadBackground();
@@ -66,16 +74,27 @@ export default class LeaderBoard extends Phaser.Scene {
   }
   update() {
     //animations (player and bull jumps around)
+    const RIGHTEDGE = center.width+400;
+    const LEFTEDGE = center.width-400;
     this.bounce();
-    this.moveBull();
+    
+    this.bull.setVelocityX(-80);
+
+    //edge detection
+    if (this.bull.x < LEFTEDGE) {
+      this.bull.x = RIGHTEDGE;
+    }
+
   }
   render() {}
 
   bounce(){
-    const RIGHTEDGE = center.width+143;
-    const LEFTEDGE = center.width-143;
-    const TOP = center.height-102;
-    const BOTTOM = center.height-45;
+    var scaleSpeed = linearScale([1, 100], [0, 1]);
+    var gravity = 4;
+    const RIGHTEDGE = center.width+360;
+    const LEFTEDGE = center.width-360;
+    const TOP = center.height-260;
+    const BOTTOM = center.height-157;
 
     this.people.forEach(( person ) => {
     
@@ -86,7 +105,12 @@ export default class LeaderBoard extends Phaser.Scene {
         person.x = person.x - person.speed;
       }
 
-    person.y = person.y + person.direction;
+    if(person.direction == 1)
+      person.accelaration = BOTTOM - person.y;
+    else
+      person.accelaration = person.y - BOTTOM;    
+    
+      person.y = person.y + person.direction * (gravity*(1-Math.abs(scaleSpeed(person.accelaration))));
 
         if(person.y > BOTTOM){
             person.y = BOTTOM;
@@ -99,51 +123,47 @@ export default class LeaderBoard extends Phaser.Scene {
     });
   }
 
-  moveBull(){
-    const RIGHTEDGE = center.width+143;
-    const LEFTEDGE = center.width-143;
-    if (this.bull.x < LEFTEDGE) {
-        this.bull.x = RIGHTEDGE;
-      } else {
-        this.bull.x = this.bull.x - this.bull.speed;
-      }
-  }
-
   addAnimations(){
       this.people = [];
 
       var person = this.add
       .image(
-        center.width+80,
-        center.height - 102,
+        center.width + 80,
+        center.height - 300,
         'person-1'
       )
-      .setScale(assetScale * .3);
-      person.speed = 1.2;
+      .setScale(assetScale);
+      person.speed = 1.8;
       person.direction = 1;
-      person.gravity = 2;
+      person.accelaration = 1;
       this.people.push(person);
 
 
       var person = this.add
       .image(
-        center.width-40,
-        center.height - 70,
+        center.width - 80,
+        center.height-220,
         'person-2'
       )
-      .setScale(assetScale * .3);
-      person.speed = 0.8;
+      .setScale(assetScale);
+      person.speed = 1.4;
       person.direction = 1;
+      person.accelaration = 1;
     
       this.people.push(person);
 
-      this.bull = this.add
-      .image(
-          center.width+170,
-          center.height-50,
-          'bull'
-      )
-      .setScale(assetScale * .3);
-      this.bull.speed = 0.7;
+      this.anims.create({
+        key: 'run',
+        frames: this.anims.generateFrameNumbers('bull', { frames: [ 0, 1 ] }),
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.platforms = this.physics.add.staticGroup();
+    this.platforms.create(650, 243, 'platform');
+    this.bull = this.physics.add.sprite(center.width+375, center.height-190, 'bull');
+    
+    this.physics.add.collider(this.bull, this.platforms);
+    this.bull.play('run');
   }
 }

@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
-import leaderboard from '../assets/backgrounds/start/leaderboard.png';
+// import leaderboard from '../assets/backgrounds/start/leaderboard.png';
 import mainmenu from '../assets/backgrounds/start/mainmenu.png';
 import hand from '../assets/backgrounds/start/hand.png';
 import audio from '../assets/backgrounds/start/audio.png';
-import noaudio from '../assets/backgrounds/start/no_audio.png';
+import noaudio from '../assets/backgrounds/start/no-audio.png';
 import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 
@@ -21,7 +21,7 @@ const assetScale = SCALE;
 export default class Start extends Phaser.Scene {
   constructor() {
     super({ key: 'Start' });
-    this.musicplaying = false;
+    this.musicplaying = true;
     this.showleaderboard = false;
   }
 
@@ -54,7 +54,8 @@ export default class Start extends Phaser.Scene {
     this.playMusic();
   }
   startGame(){
-    this.scene.start('Game');
+    this.scene.stop('Start');
+    this.scene.start('GameBoard');
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);
@@ -62,16 +63,18 @@ export default class Start extends Phaser.Scene {
     this.input.keyboard.on('keydown_ENTER', this.startGame, this);
   }
   addComponents(){
+    var audiox = center.width+300;
+    var audioy = center.height-280;
     this.hand = this.add
-    .image(center.width-35, center.height+35, 'hand')
-    .setScale(assetScale * 0.5);
+    .image(center.width-110, center.height+90, 'hand')
+    .setScale(assetScale);
     this.audio = this.add
-      .image(center.width+110, center.height-100, 'audio')
-      .setScale(assetScale * .05);
+      .image(audiox, audioy, 'audio')
+      .setScale(assetScale);
     this.audio.visible = true;
     this.noaudio = this.add
-      .image(center.width+110, center.height-100, 'noaudio')
-      .setScale(assetScale * .75);
+      .image(audiox, audioy, 'noaudio')
+      .setScale(assetScale);
     this.noaudio.visible = false;
   }
   resetTimer(){
@@ -83,21 +86,18 @@ export default class Start extends Phaser.Scene {
   update() {
     //if more than 20 seconds on main menu then render leaderboard... on mouse move on leaderboard navigate back to main menu
     counter++;
-    if(counter > 100){
-      // this.scene.stop('Start');
+    if(counter > 1000){
       this.scene.switch('LeaderBoard');
       this.showleaderboard = true;
       counter = 0;
     }
     if (cursors.up.isDown)
     {
-      this.hand.setY(center.height+35);
-      counter=0;
+      this.hand.y = center.height + 90;
     }
     if (cursors.down.isDown)
     {
-      this.hand.setY(center.height+50);
-      counter=0;
+      this.hand.y = center.height + 135;
     }
   }
   render() {}
@@ -124,9 +124,9 @@ export default class Start extends Phaser.Scene {
 
   makeText() {
     this.titleText = this.add
-      .text(center.width, center.height * 0.30, 'Choose 1 or 2 players', {
+      .text(center.width, center.height * 0.20, 'Choose 1 or 2 players', {
         fill: '#ffffff',
-        font: `${10 * SCALE}px Rajdhani`
+        font: `${20 * SCALE}px Rajdhani`
       })
       .setOrigin(0.5, 0.5)
       .setAlpha(0);
