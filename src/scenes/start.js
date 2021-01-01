@@ -57,7 +57,7 @@ export default class Start extends Phaser.Scene {
   startGame(){
     sounds.stop(this.title_track);
     this.scene.stop('Start');
-    this.scene.start('DojoBoard');
+    this.scene.start('GameBoard');
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);

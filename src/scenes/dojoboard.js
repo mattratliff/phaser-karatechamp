@@ -80,7 +80,7 @@ export default class DojoBoaarad extends Phaser.Scene {
     if(this.man.x >= center.width+300){
         sounds.stop(this.backgroundMusic);
         this.scene.stop('DojoBoard');
-        this.scene.start('GameBoard');
+        this.scene.start('Start');
     }
     // //edge detection
     // if (this.bull.x < LEFTEDGE) {
@@ -98,6 +98,7 @@ export default class DojoBoaarad extends Phaser.Scene {
     });
     this.ground = this.physics.add.staticGroup();
     this.ground.create(600, center.height+280, 'ground');
+
 
     this.man = this.physics.add.sprite(center.width-310, center.height+145, 'man');
     this.physics.add.collider(this.man, this.ground);
