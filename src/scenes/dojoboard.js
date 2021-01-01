@@ -3,6 +3,9 @@ import Phaser from 'phaser';
 import dojoboard from '../assets/backgrounds/start/dojoboard.png';
 import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
+import man from '../sprites/walkingtodojo.png';
+import border from '../assets/backgrounds/start/dojo-border.png';
+import ground from '../assets/backgrounds/start/dojo-ground.png';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -22,7 +25,7 @@ export default class DojoBoaarad extends Phaser.Scene {
     this.load.image('dojoboard', dojoboard);
   }
 
-  createBackground(scale) {
+  createBackground() {
     const center = {
       width: WIDTH * 0.5,
       height: HEIGHT * 0.5
@@ -30,23 +33,34 @@ export default class DojoBoaarad extends Phaser.Scene {
     console.log("adding boarad");
     this.add
       .image(center.width, center.height, 'dojoboard')
-      .setScale(scale);
+      .setScale(1);
+    this.createBorder();
   }
 
   preload() {
       this.preloadBackground();
+      this.load.spritesheet('man',
+      man,
+      { frameWidth: 100, frameHeight: 136 }
+      );
+      this.load.image('ground', ground);
+      this.load.image('leftborder', border);
+      this.load.image('rightborder', border);
   }
 
   create() {
-    this.createBackground(assetScale);
-    // this.input.on('pointermove', this.activateMainMenu, this);
-    // this.addAnimations();
-    // this.createBorder(assetScale);
+    this.createBackground();
+    this.addAnimations();
+    this.createBorder(assetScale);
+        const RIGHTEDGE = center.width+400;
+    const LEFTEDGE = center.width-400;
+    this.add
+    .image(LEFTEDGE, center.height, 'leftborder')
+    .setScale(1);
+    this.add
+    .image(RIGHTEDGE, center.height, 'rightborder')
+    .setScale(1);
     this.playMusic();
-  }
-  activateMainMenu(){
-    // this.scene.switch('Start');
-    // sounds.stop('Main_Menu');
   }
 
   playMusic = () => {
@@ -61,8 +75,13 @@ export default class DojoBoaarad extends Phaser.Scene {
     // const LEFTEDGE = center.width-400;
     // this.bounce();
     
-    // this.man.setVelocityX(40);
+    this.man.setVelocityX(60);
 
+    if(this.man.x >= center.width+300){
+        sounds.stop(this.backgroundMusic);
+        this.scene.stop('DojoBoard');
+        this.scene.start('GameBoard');
+    }
     // //edge detection
     // if (this.bull.x < LEFTEDGE) {
     //   this.bull.x = RIGHTEDGE;
@@ -70,19 +89,25 @@ export default class DojoBoaarad extends Phaser.Scene {
 
   }
   render() {}
+  addAnimations(){
+    this.anims.create({
+        key: 'walk',
+        frames: this.anims.generateFrameNumbers('man', { frames: [ 0, 1, 2, 3 ] }),
+        frameRate: 6,
+        repeat: -1
+    });
+    this.ground = this.physics.add.staticGroup();
+    this.ground.create(600, center.height+280, 'ground');
 
-//   animaateMan(){
-//     this.anims.create({
-//         key: 'walk',
-//         frames: this.anims.generateFrameNumbers('man', { frames: [ 0, 1 ] }),
-//         frameRate: 10,
-//         repeat: -1
-//     });
-//     this.platforms = this.physics.add.staticGroup();
-//     this.platforms.create(650, 243, 'ground');
-//     this.man = this.physics.add.sprite(center.width+375, center.height-190, 'man');
-    
-//     this.physics.add.collider(this.man, this.platforms);
-//     this.man.play('run');
-//   }
+    this.man = this.physics.add.sprite(center.width-310, center.height+145, 'man');
+    this.physics.add.collider(this.man, this.ground);
+    this.man.play('walk');
+  }
+  createBorder(scale){
+    const RIGHTEDGE = center.width+464;
+    const LEFTEDGE = center.width-464;
+
+    this.load.image('leftborder', border);
+    this.load.image('rightborder', border);
+  }
 }
