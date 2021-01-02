@@ -5,8 +5,9 @@ import sounds_webm from './sounds.webm';
 const config = {
   src: [sounds_webm, sounds_mp3],
   sprite: {
-    Main_Menu: [1000, 90400],
-    Dojo_Music: [91700, 7137.3]
+    Main_Menu: [2000, 90400],
+    Dojo_Music: [91610, 6720],
+    Begin: [98540, 1012.7]
   }
 };
 const sounds = new Howl(config);

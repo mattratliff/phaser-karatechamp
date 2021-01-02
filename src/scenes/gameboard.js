@@ -31,6 +31,7 @@ import redplayersheet from '../sprites/player/redplayer/player.png';
 import whiteplayersheet from '../sprites/player/whiteplayer/player.png';
 // import playerred from '../assets/player/red/ready.png';
 // import playerwhite from '../assets/player/white/ready.png';
+import sounds from '../assets/sounds/processed';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -66,24 +67,7 @@ export default class GameBoard extends Phaser.Scene {
     cursors = this.input.keyboard.createCursorKeys();
     this.preloadBackground();
     this.load.image('classWatching', classWatching);
-    this.load.image('controllers', controllers);
-    
-    this.load.image('arrowup', arrowup);
-    this.load.image('arrowdown', arrowdown);
-    this.load.image('arrowleft', arrowleft);
-    this.load.image('arrowright', arrowright);
-
-    this.load.image('yellowarrowup', yellowarrowup);
-    this.load.image('yellowarrowdown', yellowarrowdown);
-    this.load.image('yellowarrowleft', yellowarrowleft);
-    this.load.image('yellowarrowright', yellowarrowright);
-
-    this.load.image('spectatorwhite', spectatorwhite);
-    this.load.image('spectatorred', spectatorred);
-    
-    //create playerd
-    
-
+  
     this.load.image('ground', ground);
     this.load.spritesheet('redplayer',
     redplayersheet,
@@ -94,39 +78,25 @@ export default class GameBoard extends Phaser.Scene {
     whiteplayersheet,
     { frameWidth: 130, frameHeight: 139 }
     );
-
-    // this.player.preload();
-
-    // this.load.image('playerred', playerred);
-    // this.load.image('playerwhite', playerwhite);
   }
   
 
   create() {
     this.createBackground();
-    
-    // this.inputHandler();
     this.addComponents();
     this.makeText();
     this.grounds = this.physics.add.staticGroup();
-    this.grounds.create(650, center.height+70, 'ground');
-    this.grounds.create(650, center.height+220, 'ground');
-    this.redplayer = new RedPlayer({scene: this, x: 500, y: center.height-10 });
-    this.whiteplayer = new WhitePlayer({scene: this, x: 500, y: center.height+140 });
+    
+    this.grounds.create(650, center.height+130, 'ground');
+    this.redplayer = new RedPlayer({scene: this, x: center.width + 165, y: center.height+50 });
+    this.whiteplayer = new WhitePlayer({scene: this, x: center.width - 165, y: center.height+50 });
     
     this.anims.create({
-      key: 'moveforward',
-      frames: this.anims.generateFrameNumbers('whiteplayer', { start: 3, end: 0 }),
+      key: 'move',
+      frames: this.anims.generateFrameNumbers('whiteplayer', { start: 2, end: 3 }),
       frameRate: 8,
       repeat: -1
     });
-
-    this.anims.create({
-      key: 'movebackward',
-      frames: this.anims.generateFrameNumbers('whiteplayer', { start: 0, end: 3 }),
-      frameRate: 8,
-      repeat: -1
-  });
 
     this.anims.create({
       key: 'standstill',
@@ -134,91 +104,36 @@ export default class GameBoard extends Phaser.Scene {
       frameRate: 20
   });
 
-    this.physics.add.collider(this.redplayer, this.grounds);
     this.physics.add.collider(this.whiteplayer, this.grounds);
+    this.physics.add.collider(this.redplayer, this.grounds);
+
+    this.time.delayedCall(3000, this.startMatch, [], this);
   }
 
+  startBegin(){
+    sounds.play('Begin');
+    console.log("start bein");
+    this.begin = this.add.image(center.width, center.height, 'begin');
+    this.begin.visible = true;
+    this.time.delayedCall(3000, this.endBegin, [], this);
+  }
+  endBegin(){
+      console.log("end begin");
+    this.begin.visible = false;
+  }
 
   addComponents(){
-    this.addClassWatchingComponent();
-    this.addPracticeControllersComponent();
-    this.addSpectators();
-  }
-
-  //show class watching at bottom of screen
-  addClassWatchingComponent(){
-    
-    // this.classWatching = this.add
-    // .image(center.width, center.height+278, 'classWatching')
-    // .setScale(assetScale);
-  }
-
-  addSpectators(){
-        //add spectators
-        this.whitespectator1 = this.add
-        .image(center.width-250, center.height-30, 'spectatorwhite')
-        .setScale(assetScale);
-        this.whitespectator2 = this.add
-        .image(center.width-265, center.height+60, 'spectatorwhite')
-        .setScale(assetScale);
-        this.whitespectator3 = this.add
-        .image(center.width-280, center.height+150, 'spectatorwhite')
-        .setScale(assetScale);
-    
-        this.redspectator1 = this.add
-        .image(center.width+250, center.height-30, 'spectatorred')
-        .setScale(assetScale);
-        this.redspectator2 = this.add
-        .image(center.width+265, center.height+60, 'spectatorred')
-        .setScale(assetScale);
-        this.redspectator3 = this.add
-        .image(center.width+280, center.height+150, 'spectatorred')
-        .setScale(assetScale);
-  }
-  //show practice controllers at bottom of screen
-  addPracticeControllersComponent(){
     this.classWatching = this.add
-    .image(center.width, center.height+278, 'controllers')
+    .image(center.width, center.height+278, 'classWatching')
     .setScale(assetScale);
-
-    //left arrows
-    this.leftarrowup = this.add
-    .image(center.width-58, center.height+282, 'arrowup')
-    .setScale(assetScale);
-    this.leftarrowdown = this.add
-    .image(center.width-58, center.height+345, 'arrowdown')
-    .setScale(assetScale);
-    this.leftarrowleft = this.add
-    .image(center.width-97, center.height+315, 'arrowleft')
-    .setScale(assetScale);
-    this.leftarrowright = this.add
-    .image(center.width-20, center.height+315, 'arrowright')
-    .setScale(assetScale);
-
-    //right arrows
-    this.rightarrowup = this.add
-    .image(center.width+82, center.height+282, 'arrowup')
-    .setScale(assetScale);
-    this.rightarrowdown = this.add
-    .image(center.width+82, center.height+345, 'arrowdown')
-    .setScale(assetScale);
-    this.rightarrowleft = this.add
-    .image(center.width+45, center.height+315, 'arrowleft')
-    .setScale(assetScale);
-    this.rightarrowright = this.add
-    .image(center.width+120, center.height+315, 'yellowarrowright')
-    .setScale(assetScale);
-
-
-
   }
 
   makeText() {
-    this.practiceText = this.add
-      .text(center.width-305, center.height-235, 'PRACTICE', {
-        fill: '#ffffff',
-        font: `${22 * SCALE}pt Silom`
-      });
+    // this.practiceText = this.add
+    //   .text(center.width-305, center.height-235, 'PRACTICE', {
+    //     fill: '#ffffff',
+    //     font: `${22 * SCALE}pt Silom`
+    //   });
 
       // this.movementText = this.add
       // .text(center.width-305, center.height+290, 'REVERSE PUNCH', {
@@ -232,16 +147,21 @@ export default class GameBoard extends Phaser.Scene {
       // this.player.update();
 
       const cursors = this.input.keyboard.createCursorKeys();
-      // const { dirLeft, dirRight } = this.locomotion;
+      var RIGHTEDGE = center.width + 210;
+      var LEFTEDGE = center.width - 210;
   
         if (cursors.left.isDown) {
           //show walking left animation
-          this.whiteplayer.anims.play('movebackward', true);
+          this.whiteplayer.anims.play('move', true);
+          console.log("X = "+this.whiteplayer.x);
+          console.log(LEFTEDGE);
+          if(this.whiteplayer.x >= LEFTEDGE)
           this.whiteplayer.x -= 1;
   
         } else if (cursors.right.isDown) {
           //show walking right animaataion
-          this.whiteplayer.anims.play('moveforward', true);
+          this.whiteplayer.anims.play('move', true);
+          if(this.whiteplayer.x <= RIGHTEDGE)
           this.whiteplayer.x += 1;
         }
   

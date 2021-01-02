@@ -18,6 +18,7 @@ const timeBeforeShowingLanding = 1000;
 
  var cursors;
  var counter = 0;
+ var selection = 1;
 
 export default class Start extends Phaser.Scene {
   constructor() {
@@ -57,7 +58,11 @@ export default class Start extends Phaser.Scene {
   startGame(){
     sounds.stop(this.title_track);
     this.scene.stop('Start');
-    this.scene.start('GameBoard');
+
+    if(selection == 0)
+      this.scene.start('PracticeBoard');
+    else
+      this.scene.start('DojoBoard');
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);
@@ -70,17 +75,17 @@ export default class Start extends Phaser.Scene {
     
     //pointer for choosing 1 or 2 players
     this.hand = this.add
-    .image(center.width-110, center.height+90, 'hand')
+    .image(center.width-110, center.height+55, 'hand')
     .setScale(assetScale);
 
     //audio icons
     this.audio = this.add
       .image(audiox, audioy, 'audio')
-      .setScale(assetScale);
+      .setScale(assetScale * .8);
     this.audio.visible = true;
     this.noaudio = this.add
       .image(audiox, audioy, 'noaudio')
-      .setScale(assetScale);
+      .setScale(assetScale * .8);
     this.noaudio.visible = false;
   }
   resetTimer(){
@@ -100,13 +105,32 @@ export default class Start extends Phaser.Scene {
     }
 
     //input handling
-    if (cursors.up.isDown)
+    if(this.input.keyboard.checkDown(cursors.up, 250))
+    // if (cursors.up.isDown)
     {
-      this.hand.y = center.height + 90;
+      if(selection==1){
+        this.hand.y = center.height+15;
+        console.log("moving to practice");
+        selection = 0;
+      }
+      else if(selection==2){
+        this.hand.y = center.height+55;
+        console.log("moving to 1 player");
+        selection = 1;
+      }
     }
-    if (cursors.down.isDown)
+    if(this.input.keyboard.checkDown(cursors.down, 250))
     {
-      this.hand.y = center.height + 135;
+      if(selection==0){
+        this.hand.y = center.height+55;
+        console.log("moving to 1 player");
+        selection = 1;
+      }
+      else if(selection==1){
+        this.hand.y = center.height+100;
+        console.log("moving to 2 player");
+        selection = 2;
+      }
     }
   }
   render() {}

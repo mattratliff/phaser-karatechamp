@@ -11,6 +11,7 @@ import StartScene from './scenes/start';
 import LeaderBoard from './scenes/leaderboard';
 import GameBoard from './scenes/gameboard';
 import DojoBoard from './scenes/dojoboard';
+import PracticeBoard from './scenes/practiceboard';
 
 window.Phaser = Phaser;
 
@@ -34,7 +35,7 @@ const config = {
       debug: false
     }
   },
-  scene: [PreBoot, StartScene, LeaderBoard, GameBoard, DojoBoard],
+  scene: [PreBoot, StartScene, LeaderBoard, GameBoard, DojoBoard, PracticeBoard],
   pixelArt: true,
   antialias: false,
   callbacks: {

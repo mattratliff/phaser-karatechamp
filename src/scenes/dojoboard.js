@@ -41,7 +41,7 @@ export default class DojoBoaarad extends Phaser.Scene {
       this.preloadBackground();
       this.load.spritesheet('man',
       man,
-      { frameWidth: 100, frameHeight: 136 }
+      { frameWidth: 90, frameHeight: 122 }
       );
       this.load.image('ground', ground);
       this.load.image('leftborder', border);
@@ -80,7 +80,7 @@ export default class DojoBoaarad extends Phaser.Scene {
     if(this.man.x >= center.width+300){
         sounds.stop(this.backgroundMusic);
         this.scene.stop('DojoBoard');
-        this.scene.start('Start');
+        this.scene.start('GameBoard');
     }
     // //edge detection
     // if (this.bull.x < LEFTEDGE) {
