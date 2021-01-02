@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import dojoboard from '../assets/backgrounds/start/dojoboard.png';
 import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
-import man from '../sprites/walkingtodojo.png';
+import man from '../assets/walkingtodojo.png';
 import border from '../assets/backgrounds/start/dojo-border.png';
 import ground from '../assets/backgrounds/start/dojo-ground.png';
 
@@ -17,6 +17,8 @@ const center = {
   const assetScale = SCALE;
 
 export default class DojoBoaarad extends Phaser.Scene {
+  
+
   constructor() {
     super({ key: 'DojoBoard' });
   }
@@ -30,7 +32,6 @@ export default class DojoBoaarad extends Phaser.Scene {
       width: WIDTH * 0.5,
       height: HEIGHT * 0.5
     };
-    console.log("adding boarad");
     this.add
       .image(center.width, center.height, 'dojoboard')
       .setScale(1);
@@ -49,10 +50,12 @@ export default class DojoBoaarad extends Phaser.Scene {
   }
 
   create() {
+    this.ground = this.physics.add.staticGroup();
+    this.ground.create(600, center.height+280, 'ground');
     this.createBackground();
     this.addAnimations();
     this.createBorder(assetScale);
-        const RIGHTEDGE = center.width+400;
+    const RIGHTEDGE = center.width+400;
     const LEFTEDGE = center.width-400;
     this.add
     .image(LEFTEDGE, center.height, 'leftborder')
@@ -77,7 +80,7 @@ export default class DojoBoaarad extends Phaser.Scene {
     
     this.man.setVelocityX(60);
 
-    if(this.man.x >= center.width+300){
+    if(this.man.x >= center.width+200){
         sounds.stop(this.backgroundMusic);
         this.scene.stop('DojoBoard');
         this.scene.start('GameBoard');
@@ -96,8 +99,7 @@ export default class DojoBoaarad extends Phaser.Scene {
         frameRate: 6,
         repeat: -1
     });
-    this.ground = this.physics.add.staticGroup();
-    this.ground.create(600, center.height+280, 'ground');
+
 
 
     this.man = this.physics.add.sprite(center.width-310, center.height+145, 'man');

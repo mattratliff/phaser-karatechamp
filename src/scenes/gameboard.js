@@ -1,36 +1,14 @@
 import Phaser from 'phaser';
-// import person from '../assets/backgrounds/start/person.png';
-// import platform from '../assets/backgrounds/start/platform.png';
-// import bull from '../assets/backgrounds/start/bull-sprites.png';
-// import border from '../assets/backgrounds/start/border.png';
-// import leaderboard from '../assets/backgrounds/start/leaderboard.png';
-// import sounds from '../assets/sounds/processed';
+
 import classWatching from '../assets/backgrounds/game/class-watching.png';
-import controllers from '../assets/backgrounds/game/controllers.png';
 import gameboard from '../assets/backgrounds/gameboard1.png';
 import constants from '../config/constants';
-
-import arrowup from '../assets/backgrounds/game/practice/arrow-up.png';
-import arrowdown from '../assets/backgrounds/game/practice/arrow-down.png';
-import arrowleft from '../assets/backgrounds/game/practice/arrow-left.png';
-import arrowright from '../assets/backgrounds/game/practice/arrow-right.png';
-
-import yellowarrowup from '../assets/backgrounds/game/practice/yellow-arrow-up.png';
-import yellowarrowdown from '../assets/backgrounds/game/practice/yellow-arrow-down.png';
-import yellowarrowleft from '../assets/backgrounds/game/practice/yellow-arrow-left.png';
-import yellowarrowright from '../assets/backgrounds/game/practice/yellow-arrow-right.png';
-
-import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.png';
-import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
-
-import RedPlayer from '../sprites/player/redplayer';
-import WhitePlayer from '../sprites/player/whiteplayer';
-
+import RedPlayer from '../gameobjects/player/redplayer';
+import WhitePlayer from '../gameobjects/player/whiteplayer';
+import begin from '../assets/begin.png';
 import ground from '../assets/backgrounds/game/practice/practice-ground.png';
-import redplayersheet from '../sprites/player/redplayer/player.png';
-import whiteplayersheet from '../sprites/player/whiteplayer/player.png';
-// import playerred from '../assets/player/red/ready.png';
-// import playerwhite from '../assets/player/white/ready.png';
+import redplayersheet from '../gameobjects/player/redplayer/player.png';
+import whiteplayersheet from '../gameobjects/player/whiteplayer/player.png';
 import sounds from '../assets/sounds/processed';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -66,9 +44,10 @@ export default class GameBoard extends Phaser.Scene {
   preload() {
     cursors = this.input.keyboard.createCursorKeys();
     this.preloadBackground();
-    this.load.image('classWatching', classWatching);
-  
     this.load.image('ground', ground);
+    this.load.image('classWatching', classWatching);
+    this.load.image('begin', begin);
+    
     this.load.spritesheet('redplayer',
     redplayersheet,
     { frameWidth: 130, frameHeight: 139 }
@@ -82,12 +61,13 @@ export default class GameBoard extends Phaser.Scene {
   
 
   create() {
+    this.grounds = this.physics.add.staticGroup();
+    this.grounds.create(650, center.height+130, 'ground');
     this.createBackground();
+
     this.addComponents();
     this.makeText();
-    this.grounds = this.physics.add.staticGroup();
-    
-    this.grounds.create(650, center.height+130, 'ground');
+
     this.redplayer = new RedPlayer({scene: this, x: center.width + 165, y: center.height+50 });
     this.whiteplayer = new WhitePlayer({scene: this, x: center.width - 165, y: center.height+50 });
     
@@ -106,19 +86,18 @@ export default class GameBoard extends Phaser.Scene {
 
     this.physics.add.collider(this.whiteplayer, this.grounds);
     this.physics.add.collider(this.redplayer, this.grounds);
+    this.physics.add.collider(this.redplayer, this.whiteplayer);
 
     this.time.delayedCall(3000, this.startMatch, [], this);
   }
 
-  startBegin(){
+  startMatch(){
     sounds.play('Begin');
-    console.log("start bein");
-    this.begin = this.add.image(center.width, center.height, 'begin');
+    this.begin = this.add.image(center.width+50, center.height-200, 'begin');
     this.begin.visible = true;
     this.time.delayedCall(3000, this.endBegin, [], this);
   }
   endBegin(){
-      console.log("end begin");
     this.begin.visible = false;
   }
 

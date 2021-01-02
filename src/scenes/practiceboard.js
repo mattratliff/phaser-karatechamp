@@ -23,16 +23,14 @@ import yellowarrowright from '../assets/backgrounds/game/practice/yellow-arrow-r
 import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.png';
 import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
 
-import RedPlayer from '../sprites/player/redplayer';
-import WhitePlayer from '../sprites/player/whiteplayer';
+import WhitePlayer from '../gameobjects/player/whiteplayer';
 
 import ground from '../assets/backgrounds/game/practice/practice-ground.png';
-import redplayersheet from '../sprites/player/redplayer/player.png';
-import whiteplayersheet from '../sprites/player/whiteplayer/player.png';
+import whiteplayersheet from '../gameobjects/player/whiteplayer/player.png';
 import begin from '../assets/begin.png';
+import good from '../assets/good.png';
+import line from '../assets/line.png';
 
-// import playerred from '../assets/player/red/ready.png';
-// import playerwhite from '../assets/player/white/ready.png';
 import sounds from '../assets/sounds/processed';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -43,11 +41,16 @@ const center = {
 };
 
 const assetScale = SCALE;
+const RIGHTEDGE = center.width + 150;
+const LEFTEDGE = center.width - 150;
  var cursors;
 
 export default class PracticeBoard extends Phaser.Scene {
   constructor() {
     super({ key: 'PracticeBoard' });
+    this.practiceStarted = false;
+    this.gameState = 0;
+    console.log("setting gamesate to 0");
   }
 
   preloadBackground() {
@@ -87,15 +90,34 @@ export default class PracticeBoard extends Phaser.Scene {
     this.load.image('ground', ground);
     
     this.load.image('begin', begin);
+    this.load.image('good', good);
+    this.load.image('line', line);
 
     this.load.spritesheet('whiteplayer',
     whiteplayersheet,
-    { frameWidth: 130, frameHeight: 139 }
+    { frameWidth: 130, frameHeight: 237 }
     );
   }
   
 
   create() {
+    const cursors = this.input.keyboard.createCursorKeys();
+    const WASD = this.input.keyboard.addKeys('W,A,S,D');
+    const { W, A, S, D } = WASD;
+    const dirUp = W;
+    const dirDown = S;
+    const dirLeft = A;
+    const dirRight = D;
+
+    this.locomotion = {
+        dirUp,
+        dirDown,
+        dirLeft,
+        dirRight
+      };
+
+    this.grounds = this.physics.add.staticGroup();
+    this.grounds.create(650, center.height+160, 'ground');
     this.createBackground();
     this.addComponents();
     
@@ -105,10 +127,16 @@ export default class PracticeBoard extends Phaser.Scene {
       font: `${22 * SCALE}pt Silom`
     });
 
-    this.grounds = this.physics.add.staticGroup();
-    this.grounds.create(650, center.height+160, 'ground');
-    this.whiteplayer = new WhitePlayer({scene: this, x: center.width - 100, y: center.height+80 });
-    
+    this.movehereText = this.add
+    .text(center.width, center.height+80, 'Move Here', {
+      fill: '#000000',
+      font: `${14 * SCALE}pt Silom`
+    });
+    this.movehereText.visible = false;
+
+    this.whiteplayer = new WhitePlayer({scene: this, x: center.width - 100, y: center.height+30 });
+
+    //MOVE FORWARD/BACKWARD
     this.anims.create({
       key: 'move',
       frames: this.anims.generateFrameNumbers('whiteplayer', { start: 2, end: 3 }),
@@ -116,6 +144,23 @@ export default class PracticeBoard extends Phaser.Scene {
       repeat: -1
     });
 
+    //SQUAT
+    this.anims.create({
+        key: 'squat',
+        frames: [ { key: 'whiteplayer', frame: 5 } ],
+        frameRate: 8,
+        repeat: -1
+      });
+
+    //JUMP
+    this.anims.create({
+        key: 'jump',
+        frames: [ { key: 'whiteplayer', frame: 7 } ],
+        frameRate: 8,
+        repeat: -1
+      });
+
+    //STAND STILL
     this.anims.create({
       key: 'standstill',
       frames: [ { key: 'whiteplayer', frame: 0 } ],
@@ -129,29 +174,36 @@ export default class PracticeBoard extends Phaser.Scene {
   addComponents(){
     this.addPracticeControllersComponent();
     this.addSpectators();
+    this.line = this.add.image(center.width, center.height+120, 'line').setScale(assetScale * .5);
+    this.line.visible = false;
+    this.movementText = this.add
+    .text(center.width-305, center.height+290, "", {
+      fill: '#ffffff',
+      font: `${14 * SCALE}pt Silom`
+    });
   }
 
   addSpectators(){
-        //add spectators
-        this.whitespectator1 = this.add
-        .image(center.width-250, center.height-30, 'spectatorwhite')
-        .setScale(assetScale);
-        this.whitespectator2 = this.add
-        .image(center.width-265, center.height+60, 'spectatorwhite')
-        .setScale(assetScale);
-        this.whitespectator3 = this.add
-        .image(center.width-280, center.height+150, 'spectatorwhite')
-        .setScale(assetScale);
-    
-        this.redspectator1 = this.add
-        .image(center.width+250, center.height-30, 'spectatorred')
-        .setScale(assetScale);
-        this.redspectator2 = this.add
-        .image(center.width+265, center.height+60, 'spectatorred')
-        .setScale(assetScale);
-        this.redspectator3 = this.add
-        .image(center.width+280, center.height+150, 'spectatorred')
-        .setScale(assetScale);
+    //add spectators
+    this.whitespectator1 = this.add
+    .image(center.width-250, center.height-30, 'spectatorwhite')
+    .setScale(assetScale);
+    this.whitespectator2 = this.add
+    .image(center.width-265, center.height+60, 'spectatorwhite')
+    .setScale(assetScale);
+    this.whitespectator3 = this.add
+    .image(center.width-280, center.height+150, 'spectatorwhite')
+    .setScale(assetScale);
+
+    this.redspectator1 = this.add
+    .image(center.width+250, center.height-30, 'spectatorred')
+    .setScale(assetScale);
+    this.redspectator2 = this.add
+    .image(center.width+265, center.height+60, 'spectatorred')
+    .setScale(assetScale);
+    this.redspectator3 = this.add
+    .image(center.width+280, center.height+150, 'spectatorred')
+    .setScale(assetScale);
   }
   //show practice controllers at bottom of screen
   addPracticeControllersComponent(){
@@ -194,14 +246,29 @@ export default class PracticeBoard extends Phaser.Scene {
     this.yellowrightarrowright.visible = false;
   }
 
+
+  //can move these states to behaviors.JSON file
   startPractice() {
-      this.movementText = this.add
-      .text(center.width-305, center.height+290, 'MOVE FORWARD', {
-        fill: '#ffffff',
-        font: `${14 * SCALE}pt Silom`
-      });
-      this.rightarrowright.visible = false;
-      this.yellowrightarrowright.visible = true;
+    this.practiceStarted = true; 
+    this.gameState = 0;
+    console.log("setting gamesate to 0");
+    this.completeStep = false;
+
+  }
+
+  updateStatusText(status){
+    this.movementText.setText(status);
+  }
+
+  startGood(){
+    // sounds.play('Begin');
+    this.good = this.add.image(center.width+50, center.height-200, 'good');
+    this.time.delayedCall(2000, this.endGood, [], this);      
+  }
+  endGood(){
+    this.good.visible = false;
+    console.log("setting complete step = false");
+    this.completeStep = false;   //reset to get ready for next step
   }
 
   startBegin(){
@@ -215,36 +282,154 @@ export default class PracticeBoard extends Phaser.Scene {
   }
 
   update() {
-      const cursors = this.input.keyboard.createCursorKeys();
-      var RIGHTEDGE = center.width + 150;
-      var LEFTEDGE = center.width - 150;
-  
-        if (cursors.left.isDown) {
-          //show walking left animation
-          this.whiteplayer.anims.play('move', true);
-          console.log("X = "+this.whiteplayer.x);
-          console.log(LEFTEDGE);
-          if(this.whiteplayer.x >= LEFTEDGE)
-          this.whiteplayer.x -= 1;
-  
-        } else if (cursors.right.isDown) {
-          //show walking right animaataion
-          this.whiteplayer.anims.play('move', true);
-          if(this.whiteplayer.x <= RIGHTEDGE)
-          this.whiteplayer.x += 1;
-        }
+      if(!this.practiceStarted)
+        return;
+
+      this.checkPracticeStep();
   
         if (this.hasNoInput()) {
           //show still aniimation
-          console.log("standing still");
           this.whiteplayer.anims.play('standstill');
           this.whiteplayer.setVelocity(0);
         }
+  }
 
+  checkPracticeStep(){
+      if(!this.completeStep){
+          console.log(this.gameState);
+          switch(this.gameState){
+              case 0:
+                  this.checkMoveForward();
+                  break;
+              case 1:
+                  this.checkMoveBackward();
+                  break;
+              case 2:
+                  this.checkSquat();
+                  break;
+              case 3:
+                  this.checkJump();
+                  break;
+          }
+      }
+  }
+
+  checkMoveForward(){
+    this.updateStatusText("MOVE FORWARD");
+    this.leftarrowright.visible = false;
+    this.yellowleftarrowright.visible = true;
+    this.line.visible = true;
+    this.movehereText.visible = true;
+    const { dirUp, dirDown, dirLeft, dirRight } = this.locomotion;
+
+    if (dirRight.isDown) {
+        this.whiteplayer.anims.play('move', true); 
+        if(this.whiteplayer.x <= RIGHTEDGE)
+            this.whiteplayer.x += 1;
+    }
+
+      //if moved pasted the threshold then complete step
+    if(this.whiteplayer.x >= this.line.x-20){
+        this.completeStep = true;
+        this.leftarrowright.visible = true;
+        this.yellowleftarrowright.visible = false;
+        this.startGood();
+        this.gameState = 1;
+        this.line.visible = false;
+        this.movehereText.visible = false;
+    }
+  }
+
+  checkMoveBackward(){
+    this.updateStatusText("MOVE BACKWARD");
+    this.leftarrowleft.visible = false;
+    this.yellowleftarrowleft.visible = true;
+    this.line.x = center.width-150;
+    this.movehereText.x = center.width-250;
+    this.line.visible = true;
+    this.movehereText.visible = true;
+    const { dirUp, dirDown, dirLeft, dirRight } = this.locomotion;
+
+    if (dirRight.isDown) {
+        this.whiteplayer.anims.play('move', true); 
+        if(this.whiteplayer.x <= RIGHTEDGE)
+            this.whiteplayer.x += 1;
+    }
+    else if (dirLeft.isDown) {
+        this.whiteplayer.anims.play('move', true);
+        if(this.whiteplayer.x >= LEFTEDGE)
+            this.whiteplayer.x -= 1;
+    }
+
+      if(this.whiteplayer.x <= this.line.x+40){
+        this.completeStep = true;
+        this.leftarrowleft.visible = true;
+        this.yellowleftarrowleft.visible = false;
+        this.startGood();
+        this.gameState = 2;
+        this.line.visible = false;
+        this.movehereText.visible = false;
+    }
+  }
+
+  checkSquat(){
+    this.updateStatusText("SQUAT (DEFEND)");
+    this.leftarrowdown.visible = false;
+    this.yellowleftarrowdown.visible = true;
+    const { dirUp, dirDown, dirLeft, dirRight } = this.locomotion;
+
+    if (dirRight.isDown) {
+        this.whiteplayer.anims.play('move', true); 
+        if(this.whiteplayer.x <= RIGHTEDGE)
+            this.whiteplayer.x += 1;
+    }
+    else if (dirLeft.isDown) {
+        this.whiteplayer.anims.play('move', true);
+        if(this.whiteplayer.x >= LEFTEDGE)
+            this.whiteplayer.x -= 1;
+    }
+    else if(dirDown.isDown) {
+        this.whiteplayer.anims.play('squat'); 
+        this.completeStep = true;
+        this.leftarrowdown.visible = true;
+        this.yellowleftarrowdown.visible = false;
+        this.startGood();
+        this.gameState = 3;
+    }
+  }
+
+  checkJump(){
+    this.updateStatusText("JUMP");
+    this.leftarrowup.visible = false;
+    this.yellowleftarrowup.visible = true;
+    const { dirUp, dirDown, dirLeft, dirRight } = this.locomotion;
+
+    if (dirRight.isDown) {
+        this.whiteplayer.anims.play('move', true); 
+        if(this.whiteplayer.x <= RIGHTEDGE)
+            this.whiteplayer.x += 1;
+    }
+    else if (dirLeft.isDown) {
+        this.whiteplayer.anims.play('move', true);
+        if(this.whiteplayer.x >= LEFTEDGE)
+            this.whiteplayer.x -= 1;
+    }
+    else if(dirDown.isDown) {
+        this.whiteplayer.anims.play('squat'); 
+    }
+    else if(dirUp.isDown){
+        this.whiteplayer.anims.play('jump'); 
+        this.completeStep = true;
+        this.leftarrowup.visible = true;
+        this.yellowleftarrowup.visible = false;
+        this.startGood();
+        this.gameState = 4;
+    }
   }
 
   hasNoInput(){
-    return !cursors.left.isDown && !cursors.right.isDown;
+    const { dirUp, dirDown, dirLeft, dirRight } = this.locomotion;
+    return !dirLeft.isDown && !dirRight.isDown && !dirDown.isDown && !dirUp.isDown;
   }
 
   render() {}
