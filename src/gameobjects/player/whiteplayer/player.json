@@ -1,0 +1,234 @@
+{
+  "frames": {
+    "kick01": {
+      "frame": {
+        "x": 213,
+        "y": 0,
+        "w": 88,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 130
+      }
+    },
+    "kick02": {
+      "frame": {
+        "x": 209,
+        "y": 262,
+        "w": 92,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 92,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 92,
+        "h": 130
+      }
+    },
+    "kick03": {
+      "frame": {
+        "x": 0,
+        "y": 131,
+        "w": 74,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 74,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 74,
+        "h": 130
+      }
+    },
+    "kick04": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 59,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 59,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 59,
+        "h": 130
+      }
+    },
+    "kick05": {
+      "frame": {
+        "x": 60,
+        "y": 0,
+        "w": 77,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 77,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 77,
+        "h": 130
+      }
+    },
+    "kick06": {
+      "frame": {
+        "x": 0,
+        "y": 262,
+        "w": 115,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 115,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 115,
+        "h": 130
+      }
+    },
+    "kick07": {
+      "frame": {
+        "x": 75,
+        "y": 131,
+        "w": 77,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 77,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 77,
+        "h": 130
+      }
+    },
+    "kick08": {
+      "frame": {
+        "x": 153,
+        "y": 131,
+        "w": 59,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 59,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 59,
+        "h": 130
+      }
+    },
+    "kick09": {
+      "frame": {
+        "x": 138,
+        "y": 0,
+        "w": 74,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 74,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 74,
+        "h": 130
+      }
+    },
+    "kick10": {
+      "frame": {
+        "x": 116,
+        "y": 262,
+        "w": 92,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 92,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 92,
+        "h": 130
+      }
+    },
+    "kick11": {
+      "frame": {
+        "x": 213,
+        "y": 131,
+        "w": 88,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 130
+      }
+    }
+  },
+  "meta": {
+    "app": "https://www.leshylabs.com/apps/sstool/",
+    "version": "Leshy SpriteSheet Tool v0.8.4",
+    "image": "player.png",
+    "size": {
+      "w": 301,
+      "h": 392
+    },
+    "scale": 1
+  }
+}

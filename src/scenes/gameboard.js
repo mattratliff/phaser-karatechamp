@@ -55,7 +55,7 @@ export default class GameBoard extends Phaser.Scene {
     
     this.load.spritesheet('whiteplayer',
     whiteplayersheet,
-    { frameWidth: 130, frameHeight: 139 }
+    { frameWidth: 130, frameHeight: 237 }
     );
   }
   
@@ -69,7 +69,7 @@ export default class GameBoard extends Phaser.Scene {
     this.makeText();
 
     this.redplayer = new RedPlayer({scene: this, x: center.width + 165, y: center.height+50 });
-    this.whiteplayer = new WhitePlayer({scene: this, x: center.width - 165, y: center.height+50 });
+    this.whiteplayer = new WhitePlayer({scene: this, x: center.width - 165, y: center.height });
     
     this.anims.create({
       key: 'move',
