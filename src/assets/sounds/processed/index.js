@@ -7,7 +7,8 @@ const config = {
   sprite: {
     Main_Menu: [2000, 90400],
     Dojo_Music: [91610, 6720],
-    Begin: [98540, 1012.7]
+    Begin: [98540, 1012.7],
+    Front_Kick: [99360, 1030]
   }
 };
 const sounds = new Howl(config);

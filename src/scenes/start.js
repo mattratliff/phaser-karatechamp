@@ -60,7 +60,7 @@ export default class Start extends Phaser.Scene {
     this.scene.stop('Start');
 
     if(selection == 0)
-      this.scene.start('PracticeBoard');
+      this.scene.start('Sandbox');
     else
       this.scene.start('DojoBoard');
   }

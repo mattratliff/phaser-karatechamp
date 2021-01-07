@@ -9,9 +9,10 @@ import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import PreBoot from './scenes/preboot';
 import StartScene from './scenes/start';
 import LeaderBoard from './scenes/leaderboard';
-import GameBoard from './scenes/gameboard';
+// import GameBoard from './scenes/gameboard';
 import DojoBoard from './scenes/dojoboard';
-import PracticeBoard from './scenes/practiceboard';
+// import TrainingBoard from './scenes/trainingboard';
+import Sandbox from './scenes/sandbox';
 
 window.Phaser = Phaser;
 
@@ -35,7 +36,7 @@ const config = {
       debug: false
     }
   },
-  scene: [PreBoot, StartScene, LeaderBoard, GameBoard, DojoBoard, PracticeBoard],
+  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, Sandbox],
   pixelArt: true,
   antialias: false,
   callbacks: {

@@ -83,7 +83,7 @@ export default class DojoBoaarad extends Phaser.Scene {
     if(this.man.x >= center.width+200){
         sounds.stop(this.backgroundMusic);
         this.scene.stop('DojoBoard');
-        this.scene.start('GameBoard');
+        // this.scene.start('GameBoard');
     }
     // //edge detection
     // if (this.bull.x < LEFTEDGE) {

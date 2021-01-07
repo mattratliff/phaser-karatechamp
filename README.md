@@ -29,7 +29,22 @@ Phaser 3 version of the Arcade Game "Karate Champ"
 
 ## Game Play
 
-TBD
+Practice Board
+
+- Use this board to practice moves (no direction or guidance provided)
+
+Training Boaard
+
+- Use this board for guided training and to increase belt ranking
+
+Challenge Board
+
+- Boards provided during gameplay between matches to test your skill
+
+Game Board
+
+- Either single or multi-player matches (location will radomly change)
+
 
 ### Player Movement
 
