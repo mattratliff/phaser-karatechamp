@@ -23,7 +23,7 @@ const timeBeforeShowingLanding = 1000;
 export default class Start extends Phaser.Scene {
   constructor() {
     super({ key: 'Start' });
-    this.musicplaying = true;
+    this.musicplaying = false;
     this.showleaderboard = false;
   }
 
@@ -60,14 +60,14 @@ export default class Start extends Phaser.Scene {
     this.scene.stop('Start');
 
     if(selection == 0)
-      this.scene.start('Sandbox');
+      this.scene.start('ChallengeBoard');
     else
       this.scene.start('DojoBoard');
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);
     this.input.on('pointermove', this.resetTimer, this);
-    this.input.keyboard.on('keydown_ENTER', this.startGame, this);
+    this.input.keyboard.on('keydown-ENTER', this.startGame, this);
   }
   addComponents(){
     var audiox = center.width+300;
@@ -136,7 +136,7 @@ export default class Start extends Phaser.Scene {
   render() {}
 
   playMusic = () => {
-    this.backgroundMusic = sounds.play('Main_Menu');
+    // this.backgroundMusic = sounds.play('Main_Menu');
     sounds.loop(true, this.backgroundMusic);
     sounds.volume(0.6, this.backgroundMusic);
   };

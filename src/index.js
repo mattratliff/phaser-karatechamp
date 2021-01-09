@@ -5,7 +5,6 @@ import Phaser from 'phaser';
 
 import LightraysPlugin from '../src/plugins/lightrays/index.js';
 import constants from './config/constants';
-import CustomPipeline from './rendering-pipelines/CustomPipeline';
 import PreBoot from './scenes/preboot';
 import StartScene from './scenes/start';
 import LeaderBoard from './scenes/leaderboard';
@@ -13,6 +12,7 @@ import LeaderBoard from './scenes/leaderboard';
 import DojoBoard from './scenes/dojoboard';
 // import TrainingBoard from './scenes/trainingboard';
 import Sandbox from './scenes/sandbox';
+import ChallengeBoard from './scenes/challengeboard';
 
 window.Phaser = Phaser;
 
@@ -20,6 +20,9 @@ const config = {
   type: Phaser.AUTO,
   width: constants.WIDTH,
   height: constants.HEIGHT,
+  input: {
+    gamepad: true
+  },
   plugins: {
     scene: [
       {
@@ -36,14 +39,9 @@ const config = {
       debug: false
     }
   },
-  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, Sandbox],
+  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, Sandbox, ChallengeBoard],
   pixelArt: true,
-  antialias: false,
-  callbacks: {
-    postBoot: game => {
-      game.renderer.addPipeline('Custom', new CustomPipeline(game));
-    }
-  }
+  antialias: false
 };
 
 const game = new Phaser.Game(config);
