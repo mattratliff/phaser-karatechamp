@@ -61,6 +61,7 @@
         "howler": "^2.1.2",
         "lodash": "^4.17.15",
         "machina": "^4.0.2",
+        "matter-js": "^0.15.0",
         "phaser": "^3.51.0",
         "phaser-animated-tiles": "2.0.2"
     },

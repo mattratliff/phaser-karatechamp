@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import mainmenu from '../assets/backgrounds/start/mainmenu.png';
+import testmenu from '../assets/backgrounds/start/testmenu.png';
 import hand from '../assets/backgrounds/start/hand.png';
 import audio from '../assets/backgrounds/start/audio.png';
 import noaudio from '../assets/backgrounds/start/no-audio.png';
@@ -23,12 +24,13 @@ const timeBeforeShowingLanding = 1000;
 export default class Start extends Phaser.Scene {
   constructor() {
     super({ key: 'Start' });
-    this.musicplaying = false;
+    this.musicplaying = true;
     this.showleaderboard = false;
+    this.selection = 0;
   }
 
   preloadBackground() {
-    this.load.image('mainmenu', mainmenu);
+    this.load.image('testmenu', testmenu);
   }
 
   createBackground(scale) {
@@ -37,7 +39,7 @@ export default class Start extends Phaser.Scene {
       height: HEIGHT * 0.5
     };
     this.add
-      .image(center.width, center.height, 'mainmenu')
+      .image(center.width, center.height, 'testmenu')
       .setScale(scale);
   }
 
@@ -59,10 +61,14 @@ export default class Start extends Phaser.Scene {
     sounds.stop(this.title_track);
     this.scene.stop('Start');
 
-    if(selection == 0)
-      this.scene.start('ChallengeBoard');
-    else
-      this.scene.start('DojoBoard');
+    if(this.selection == 0)
+      this.scene.start('PhysicsSandbox');
+    else if(this.selection == 1)
+      this.scene.start('AnimationSandbox');
+    else if(this.selection == 2)
+      this.scene.start('AISandbox');
+    else if(this.selection == 3)
+      this.scene.start('MultiplayerSandbox');
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);
@@ -75,7 +81,7 @@ export default class Start extends Phaser.Scene {
     
     //pointer for choosing 1 or 2 players
     this.hand = this.add
-    .image(center.width-110, center.height+55, 'hand')
+    .image(center.width-160, center.height+10, 'hand')
     .setScale(assetScale);
 
     //audio icons
@@ -106,30 +112,17 @@ export default class Start extends Phaser.Scene {
 
     //input handling
     if(this.input.keyboard.checkDown(cursors.up, 250))
-    // if (cursors.up.isDown)
     {
-      if(selection==1){
-        this.hand.y = center.height+15;
-        console.log("moving to practice");
-        selection = 0;
-      }
-      else if(selection==2){
-        this.hand.y = center.height+55;
-        console.log("moving to 1 player");
-        selection = 1;
+      if(this.selection > 0){
+        this.hand.y = this.hand.y - 35;
+        this.selection--;
       }
     }
     if(this.input.keyboard.checkDown(cursors.down, 250))
     {
-      if(selection==0){
-        this.hand.y = center.height+55;
-        console.log("moving to 1 player");
-        selection = 1;
-      }
-      else if(selection==1){
-        this.hand.y = center.height+100;
-        console.log("moving to 2 player");
-        selection = 2;
+      if(this.selection < 3){
+      this.hand.y = this.hand.y + 35;
+      this.selection++;
       }
     }
   }

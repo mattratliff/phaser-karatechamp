@@ -8,11 +8,12 @@ import constants from './config/constants';
 import PreBoot from './scenes/preboot';
 import StartScene from './scenes/start';
 import LeaderBoard from './scenes/leaderboard';
-// import GameBoard from './scenes/gameboard';
 import DojoBoard from './scenes/dojoboard';
-// import TrainingBoard from './scenes/trainingboard';
-import Sandbox from './scenes/sandbox';
-import ChallengeBoard from './scenes/challengeboard';
+
+import AnimationSandbox from './scenes/sandboxes/animation-sandbox';
+import PhysicsSandbox from './scenes/sandboxes/physics-sandbox';
+import AISandbox from './scenes/sandboxes/ai-sandbox';
+import MultiplayerSandbox from './scenes/sandboxes/multiplayer-sandbox';
 
 window.Phaser = Phaser;
 
@@ -33,13 +34,17 @@ const config = {
     ]
   },
   physics: {
-    default: 'arcade',
-    arcade: {
-      gravity: { y: 400 },
-      debug: false
+    default: "matter",
+    matter: {
+      // This is the default value
+      gravity: { y: 1 },
+
+      // You can also pass in Matter.Engine config properties:
+      //  http://brm.io/matter-js/docs/classes/Engine.html#properties
+      enableSleep: true
     }
   },
-  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, Sandbox, ChallengeBoard],
+  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, AISandbox, PhysicsSandbox, AnimationSandbox, MultiplayerSandbox],
   pixelArt: true,
   antialias: false
 };

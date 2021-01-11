@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
-import practiceboard from '../assets/backgrounds/gameboard1.png';
-import constants from '../config/constants';
-import ground from '../assets/backgrounds/game/practice/practice-ground.png';
-import playerPNG from '../assets/white/spritesheet.png';
-import playerJSON from '../assets/white/sprites.json';
-import sounds from '../assets/sounds/processed';
-import vase from '../assets/vase.png';
-import border from '../assets/backgrounds/start/dojo-border.png';
+import practiceboard from '../../assets/backgrounds/gameboard1.png';
+import constants from '../../config/constants';
+import ground from '../../assets/backgrounds/game/practice/practice-ground.png';
+import playerPNG from '../../assets/white/spritesheet.png';
+import playerJSON from '../../assets/white/sprites.json';
+import sounds from '../../assets/sounds/processed';
+import vase from '../../assets/vase.png';
+import border from '../../assets/backgrounds/start/dojo-border.png';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -19,9 +19,9 @@ const assetScale = SCALE;
 const RIGHTEDGE = center.width + 463;
 const LEFTEDGE = center.width - 462;
 
-export default class ChallengeBoard extends Phaser.Scene {
+export default class MultiplayerSandbox extends Phaser.Scene {
   constructor() {
-    super({ key: 'ChallengeBoard' });
+    super({ key: 'MultiplayerSandbox' });
 
     //game config settings
     this.flyingObjectSpeed = 5;
@@ -44,24 +44,22 @@ export default class ChallengeBoard extends Phaser.Scene {
     this.addComponents();
     this.addAnimations();
     this.buildInputs();
-    // sounds.play('Begin');
+    sounds.play('Begin');
+
+    this.practiceText = this.add
+    .text(center.width-305, center.height+300, 'MULTIPLAYER SANDBOX', {
+      fill: '#000000',
+      font: `${22 * SCALE}pt Silom`
+    });
   }
 
   buildInputs(){
-
     //event to connect gamepad
     if(this.input.gamepad.total == 0){
       this.input.gamepad.once('connected', function (pad) {
         this.gamepad = pad;
     }, this);
    }
-    // const actions = this.input.keyboard.addKeys('W,A,S,D,J,I,L,K,U');
-    // const { W, A, S, D, J, I, L, K, U } = actions;
-    // const sendObject = U;
-
-    // this.locomotion = {
-    //     W,A,S,D,J,I,L,K,U
-    //   };
   }
 
 
@@ -74,14 +72,15 @@ export default class ChallengeBoard extends Phaser.Scene {
 
 
     //add platform
-    this.grounds = this.physics.add.staticGroup();
-    this.grounds.create(650, center.height+160, 'ground');
+    // this.grounds = this.physics.add.staticGroup();
+    // this.grounds.create(650, center.height+160, 'ground');
+    this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
     //add board
     this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
 
     //add player
-    this.whiteplayer = this.add.sprite(center.width - 100, center.height-15, 'player');
+    this.whiteplayer = this.matter.add.sprite(center.width - 100, HEIGHT-200, 'player');
 
     this.whiteplayer.on(Phaser.Animations.Events.ANIMATION_COMPLETE, function () {
       if(this.isFlipping){
@@ -91,10 +90,6 @@ export default class ChallengeBoard extends Phaser.Scene {
         this.isFlyingSideKick = false;
       }
   }, this);
-
-    //create objects
-    this.challengeObjects = [];
-    this.challengeObjects.push(this.add.sprite(RIGHTEDGE, center.height-15, 'vase'));
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
@@ -182,46 +177,46 @@ export default class ChallengeBoard extends Phaser.Scene {
           });
 
           
-      this.physics.add.collider(this.whiteplayer, this.grounds);
+      // this.physics.add.collider(this.whiteplayer, this.grounds);
       this.time.delayedCall(3000, this.startBegin, [], this);
   }
 
 /*
     Inputs:
 
-    back kick = right stick left
-    round kick = right stik up
-    front kick = right stick right
-    low kick = right stick down
-    front leg sweep = left stick down, right stick right
-    back leg sweep = left stick down, right stick left
-    spinning heal kick = left stick right, right stick left
-    reverse spinning heal kick = left stick left, right stick right
-    flying side kick = left stick up, right stick right
+___ back kick = right stick left
+_X__ round kick = right stik up
+_X__ front kick = right stick right
+_X__ low kick = right stick down
+___ front leg sweep = left stick down, right stick right
+___ back leg sweep = left stick down, right stick left
+_X__ spinning heal kick = left stick right, right stick left
+___ reverse spinning heal kick = left stick left, right stick right
+_X__ flying side kick = left stick up, right stick right
 
-    front flip = left stick up, right stick down
-    back flip = left stick down, right stick up
+___ front flip = left stick up, right stick down
+_X__ back flip = left stick down, right stick up
 
-    move forward = left stick right
-    move backward = left stick left
-    jump = left stick up
-    squat = left stick down
+_X__ move forward = left stick right
+_X__ move backward = left stick left
+_X__ jump = left stick up
+_X__ squat = left stick down
 
-    upperpunch = left trigger + right stick up
-    reverse punch = left trigger + right stick right
-    squating reverse punch = left trigger + right stick down
-    thrust punch = left stick right + right stick right
-    (new) back fist = left trigger + right stick right
-    (new) spinning back fist = left trigger + left stick left + right stick right
+___ upperpunch = left trigger + right stick up
+___ reverse punch = left trigger + right stick right
+___ squating reverse punch = left trigger + right stick down
+___ thrust punch = left stick right + right stick right
+___ (new) back fist = left trigger + right stick right
+___ (new) spinning back fist = left trigger + left stick left + right stick right
 
-    high block = left trigger + left stick up
-    middle block = left trigger + left stick back
-    low block = left trigger + left stick down
+___ high block = left trigger + left stick up
+___ middle block = left trigger + left stick back
+___ low block = left trigger + left stick down
 
-    change direction = right trigger
+___ change direction = right trigger
 
-    jump forward = A + left stick right
-    jump back = A + left stick left
+___ jump forward = A + left stick right
+___ jump back = A + left stick left
 */
   checkGamePadInput(){
     if(!this.gamepad)
@@ -245,8 +240,6 @@ export default class ChallengeBoard extends Phaser.Scene {
       this.whiteplayer.play('spinningheal', true); 
     }
     else if(LS.y < -0.4 && RS.x > 0.4){
-            //  var frontkick = sounds.play('Front_Kick', false);
-        // sounds.volume(0.3, frontkick);
         this.whiteplayer.play('flyingside', true); 
         this.isFlyingSideKick = true;
         this.whiteplayer.x += 1;
@@ -294,28 +287,24 @@ export default class ChallengeBoard extends Phaser.Scene {
   checkKeyboardInput(){
   }
 
-  sendFlyingObject(){
-    this.sendObject = true;
-  }
+  // sendFlyingObject(){
+  //   this.sendObject = true;
+  // }
 
-  stopFlyingObject(){
-    this.sendObject = false;
-    this.challengeObjects[0].x = RIGHTEDGE;
-  }
+  // stopFlyingObject(){
+  //   this.sendObject = false;
+  //   this.challengeObjects[0].x = RIGHTEDGE;
+  // }
 
   update(){
       this.checkGamePadInput();
-      // if(this.hasNoInput()){
-        //play ready
-
+      
+      // if(this.sendObject){
+      //     this.challengeObjects[0].x -= this.flyingObjectSpeed;
+      //     if(this.challengeObjects[0].x <= LEFTEDGE){
+      //       this.stopFlyingObject();
+      //     }
       // }
-
-      if(this.sendObject){
-          this.challengeObjects[0].x -= this.flyingObjectSpeed;
-          if(this.challengeObjects[0].x <= LEFTEDGE){
-            this.stopFlyingObject();
-          }
-      }
   }
 
   hasNoInput(){
