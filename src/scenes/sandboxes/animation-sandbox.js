@@ -101,6 +101,12 @@ export default class AnimationSandbox extends Phaser.Scene {
         this.isFrontSweep = false;
       if(this.isBackKick)
         this.isBackKick = false;
+      if(this.isLungePunching)
+        this.isLungePunching = false;
+      if(this.isSpinningHealKick)
+        this.isSpinningHealKick = false;
+      if(this.isJumpingForward)
+        this.isJumpingForward = false;
   }, this);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
@@ -202,6 +208,41 @@ export default class AnimationSandbox extends Phaser.Scene {
               repeat: 0 
           });
 
+          this.anims.create(
+            { key: 'highblock', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'highblock', start:1, end: 9, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
+          this.anims.create(
+            { key: 'middleblock', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'middleblock', start:1, end: 9, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
+          this.anims.create(
+            { key: 'lowblock', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'lowblock', start:1, end: 11, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
+          this.anims.create(
+            { key: 'reverse', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'reverse', start:1, end: 7, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
+          this.anims.create(
+            { key: 'lungepunch', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'lungepunch', start:1, end: 11, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
       // this.physics.add.collider(this.whiteplayer, this.grounds);
       this.time.delayedCall(3000, this.startBegin, [], this);
   }
@@ -209,7 +250,7 @@ export default class AnimationSandbox extends Phaser.Scene {
 /*
     Inputs:
 
-___ back kick = right stick left
+_x__ back kick = right stick left
 _X__ round kick = right stik up
 _X__ front kick = right stick right
 _X__ low kick = right stick down
@@ -227,18 +268,18 @@ _X__ move backward = left stick left
 _X__ jump = left stick up
 _X__ squat = left stick down
 
-___ upperpunch = left trigger + right stick up
-___ reverse punch = left trigger + right stick right
-___ squating reverse punch = left trigger + right stick down
-___ thrust punch = left stick right + right stick right
-___ (new) back fist = left trigger + right stick right
-___ (new) spinning back fist = left trigger + left stick left + right stick right
+___ upperpunch = left shoulder + right stick up
+___ reverse punch = left shoulder + right stick right
+___ squating reverse punch = left shoulder + right stick down
+_x__ thrust punch = left stick right + right stick right
+___ (new) back fist = left shoulder + right stick right
+___ (new) spinning back fist = left shoulder + left stick left + right stick right
 
-___ high block = left trigger + left stick up
-___ middle block = left trigger + left stick back
-___ low block = left trigger + left stick down
+_x__ high block = left shoulder + left stick up
+_x__ middle block = left shoulder + left stick back
+_x__ low block = left shoulder + left stick down
 
-___ change direction = right trigger
+___ change direction = right shoulder
 
 ___ jump forward = A + left stick right
 ___ jump back = A + left stick left
@@ -255,9 +296,21 @@ ___ jump back = A + left stick left
         this.whiteplayer.x -= 2;
     }
 
+    console.log(this.gamepad.L1);
+    console.log(RS.x);
     if(LS.y > 0.4 && RS.y < -0.4){                          //BACK FLIP
       this.whiteplayer.play('backflip', true); 
       this.isBackFlipping = true;
+    }
+    else if(this.gamepad.L1 > 0.4 && RS.x > 0.4){                                 //REVERSE PUNCH
+      this.whiteplayer.play('lungepunch', true); 
+      this.isLungePunching = true;
+      this.whiteplayer.x += 1;
+    }
+    else if(this.gamepad.A && LS.x > 0.4 & !this.isFlyingSideKick){        //JUMP FORWARD (have to hold it down)
+      this.whiteplayer.play('jump', true); 
+      this.whiteplayer.x += 3;
+      this.isJumpingForward = true;
     }
     else if(LS.x < -0.2 && RS.x > 0.2){                     //SPINNING HEAL KICK
         var frontkick = sounds.play('Front_Kick', false);
@@ -300,7 +353,7 @@ ___ jump back = A + left stick left
       this.whiteplayer.play('standup', true); 
       this.isSquating = false;
     }
-    else if(RS.x > 0.4 && !this.isFlyingSideKick && !this.isFrontSweep){      //FRONT KICK
+    else if(RS.x > 0.4 && !this.isFlyingSideKick && !this.isFrontSweep && !this.isLungePunching && !this.isSpinningHealKick){      //FRONT KICK
       if(!this.isKicking){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -317,7 +370,7 @@ ___ jump back = A + left stick left
       this.isRoundHouseKicking = true;
       this.whiteplayer.play('roundhousekick', true); 
     }
-    else if(RS.y > 0.4){                                          //LOW KICK
+    else if(RS.y > 0.4 && !this.isBackKick){                                          //LOW KICK
       if(!this.isLowKick){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -332,6 +385,15 @@ ___ jump back = A + left stick left
       }
       this.isBackKick = true;
       this.whiteplayer.play('backkick', true); 
+    }
+    else if(this.gamepad.Y){
+      this.whiteplayer.play('highblock', true);
+    }
+    else if(this.gamepad.B){
+      this.whiteplayer.play('middleblock', true);
+    }
+    else if(this.gamepad.A){
+      this.whiteplayer.play('lowblock', true);
     }
   }
 
