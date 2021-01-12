@@ -7,6 +7,7 @@ import playerJSON from '../../assets/white/sprites.json';
 import sounds from '../../assets/sounds/processed';
 import vase from '../../assets/vase.png';
 import border from '../../assets/backgrounds/start/dojo-border.png';
+import { takeWhile } from 'lodash';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -32,6 +33,8 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.isFlyingSideKick = false;
     this.isLowKick = false;
     this.isFrontSweep = false;
+    this.isBackSweep = false;
+    this.isSpinningHealKick = false;
     this.pad1 = null;
   }
 
@@ -99,8 +102,12 @@ export default class AnimationSandbox extends Phaser.Scene {
         this.isFlyingSideKick = false;
       if(this.isFrontSweep)
         this.isFrontSweep = false;
+      if(this.isBackSweep)
+        this.isBackSweep = false;
       if(this.isBackKick)
         this.isBackKick = false;
+      if(this.isSpinningHealKick)
+        this.isSpinningHealKick = false;
   }, this);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
@@ -190,7 +197,7 @@ export default class AnimationSandbox extends Phaser.Scene {
 
           this.anims.create(
             { key: 'frontsweep', 
-              frames: this.anims.generateFrameNames('player', { prefix: 'frontsweep', start:1, end: 10, zeroPad: 2 }),
+              frames: this.anims.generateFrameNames('player', { prefix: 'frontsweep', start:1, end: 9, zeroPad: 2 }),
               frameRate: 8, 
               repeat: 0 
           });
@@ -244,8 +251,6 @@ ___ jump forward = A + left stick right
 ___ jump back = A + left stick left
 */
   checkGamePadInput(){
-    if(!this.gamepad)
-      return;
 
     var LS = this.gamepad.leftStick;
     var RS = this.gamepad.rightStick;
@@ -260,8 +265,10 @@ ___ jump back = A + left stick left
       this.isBackFlipping = true;
     }
     else if(LS.x < -0.2 && RS.x > 0.2){                     //SPINNING HEAL KICK
+      if(!this.isSpinningHealKick){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
+      }
       this.whiteplayer.play('spinningheal', true); 
     }
     else if(LS.y < -0.4 && RS.x > 0.4){                     //FLYING SIDE KICK
@@ -336,6 +343,115 @@ ___ jump back = A + left stick left
   }
 
   checkKeyboardInput(){
+
+    var keyLeftLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+    var keyLeftUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+    var keyLeftDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+    var keyLeftRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+    var keyRightLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.J);
+    var keyRightUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.I);
+    var keyRightDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.K);
+    var keyRightRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
+
+    var keyAlt = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    
+    if(this.isBackFlipping){                                     //BACK FLIP
+      if(this.whiteplayer.anims.currentFrame.index > 1 && this.whiteplayer.anims.currentFrame.index < 10)
+        this.whiteplayer.x -= 2;
+    }
+
+        //KICKS
+    //SPINNING HEAL KICK
+        if(keyLeftLeft.isDown && keyRightRight.isDown){                                                          
+          if(!this.isSpinningHealKick){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+          }
+          this.whiteplayer.play('spinningheal', true); 
+          this.isSpinningHealKick = true;
+        }
+        else if(keyLeftUp.isDown && keyRightDown.isDown){                                                             //BACK FLIP
+          console.log('back flipping');
+          this.whiteplayer.play('backflip', true); 
+          this.isBackFlipping = true;
+        }
+        else if(keyLeftDown.isDown && keyRightRight.isDown && !this.isSpinningHealKick){                                                          //FRONT LEG SWEEP
+          if(!this.isFrontSweep){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+          }
+          this.isFrontSweep = true;
+          this.whiteplayer.play('frontsweep', true); 
+        }
+        else if(keyLeftLeft.isDown && keyRightDown.isDown && !this.isSpinningHealKick){                                                           //BACK LEG SWEEP
+    
+        }
+        else if(keyLeftUp.isDown && keyRightRight.isDown && !this.isSpinningHealKick){                                 //FLYING SIDE KICK
+          if(!this.isFlyingSideKick){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+          }
+          this.isFlyingSideKick = true;
+            this.whiteplayer.play('flyingside', true); 
+            this.whiteplayer.x += 1;
+        }
+        else if(keyRightRight.isDown && !this.isFlyingSideKick && !this.isFrontSweep && !this.isSpinningHealKick){                        //FRONT KICK
+          if(!this.isKicking){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+          }
+          this.isKicking = true;
+          this.whiteplayer.play('frontkick', true); 
+          this.whiteplayer.x += 1;
+        }
+        else if(keyRightUp.isDown){                                                                                   //ROUNDHOUSE
+          if(!this.isRoundHouseKicking){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+         }
+          this.isRoundHouseKicking = true;
+          this.whiteplayer.play('roundhousekick', true); 
+        }
+        else if(keyRightLeft.isDown){                                                                                   //BACK KICK
+          if(!this.isBackKick){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+          }
+          this.isBackKick = true;
+          this.whiteplayer.play('backkick', true); 
+        }
+        else if(keyRightDown.isDown && !this.isBackFlipping && !this.isBackSweep){                                  //Low Kick
+          if(!this.isLowKick){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+          }
+          this.isLowKick = true;
+          this.whiteplayer.play('lowkick', true); 
+        }
+
+    //basic movements
+    else if(keyLeftRight.isDown){
+      this.whiteplayer.play('forward', true);                                                                 //FORWARD
+      this.whiteplayer.x += 1;
+    }
+    else if(keyLeftLeft.isDown && !this.isSpinningHealKick){
+      this.whiteplayer.play('backward', true);                                                                //BACKWARD
+      this.whiteplayer.x -= 1;
+    }
+    else if(keyLeftUp.isDown && !this.isFlyingSideKick && !this.isBackFlipping){                               //JUMP
+      this.whiteplayer.play('jump', true); 
+    }
+    else if(keyLeftDown.isDown && !this.isSquating && !this.isFrontSweep && !this.isBackFlipping){              //SQUAT
+      this.whiteplayer.play('squat', true); 
+      this.isSquating = true;
+    }
+    else if(!keyLeftDown.isDown && this.isSquating){                                                           //STANDUP
+      this.whiteplayer.play('standup', true); 
+      this.isSquating = false;
+    }
+
+
   }
 
   // sendFlyingObject(){
@@ -348,7 +464,10 @@ ___ jump back = A + left stick left
   // }
 
   update(){
-      this.checkGamePadInput();
+      if(this.gamepad)
+        this.checkGamePadInput();
+      else
+        this.checkKeyboardInput();
       
       // if(this.sendObject){
       //     this.challengeObjects[0].x -= this.flyingObjectSpeed;
