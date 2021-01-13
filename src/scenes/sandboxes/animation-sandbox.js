@@ -35,6 +35,7 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.isFrontSweep = false;
     this.isBackSweep = false;
     this.isSpinningHealKick = false;
+    this.isFlipping = false;
     this.pad1 = null;
   }
 
@@ -112,6 +113,8 @@ export default class AnimationSandbox extends Phaser.Scene {
         this.isSpinningHealKick = false;
       if(this.isJumpingForward)
         this.isJumpingForward = false;
+      if(this.isFlipping)
+        this.isFlipping = false;
   }, this);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
@@ -248,6 +251,12 @@ export default class AnimationSandbox extends Phaser.Scene {
               repeat: 0 
           });
 
+          this.anims.create(
+            { key: 'flip', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'flip', start:1, end: 12, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
       // this.physics.add.collider(this.whiteplayer, this.grounds);
       this.time.delayedCall(3000, this.startBegin, [], this);
   }
@@ -262,10 +271,9 @@ _X__ low kick = right stick down
 _X__ front leg sweep = left stick down, right stick right
 ___ back leg sweep = left stick down, right stick left
 _X__ spinning heal kick = left stick right, right stick left
-___ reverse spinning heal kick = left stick left, right stick right
 _X__ flying side kick = left stick up, right stick right
 
-___ front flip = left stick up, right stick down
+_x__ front flip = left stick up, right stick down
 _X__ back flip = left stick down, right stick up
 
 _X__ move forward = left stick right
@@ -273,7 +281,6 @@ _X__ move backward = left stick left
 _X__ jump = left stick up
 _X__ squat = left stick down
 
-___ upperpunch = left shoulder + right stick up
 ___ reverse punch = left shoulder + right stick right
 ___ squating reverse punch = left shoulder + right stick down
 _x__ thrust punch = left stick right + right stick right
@@ -284,45 +291,83 @@ _x__ high block = left shoulder + left stick up
 _x__ middle block = left shoulder + left stick back
 _x__ low block = left shoulder + left stick down
 
-___ change direction = right shoulder
+_x__ change direction = right shoulder
 
-___ jump forward = A + left stick right
-___ jump back = A + left stick left
+
+
 */
+
   checkGamePadInput(){
 
     var LS = this.gamepad.leftStick;
     var RS = this.gamepad.rightStick;
 
-    if(this.isBackFlipping){                                     //BACK FLIP
-      if(this.whiteplayer.anims.currentFrame.index > 1 && this.whiteplayer.anims.currentFrame.index < 10)
-        this.whiteplayer.x -= 2;
+    //BACK FLIP
+    if(this.isBackFlipping){                                     
+      if(this.whiteplayer.anims.currentFrame.index > 1 && this.whiteplayer.anims.currentFrame.index < 10){
+        this.whiteplayer.x -= 3;
+      }
     }
 
-    console.log(this.gamepad.L1);
-    console.log(RS.x);
-    if(LS.y > 0.4 && RS.y < -0.4){                          //BACK FLIP
+    //FRONT FLIP
+    if(this.isFlipping){
+      if(this.whiteplayer.anims.currentFrame.index > 1 && this.whiteplayer.anims.currentFrame.index < 12){
+        this.whiteplayer.x += 3;
+      }
+    }
+
+    //BACK FLIP
+    if(LS.y > 0.4 && RS.y < -0.4){   
       this.whiteplayer.play('backflip', true); 
+      if(this.whiteplayer.flipX)
+        this.whiteplayer.play('flip', true); 
+      else
+        this.whiteplayer.play('backflip', true); 
+
       this.isBackFlipping = true;
     }
-    else if(this.gamepad.L1 > 0.4 && RS.x > 0.4){                                 //REVERSE PUNCH
+
+    //FRONT FLIP
+    else if(LS.y < -0.4 && RS.y > 0.4){
+      if(this.whiteplayer.flipX)
+        this.whiteplayer.play('backflip', true); 
+      else
+        this.whiteplayer.play('flip', true); 
+
+      this.isFlipping = true;
+    }
+
+    //LUNGE PUNCH
+    else if(this.gamepad.L1 > 0.4 && RS.x > 0.4){
       this.whiteplayer.play('lungepunch', true); 
       this.isLungePunching = true;
-      this.whiteplayer.x += 1;
+      if(this.whiteplayer.flipX)
+        this.whiteplayer.x -= 1;
+      else
+        this.whiteplayer.x += 1;
     }
-    else if(this.gamepad.A && LS.x > 0.4 & !this.isFlyingSideKick){        //JUMP FORWARD (have to hold it down)
-      this.whiteplayer.play('jump', true); 
-      this.whiteplayer.x += 3;
-      this.isJumpingForward = true;
+
+    //CHANGE DIRECTION
+    else if(this.gamepad.X){
+      if(!this.changingDirection){
+        this.time.delayedCall(1000, this.finishChangeDirection, [], this);
+        this.whiteplayer.flipX = !this.whiteplayer.flipX;
+        this.changingDirection = true;
+      }
     }
-    else if(LS.x < -0.2 && RS.x > 0.2){                     //SPINNING HEAL KICK
+
+    //SPINNING HEAL KICK
+    else if(LS.x < -0.2 && RS.x > 0.2){
       if(!this.isSpinningHealKick){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
       }
+      this.isSpinningHealKick = true;
       this.whiteplayer.play('spinningheal', true); 
     }
-    else if(LS.y < -0.4 && RS.x > 0.4){                     //FLYING SIDE KICK
+
+    //FLYING SIDE KICK
+    else if(LS.y < -0.4 && RS.x > 0.4){            
       if(!this.isFlyingSideKick){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -331,7 +376,9 @@ ___ jump back = A + left stick left
         this.whiteplayer.play('flyingside', true); 
         this.whiteplayer.x += 1;
     }
-    else if(LS.y > 0.4 && RS.x > 0.4){                     //FRONT LEG SWEEP
+
+    //FRONT LEG SWEEP
+    else if(LS.y > 0.4 && RS.x > 0.4){
       if(!this.isFrontSweep){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -339,26 +386,38 @@ ___ jump back = A + left stick left
       this.isFrontSweep = true;
       this.whiteplayer.play('frontsweep', true); 
     }
-    else if(LS.x > 0.4){                                   //MOVE FORWARD
+
+    //MOVE FOWARD
+    else if(LS.x > 0.4 && !this.isFlipping){                
         this.whiteplayer.play('forward', true); 
         this.whiteplayer.x += 1;
     }
-    else if(LS.x < -0.4){                                 //MOVE BACKWARD
+
+    //MOVE BACKWARD
+    else if(LS.x < -0.4){
       this.whiteplayer.play('backward', true); 
       this.whiteplayer.x -= 1;
     }
-    else if(LS.y < -0.4 & !this.isFlyingSideKick){        //JUMP
+
+    //JUMP 
+    else if(LS.y < -0.4 & !this.isFlyingSideKick && !this.isFlipping){
       this.whiteplayer.play('jump', true); 
     }
-    else if(LS.y > 0.4 && !this.isSquating && !this.isFrontSweep && !this.isBackFlipping){              //SQUAT
+
+    //SQUAT
+    else if(LS.y > 0.4 && !this.isSquating && !this.isFrontSweep && !this.isBackFlipping){
         this.whiteplayer.play('squat', true); 
         this.isSquating = true;
     }
-    else if(LS.y > 0 && LS.y < 0.4 && this.isSquating){   //STANDUP
+
+    //STANDUP
+    else if(LS.y > 0 && LS.y < 0.4 && this.isSquating){
       this.whiteplayer.play('standup', true); 
       this.isSquating = false;
     }
-    else if(RS.x > 0.4 && !this.isFlyingSideKick && !this.isFrontSweep && !this.isLungePunching && !this.isSpinningHealKick){      //FRONT KICK
+
+    //FRONT KICK
+    else if(RS.x > 0.4 && !this.isFlyingSideKick && !this.isFrontSweep && !this.isLungePunching && !this.isSpinningHealKick){
       if(!this.isKicking){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -367,7 +426,9 @@ ___ jump back = A + left stick left
       this.whiteplayer.play('frontkick', true); 
       this.whiteplayer.x += 1;
     }
-    else if(RS.y < -0.4 && !this.isBackFlipping){                     //ROUNDHOUSE KICK
+
+    //ROUNDHOUSE KICK
+    else if(RS.y < -0.4 && !this.isBackFlipping){
       if(!this.isRoundHouseKicking){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -375,7 +436,9 @@ ___ jump back = A + left stick left
       this.isRoundHouseKicking = true;
       this.whiteplayer.play('roundhousekick', true); 
     }
-    else if(RS.y > 0.4 && !this.isBackKick){                                          //LOW KICK
+
+    //LOW KICK
+    else if(RS.y > 0.4 && !this.isBackKick && !this.isFlipping && !this.isBackFlipping){
       if(!this.isLowKick){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -383,7 +446,9 @@ ___ jump back = A + left stick left
       this.isLowKick = true;
       this.whiteplayer.play('lowkick', true); 
     }
-    else if(RS.x < -0.4){                                          //BACK KICK
+
+    //BACK KICK
+    else if(RS.x < -0.4){
       if(!this.isBackKick){
         var frontkick = sounds.play('Front_Kick', false);
         sounds.volume(0.3, frontkick);
@@ -391,15 +456,43 @@ ___ jump back = A + left stick left
       this.isBackKick = true;
       this.whiteplayer.play('backkick', true); 
     }
+
+    //HIGH BLOCK
     else if(this.gamepad.Y){
       this.whiteplayer.play('highblock', true);
     }
+
+    //MIDDLE BLOCK
     else if(this.gamepad.B){
       this.whiteplayer.play('middleblock', true);
     }
-    else if(this.gamepad.A){
+
+    //LOW BLOCK
+    else if(this.gamepad.A && !this.isFlipping){
       this.whiteplayer.play('lowblock', true);
     }
+  }
+
+  /**
+   * RAGDOLL TESTING: (L2)
+___ punched in the face   +A
+___ punched in the stomach  +B
+___ leg sweeped   +X
+___ flying side kicked   +Y
+___ back kicked   +RS RIGHT
+___ round house kicked   +RS LEFT
+___ spinning heal kicked   +RS DOWN
+   */
+  checkRagDollInput(){
+    // var RS = this.gamepad.rightStick;
+
+    if(this.gamepad.L2 > 0.4 && this.gamepad.A){
+      console.log("testing punched in the face")
+    }
+  }
+
+  finishChangeDirection(){
+    this.changingDirection = false;
   }
 
   checkKeyboardInput(){
@@ -510,36 +603,15 @@ ___ jump back = A + left stick left
       this.whiteplayer.play('standup', true); 
       this.isSquating = false;
     }
-
-
   }
-
-  // sendFlyingObject(){
-  //   this.sendObject = true;
-  // }
-
-  // stopFlyingObject(){
-  //   this.sendObject = false;
-  //   this.challengeObjects[0].x = RIGHTEDGE;
-  // }
 
   update(){
       if(this.gamepad)
         this.checkGamePadInput();
       else
         this.checkKeyboardInput();
-      
-      // if(this.sendObject){
-      //     this.challengeObjects[0].x -= this.flyingObjectSpeed;
-      //     if(this.challengeObjects[0].x <= LEFTEDGE){
-      //       this.stopFlyingObject();
-      //     }
-      // }
-  }
 
-  hasNoInput(){
-    // const { W,A,S,D,I,J,K,L } = this.locomotion;
-    // return !W && !A && !S && !D && !I && !J && !K && !L;
+      this.checkRagDollInput();
   }
 
   render() {}
