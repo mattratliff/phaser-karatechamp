@@ -39,12 +39,8 @@ export default class LeaderBoard extends Phaser.Scene {
   createBorder(scale){
     const RIGHTEDGE = center.width+400;
     const LEFTEDGE = center.width-400;
-    this.add
-    .image(LEFTEDGE-12, center.height-240, 'leftborder')
-    .setScale(scale);
-    this.add
-    .image(RIGHTEDGE+12, center.height-240, 'rightborder')
-    .setScale(scale);
+    this.add.image(LEFTEDGE-12, center.height-240, 'leftborder').setScale(scale);
+    this.add.image(RIGHTEDGE+12, center.height-240, 'rightborder').setScale(scale);
   }
 
   preload() {
@@ -77,7 +73,7 @@ export default class LeaderBoard extends Phaser.Scene {
     const LEFTEDGE = center.width-400;
     this.bounce();
     
-    this.bull.setVelocityX(-80);
+    this.bull.setVelocityX(-3);
 
     //edge detection
     if (this.bull.x < LEFTEDGE) {
@@ -158,11 +154,12 @@ export default class LeaderBoard extends Phaser.Scene {
         repeat: -1
     });
 
-    this.platforms = this.physics.add.staticGroup();
-    this.platforms.create(650, 243, 'platform');
-    this.bull = this.physics.add.sprite(center.width+375, center.height-190, 'bull');
-    
-    this.physics.add.collider(this.bull, this.platforms);
+    // this.platforms = this.physics.add.staticGroup();
+    // this.platforms.create(650, 243, 'platform');
+
+    this.bull = this.matter.add.sprite(center.width+375, center.height-190, 'bull');
+    this.matter.world.setBounds(0,0,WIDTH, center.height-115);
+    // this.physics.add.collider(this.bull, this.platforms);
     this.bull.play('run');
   }
 }

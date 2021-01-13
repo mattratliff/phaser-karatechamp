@@ -15,7 +15,7 @@ const center = {
 };
 
 const assetScale = SCALE;
-const timeBeforeShowingLanding = 1000;
+const timeBeforeShowingLanding = 500;
 
  var cursors;
  var counter = 0;
