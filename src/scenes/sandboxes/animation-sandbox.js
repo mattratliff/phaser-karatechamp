@@ -1,4 +1,6 @@
 import Phaser, { Game, Input } from 'phaser';
+
+//assets
 import practiceboard from '../../assets/backgrounds/gameboard1.png';
 import constants from '../../config/constants';
 import ground from '../../assets/backgrounds/game/practice/practice-ground.png';
@@ -7,8 +9,9 @@ import playerJSON from '../../assets/white/sprites.json';
 import sounds from '../../assets/sounds/processed';
 import border from '../../assets/backgrounds/start/dojo-border.png';
 
-import KeyboardManager from '../../input/keyboardmanager';
-import GamepadManager from '../../input/gamepadManager';
+//game objects
+import Player from '../../gameobjects/player';
+
 import AnimationManager from '../../input/animationManager';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -25,6 +28,7 @@ const LEFTEDGE = center.width - 462;
 export default class AnimationSandbox extends Phaser.Scene {
   constructor() {
     super({ key: 'AnimationSandbox' });
+    this.gamepad = null;
   }
 
   preload() {
@@ -40,14 +44,6 @@ export default class AnimationSandbox extends Phaser.Scene {
 
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();
-
-    this.gamepadmanager = new GamepadManager(this);
-    this.gamepadmanager.init(this.player);
-    this.gamepadmanager.initStates();
-
-    this.keyboardmanager = new KeyboardManager(this);
-    this.keyboardmanager.init(this.player);
-    this.keyboardmanager.initStates();
 
     this.checkForGamePad();
 
@@ -75,17 +71,16 @@ export default class AnimationSandbox extends Phaser.Scene {
 
     this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
 
-    this.player = this.matter.add.sprite(center.width - 100, HEIGHT-200, 'player');
+    this.player = new Player({ scene: this, x: center.width - 100, y: HEIGHT-200 });
+    this.player.setGamePad(this.gamepad);
+    this.player.setInputManager(this.inputmanager);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
   }
 
   update(){
-    if(this.gamepad)
-      this.gamepadmanager.checkForGamePad(this.player);
-    else
-      this.keyboardmanager.checkKeyboardInput(this.player);
+    this.player.update();
   }
 
   render() {}

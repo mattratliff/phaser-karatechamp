@@ -7,9 +7,8 @@ import playerJSON from '../../assets/white/sprites.json';
 import sounds from '../../assets/sounds/processed';
 import border from '../../assets/backgrounds/start/dojo-border.png';
 import vase from '../../assets/vase.png';
+import Player from '../../gameobjects/player';
 
-import KeyboardManager from '../../input/keyboardmanager';
-import GamepadManager from '../../input/gamepadManager';
 import AnimationManager from '../../input/animationManager';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -26,6 +25,7 @@ const LEFTEDGE = center.width - 462;
 export default class PhysicsSandbox extends Phaser.Scene {
   constructor() {
     super({ key: 'PhysicsSandbox' });
+    this.gamepad = null;
   }
 
   preload() {
@@ -42,14 +42,6 @@ export default class PhysicsSandbox extends Phaser.Scene {
 
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();
-
-    this.gamepadmanager = new GamepadManager(this);
-    this.gamepadmanager.init(this.player);
-    this.gamepadmanager.initStates();
-
-    this.keyboardmanager = new KeyboardManager(this);
-    this.keyboardmanager.init(this.player);
-    this.keyboardmanager.initStates();
 
     this.checkForGamePad();
 
@@ -78,8 +70,10 @@ export default class PhysicsSandbox extends Phaser.Scene {
     this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
 
     var cat1 = this.matter.world.nextCategory();
-    
-    this.player = this.matter.add.sprite(center.width - 100, HEIGHT-200, 'player');
+
+    this.player = new Player({ scene: this, x: center.width - 100, y: HEIGHT-200 });
+    this.player.setGamePad(this.gamepad);
+    this.player.setInputManager(this.inputmanager);
     this.player.setCollisionCategory(cat1);
 
     this.challengeObjects = [];
@@ -91,10 +85,7 @@ export default class PhysicsSandbox extends Phaser.Scene {
   }
 
   update(){
-    if(this.gamepad)
-      this.gamepadmanager.checkForGamePad(this.player);
-    else
-      this.keyboardmanager.checkKeyboardInput(this.player);
+    this.player.update();
   }
 
   render() {}

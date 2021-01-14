@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser, { RIGHT } from 'phaser';
 import person from '../assets/backgrounds/start/person2.png';
 import platform from '../assets/backgrounds/start/platform.png';
 import bull from '../assets/backgrounds/start/bull-sprites.png';
@@ -23,18 +23,9 @@ export default class LeaderBoard extends Phaser.Scene {
     super({ key: 'LeaderBoard' });
   }
 
-  preloadBackground() {
-    this.load.image('leaderboard', leaderboard);
-  }
-
   createBackground(scale) {
-    const center = {
-      width: WIDTH * 0.5,
-      height: HEIGHT * 0.5
-    };
-    this.add
-      .image(center.width, center.height, 'leaderboard')
-      .setScale(scale);
+    const center = { width: WIDTH * 0.5, height: HEIGHT * 0.5 };
+    this.add.image(center.width, center.height, 'leaderboard').setScale(scale);
   }
   createBorder(scale){
     const RIGHTEDGE = center.width+400;
@@ -48,13 +39,10 @@ export default class LeaderBoard extends Phaser.Scene {
     this.load.image('person-1', person);
     this.load.image('person-2', person);
     this.load.image('platform', platform);
-    this.load.spritesheet('bull',
-      bull,
-      { frameWidth: 177, frameHeight: 120 }
-      );
+    this.load.spritesheet('bull', bull, { frameWidth: 177, frameHeight: 120 });
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
-    this.preloadBackground();
+    this.load.image('leaderboard', leaderboard);
   }
 
   create() {
@@ -91,56 +79,37 @@ export default class LeaderBoard extends Phaser.Scene {
     const TOP = center.height-260;
     const BOTTOM = center.height-157;
 
-    this.people.forEach(( person ) => {
-    
-      //edge detection
-      if (person.x < LEFTEDGE) {
-        person.x = RIGHTEDGE;
-      } else {
-        person.x = person.x - person.speed;
-      }
+    this.people.forEach(( person ) => {    
+      //EDGE DETECTION
+      person.x = (person.x < LEFTEDGE) ? RIGHTEDGE : person.x - person.speed;
 
-    if(person.direction == 1)
-      person.accelaration = BOTTOM - person.y;
-    else
-      person.accelaration = person.y - BOTTOM;    
-    
+      //BOUNCE FACTOR
+      person.accelaration = (person.direction == 1 ) ? BOTTOM - person.y : person.y - BOTTOM; 
       person.y = person.y + person.direction * (gravity*(1-Math.abs(scaleSpeed(person.accelaration))));
 
-        if(person.y > BOTTOM){
-            person.y = BOTTOM;
-            person.direction = -1;
-        }      
-        if(person.y < TOP+10){
-            person.y = TOP+10;
-            person.direction = 1;
-        } 
+      if(person.y > BOTTOM){
+          person.y = BOTTOM;
+          person.direction = -1;
+      }      
+      if(person.y < TOP+10){
+          person.y = TOP+10;
+          person.direction = 1;
+      } 
     });
   }
 
   addAnimations(){
       this.people = [];
 
-      var person = this.add
-      .image(
-        center.width + 80,
-        center.height - 300,
-        'person-1'
-      )
-      .setScale(assetScale);
+      var person = this.add.image(center.width + 80,center.height - 300,'person-1').setScale(assetScale);
+
       person.speed = 1.8;
       person.direction = 1;
       person.accelaration = 1;
       this.people.push(person);
 
+      var person = this.add.image(center.width - 80,center.height-220,'person-2').setScale(assetScale);
 
-      var person = this.add
-      .image(
-        center.width - 80,
-        center.height-220,
-        'person-2'
-      )
-      .setScale(assetScale);
       person.speed = 1.4;
       person.direction = 1;
       person.accelaration = 1;
@@ -154,12 +123,8 @@ export default class LeaderBoard extends Phaser.Scene {
         repeat: -1
     });
 
-    // this.platforms = this.physics.add.staticGroup();
-    // this.platforms.create(650, 243, 'platform');
-
     this.bull = this.matter.add.sprite(center.width+375, center.height-190, 'bull');
     this.matter.world.setBounds(0,0,WIDTH, center.height-115);
-    // this.physics.add.collider(this.bull, this.platforms);
     this.bull.play('run');
   }
 }

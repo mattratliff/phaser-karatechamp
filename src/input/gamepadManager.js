@@ -34,7 +34,7 @@ export default class GamepadManager extends InputManager {
         super.initStates();
     }
 
-    checkKeyboardInput(){
+    checkForInput(){
         this.player.x -= (this.isBackFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 10) ? 3 : 0;
         this.player.x += (this.isFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 10) ? 3 : 0;
     

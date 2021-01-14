@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import sounds from '../assets/sounds/processed';
 import InputManager from './inputManager';
 
-export default class KeyboardInputManager extends InputManager {
+export default class KeyboardManager extends InputManager {
     constructor(scene) {
         super(scene);
         this.scene = scene;
@@ -37,7 +37,7 @@ export default class KeyboardInputManager extends InputManager {
         super.initStates();
     }
 
-    checkKeyboardInput(){
+    checkForInput(){
         this.player.x -= (this.isBackFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 10) ? 3 : 0;
         this.player.x += (this.isFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 12) ? 3 : 0;
     
