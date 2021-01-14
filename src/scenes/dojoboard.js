@@ -16,7 +16,7 @@ const center = {
 
   const assetScale = SCALE;
 
-export default class DojoBoaarad extends Phaser.Scene {
+export default class DojoBoard extends Phaser.Scene {
   
 
   constructor() {
@@ -50,19 +50,16 @@ export default class DojoBoaarad extends Phaser.Scene {
   }
 
   create() {
-    this.ground = this.physics.add.staticGroup();
-    this.ground.create(600, center.height+280, 'ground');
+    this.matter.world.setBounds(0, 0, WIDTH, center.height+300);
+
     this.createBackground();
     this.addAnimations();
     this.createBorder(assetScale);
+
     const RIGHTEDGE = center.width+400;
     const LEFTEDGE = center.width-400;
-    this.add
-    .image(LEFTEDGE, center.height, 'leftborder')
-    .setScale(1);
-    this.add
-    .image(RIGHTEDGE, center.height, 'rightborder')
-    .setScale(1);
+    this.add.image(LEFTEDGE, center.height, 'leftborder').setScale(1);
+    this.add.image(RIGHTEDGE, center.height, 'rightborder').setScale(1);
     this.playMusic();
   }
 
@@ -73,23 +70,13 @@ export default class DojoBoaarad extends Phaser.Scene {
   };
 
   update() {
-    // //animations (player and bull jumps around)
-    // const RIGHTEDGE = center.width+400;
-    // const LEFTEDGE = center.width-400;
-    // this.bounce();
-    
-    this.man.setVelocityX(60);
+    this.man.setVelocityX(1.2);
 
     if(this.man.x >= center.width+200){
         sounds.stop(this.backgroundMusic);
         this.scene.stop('DojoBoard');
-        // this.scene.start('GameBoard');
+        this.scene.start('GameBoard');
     }
-    // //edge detection
-    // if (this.bull.x < LEFTEDGE) {
-    //   this.bull.x = RIGHTEDGE;
-    // }
-
   }
   render() {}
   addAnimations(){
@@ -100,10 +87,7 @@ export default class DojoBoaarad extends Phaser.Scene {
         repeat: -1
     });
 
-
-
-    this.man = this.physics.add.sprite(center.width-310, center.height+145, 'man');
-    this.physics.add.collider(this.man, this.ground);
+    this.man = this.matter.add.sprite(center.width-310, center.height+300, 'man');
     this.man.play('walk');
   }
   createBorder(scale){

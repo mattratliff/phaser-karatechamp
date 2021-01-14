@@ -171,6 +171,10 @@ export default class InputManager {
       else
         this.player.x += 1;
     }
+    backToMainMenu(currentscene){
+        this.scene.stop(currentscene);
+        this.scene.start('Start');
+    }
   /**
    * RAGDOLL TESTING: (L2)
 ___ punched in the face   +A

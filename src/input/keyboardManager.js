@@ -29,6 +29,8 @@ export default class KeyboardInputManager extends InputManager {
         this.keyRightRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
     
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        this.keyMainMenu = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
     }
 
     initStates(){
@@ -80,5 +82,7 @@ export default class KeyboardInputManager extends InputManager {
         else if(this.keyLeftDown.isDown && !this.isSquating && !this.isFrontSweep && !this.isBackFlipping && !this.isFlipping && !this.isLowBlocking)this.squat();
         //STANDUP
         else if(!this.keyLeftDown.isDown && this.isSquating)this.standup();
+        //BACK TO MAIN MENU
+        else if(this.keyMainMenu.isDown)this.backToMainMenu();
       }
 }

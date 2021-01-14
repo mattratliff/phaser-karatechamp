@@ -9,6 +9,8 @@ import PreBoot from './scenes/preboot';
 import StartScene from './scenes/start';
 import LeaderBoard from './scenes/leaderboard';
 import DojoBoard from './scenes/dojoboard';
+import GameBoard from './scenes/gameboard';
+import TrainingBoard from './scenes/trainingboard';
 
 import AnimationSandbox from './scenes/sandboxes/animation-sandbox';
 import PhysicsSandbox from './scenes/sandboxes/physics-sandbox';
@@ -44,7 +46,7 @@ const config = {
       enableSleep: true
     }
   },
-  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, AISandbox, PhysicsSandbox, AnimationSandbox, MultiplayerSandbox],
+  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, AISandbox, PhysicsSandbox, AnimationSandbox, MultiplayerSandbox, GameBoard, TrainingBoard],
   pixelArt: true,
   antialias: false
 };

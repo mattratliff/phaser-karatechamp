@@ -15,7 +15,7 @@ const center = {
 };
 
 const assetScale = SCALE;
-const timeBeforeShowingLanding = 500;
+const timeBeforeShowingLanding = 1000;
 
  var cursors;
  var counter = 0;
@@ -27,6 +27,8 @@ export default class Start extends Phaser.Scene {
     this.musicplaying = true;
     this.showleaderboard = false;
     this.selection = 0;
+    this.inDevMode = false;
+    this.maxSelections = 3;
   }
 
   preloadBackground() {
@@ -58,17 +60,36 @@ export default class Start extends Phaser.Scene {
     this.playMusic();
   }
   startGame(){
-    sounds.stop(this.title_track);
-    this.scene.stop('Start');
-
-    if(this.selection == 0)
-      this.scene.start('PhysicsSandbox');
-    else if(this.selection == 1)
-      this.scene.start('AnimationSandbox');
-    else if(this.selection == 2)
-      this.scene.start('AISandbox');
-    else if(this.selection == 3)
-      this.scene.start('MultiplayerSandbox');
+    if((this.selection == 3 && !this.inDevMode) || (this.selection == 4 && this.inDevMode)){
+      this.switchModes();
+    }else{
+      sounds.stop(this.title_track);
+      if(!this.inDevMode){
+        if(this.selection == 0){
+          this.scene.stop('Start');
+          this.scene.start('DojoBoard');
+        }
+        else if(this.selection == 1){
+          this.scene.stop('Start');
+          this.scene.start('Multiplayer');
+        }
+        else if(this.selection == 2){
+          this.scene.stop('Start');
+          this.scene.start('TrainingBoard');
+        }
+      }
+      else{
+        this.scene.stop('Start');
+        if(this.selection == 0)
+          this.scene.start('PhysicsSandbox');
+        else if(this.selection == 1)
+          this.scene.start('AnimationSandbox');
+        else if(this.selection == 2)
+          this.scene.start('AISandbox');
+        else if(this.selection == 3)
+          this.scene.start('MultiplayerSandbox');
+      }
+   }
   }
   inputHandler(){
     this.input.on('pointerdown', this.stopMusic, this);
@@ -80,20 +101,104 @@ export default class Start extends Phaser.Scene {
     var audioy = center.height-280;
     
     //pointer for choosing 1 or 2 players
-    this.hand = this.add
-    .image(center.width-160, center.height+10, 'hand')
-    .setScale(assetScale);
+    this.hand = this.add.image(center.width-160, center.height+10, 'hand').setScale(assetScale);
 
     //audio icons
-    this.audio = this.add
-      .image(audiox, audioy, 'audio')
-      .setScale(assetScale * .8);
+    this.audio = this.add.image(audiox, audioy, 'audio').setScale(assetScale * .8);
     this.audio.visible = true;
-    this.noaudio = this.add
-      .image(audiox, audioy, 'noaudio')
-      .setScale(assetScale * .8);
+    this.noaudio = this.add.image(audiox, audioy, 'noaudio').setScale(assetScale * .8);
     this.noaudio.visible = false;
+
+    this.menuoption1 = this.add.text(center.width-115, center.height-15, 'SINGLE PLAYER', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.menuoption1.visible = true;
+
+    this.menuoption2 = this.add.text(center.width-115, center.height+25, 'MULTIPLAYER', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.menuoption2.visible = true;
+
+    this.menuoption3 = this.add.text(center.width-115, center.height+65, 'TRAINING', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.menuoption3.visible = true;
+
+    this.menuoption4 = this.add.text(center.width-115, center.height+105, 'DEVELOPMENT MODE', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.menuoption4.visible = true;
+
+    this.devoption1 = this.add.text(center.width-115, center.height-15, 'PHYSICS SANDBOX', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.devoption1.visible = false;
+
+    this.devoption2 = this.add.text(center.width-115, center.height+25, 'ANIMATION SANDBOX', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.devoption2.visible = false;
+
+    this.devoption3 = this.add.text(center.width-115, center.height+65, 'AI SANDBOX', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.devoption3.visible = false;
+
+    this.devoption4 = this.add.text(center.width-115, center.height+105, 'MULTIPLAYER SANDBOX', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.devoption4.visible = false;
+
+    this.devoption5 = this.add.text(center.width-115, center.height+145, 'MAINMENU', {
+      fill: '#FFFFFF',
+      font: `${20 * SCALE}pt Silom`
+    });
+    this.devoption5.visible = false;
   }
+
+  switchModes(){
+
+    this.resetTimer();
+    this.hand.y = center.height+10;
+    this.selection = 0;
+    this.inDevMode = !this.inDevMode;
+    if(this.inDevMode){
+      this.maxSelections = 5;
+      this.menuoption1.visible = false;
+      this.menuoption2.visible = false;
+      this.menuoption3.visible = false;
+      this.menuoption4.visible = false;
+  
+      this.devoption1.visible = true;
+      this.devoption2.visible = true;
+      this.devoption3.visible = true;
+      this.devoption4.visible = true;
+      this.devoption5.visible = true;
+    }
+    else{
+      this.maxSelections = 4;
+      this.menuoption1.visible = true;
+      this.menuoption2.visible = true;
+      this.menuoption3.visible = true;
+      this.menuoption4.visible = true;
+  
+      this.devoption1.visible = false;
+      this.devoption2.visible = false;
+      this.devoption3.visible = false;
+      this.devoption4.visible = false;
+      this.devoption5.visible = false;
+    }
+    
+  }
+
   resetTimer(){
     if(this.showleaderboard){
       this.showleaderboard = false;
@@ -114,14 +219,14 @@ export default class Start extends Phaser.Scene {
     if(this.input.keyboard.checkDown(cursors.up, 250))
     {
       if(this.selection > 0){
-        this.hand.y = this.hand.y - 35;
+        this.hand.y = this.hand.y - 40;
         this.selection--;
       }
     }
     if(this.input.keyboard.checkDown(cursors.down, 250))
     {
-      if(this.selection < 3){
-      this.hand.y = this.hand.y + 35;
+      if(this.selection < this.maxSelections){
+      this.hand.y = this.hand.y + 40;
       this.selection++;
       }
     }
@@ -129,18 +234,20 @@ export default class Start extends Phaser.Scene {
   render() {}
 
   playMusic = () => {
-    // this.backgroundMusic = sounds.play('Main_Menu');
+    this.backgroundMusic = sounds.play('Main_Menu');
     sounds.loop(true, this.backgroundMusic);
     sounds.volume(0.6, this.backgroundMusic);
   };
 
   stopMusic() {
-    if(this.musicplaying){
+    console.log("switching music");
+    if(!this.musicplaying){
       sounds.volume(0, this.backgroundMusic);
       this.audio.visible = false;
       this.noaudio.visible = true;
     }
     else{
+      console.log("playing music");
       sounds.volume(0.6, this.backgroundMusic);
       this.audio.visible = true;
       this.noaudio.visible = false;
