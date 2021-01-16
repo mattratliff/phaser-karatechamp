@@ -29,7 +29,7 @@ const LEFTEDGE = center.width - 462;
  * Base class for different boards
  * Handles scene management, transition, etc..
  */
-export default class AnimationSandbox extends Phaser.Scene {
+export default class SceneController extends Phaser.Scene {
   constructor({scenekey}) {
       console.log("scene = "+scenekey);
     super({ key: scenekey });
@@ -63,9 +63,9 @@ export default class AnimationSandbox extends Phaser.Scene {
   addComponents(){
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
-    this.player = new Player({ scene: this, x: center.width - 100, y: HEIGHT-200 });
-    this.player.setGamePad(this.gamepad);
-    this.player.setInputManager(this.inputmanager);
+    // this.player = new Player({ scene: this, x: center.width - 100, y: HEIGHT-200 });
+    // this.player.setGamePad(this.gamepad);
+    // this.player.setInputManager(this.inputmanager);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');

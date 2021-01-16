@@ -1,0 +1,75 @@
+{
+	"generator_info": "Shape definitions generated with PhysicsEditor. Visit https://www.codeandweb.com/physicseditor",
+	"vase": {
+		"type": "fromPhysicsEditor",
+		"label": "vase",
+		"isStatic": false,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 2,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":0.75, "y":4.75 }, { "x":0.75, "y":44.75 }, { "x":17, "y":49 }, { "x":41, "y":30 }, { "x":39, "y":2 } ]
+				]
+			}
+		]
+	},
+	"vase2": {
+		"type": "fromPhysicsEditor",
+		"label": "vase2",
+		"isStatic": false,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 0
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":0.75, "y":4.75 }, { "x":0.75, "y":44.75 }, { "x":17, "y":49 }, { "x":41, "y":30 }, { "x":39, "y":2 } ]
+				]
+			}
+		]
+	},
+	"vase3": {
+		"type": "fromPhysicsEditor",
+		"label": "vase3",
+		"isStatic": false,
+		"density": 0.10000000149011612,
+		"restitution": 0,
+		"friction": 0.10000000149011612,
+		"frictionAir": 0.009999999776482582,
+		"frictionStatic": 0.5,
+		"collisionFilter": {
+			"group": 0,
+			"category": 1,
+			"mask": 255
+		},
+		"fixtures": [
+			{
+				"label": "",
+				"isSensor": false,
+				"vertices": [
+					[ { "x":0.75, "y":4.75 }, { "x":0.75, "y":44.75 }, { "x":17, "y":49 }, { "x":41, "y":35 }, { "x":40.75, "y":4.75 } ]
+				]
+			}
+		]
+	}
+}

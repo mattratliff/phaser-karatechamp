@@ -3,12 +3,16 @@ import KeyboardManager from '../controllers/keyboardManager';
 import GamepadManager from '../controllers/gamepadManager';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
-    constructor({scene, x, y}) {
-        super(scene.matter.world, x, y, 'player');
+    constructor({scene, x, y, jsconfig}) {
+        super(scene.matter.world, x, y, 'player', jsconfig);
         this.movementState = 'idle';
         this.scene = scene;
         this.inputmanager = null;
         this.gamepad = null
+        //add matterbodyconfig
+        /*
+        this.matterbodyconfig = { lungepunch: config };
+        */
         scene.add.existing(this);
       }
       preload(){

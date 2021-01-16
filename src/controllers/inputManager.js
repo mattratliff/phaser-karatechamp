@@ -91,7 +91,7 @@ export default class InputManager {
         }
         this.isKicking = true;
         this.player.play('frontkick', true); 
-        this.player.x += 1;
+        this.player.x += 3;
     }
     roundHouseKick(){
         if(!this.isRoundHouseKicking){
