@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
-import KeyboardManager from '../input/keyboardManager';
-import GamepadManager from '../input/gamepadManager';
+import KeyboardManager from '../controllers/keyboardManager';
+import GamepadManager from '../controllers/gamepadManager';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor({scene, x, y}) {

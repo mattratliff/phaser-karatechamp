@@ -175,15 +175,36 @@ export default class InputManager {
         this.scene.stop(currentscene);
         this.scene.start('Start');
     }
-  /**
-   * RAGDOLL TESTING: (L2)
-___ punched in the face   +A
-___ punched in the stomach  +B
-___ leg sweeped   +X
-___ flying side kicked   +Y
-___ back kicked   +RS RIGHT
-___ round house kicked   +RS LEFT
-___ spinning heal kicked   +RS DOWN
-   */
+
+    win(){
+        this.player.play('win', true);
+    }
+    //RAGDOLL
+    /**
+     * round house kick, flying side kick, lunge punch
+     */
+    facePunch(){
+        this.player.play('facepunch', true);
+        this.scene.time.delayedCall(4000, this.forward, [], this);
+    }
+    /**
+     * front kick, reverse punch
+     */
+    gutKick(){
+        this.player.play('gutkick', true);
+        this.scene.time.delayedCall(4000, this.forward, [], this);
+    }
+    /**
+     * low kick, leg sweep, reverse leg sweep, spinning heal kick
+     */
+    lowKick(){
+
+    }
+    /**
+     * any action to the back
+     */
+    fallForward(){
+
+    }
    
 }

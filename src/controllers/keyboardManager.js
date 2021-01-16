@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import sounds from '../assets/sounds/processed';
 import InputManager from './inputManager';
 
 export default class KeyboardManager extends InputManager {
@@ -31,6 +30,11 @@ export default class KeyboardManager extends InputManager {
         this.keySpace = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         this.keyMainMenu = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+
+        this.keyFacePunch = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
+        this.keyGutKick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
+        this.keyWin = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y);
+
     }
 
     initStates(){
@@ -84,5 +88,11 @@ export default class KeyboardManager extends InputManager {
         else if(!this.keyLeftDown.isDown && this.isSquating)this.standup();
         //BACK TO MAIN MENU
         else if(this.keyMainMenu.isDown)this.backToMainMenu();
+        //FACE PUNCH RAGDOLL
+        else if(this.keyFacePunch.isDown)this.facePunch();
+        //GUT KICK RAGDOLL
+        else if(this.keyGutKick.isDown)this.gutKick();
+        //WIN JUMPING
+        else if(this.keyWin.isDown)this.win();
       }
 }

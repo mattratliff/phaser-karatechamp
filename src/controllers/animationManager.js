@@ -141,5 +141,27 @@ export default class AnimationManager {
                 frameRate: 10, 
                 repeat: 0 
             });
+
+            //RAGDOLL ANIMATIONS
+            this.anims.create(
+              { key: 'facepunch', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'facepunch', start:1, end: 3, zeroPad: 1 }),
+                frameRate: 12, 
+                repeat: 0 
+            });
+            this.anims.create(
+              { key: 'gutkick', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'gutkick', start:1, end: 3, zeroPad: 1 }),
+                frameRate: 12, 
+                repeat: 0 
+            });
+
+            //MISC
+            this.anims.create(
+              { key: 'win', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'win', start:1, end: 2, zeroPad: 1 }),
+                frameRate: 4, 
+                repeat: 10
+            });
         }  
 }

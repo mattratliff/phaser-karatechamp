@@ -1,86 +1,42 @@
-import Phaser, { Game, Input } from 'phaser';
-import practiceboard from '../assets/backgrounds/gameboard1.png';
-import constants from '../config/constants';
-import ground from '../assets/backgrounds/game/practice/practice-ground.png';
-import playerPNG from '../assets/white/spritesheet.png';
-import playerJSON from '../assets/white/sprites.json';
+import SceneController from '../controllers/sceneController';
 import sounds from '../assets/sounds/processed';
-import border from '../assets/backgrounds/start/dojo-border.png';
-
-import KeyboardManager from '../input/keyboardmanager';
-import GamepadManager from '../input/gamepadManager';
-import AnimationManager from '../input/animationManager';
+import constants from '../config/constants';
+import practiceboard from '../assets/backgrounds/gameboard1.png';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
-
 const center = {
   width: WIDTH * 0.5,
   height: HEIGHT * 0.5
 };
-
 const assetScale = SCALE;
-const RIGHTEDGE = center.width + 463;
-const LEFTEDGE = center.width - 462;
 
-export default class GameBoard extends Phaser.Scene {
+export default class GameBoard extends SceneController {
   constructor() {
-    super({ key: 'GameBoard' });
+    super({ scenekey: 'GameBoard' });
   }
 
-  preload() {
-    this.load.atlas('player', playerPNG, playerJSON);
+  preload() { 
+    super.preload(); 
     this.load.image('practiceboard', practiceboard);
-    this.load.image('ground', ground);
-    this.load.image('leftborder', border);
-    this.load.image('rightborder', border);
   }
 
-  create() {
-    this.addComponents();
-
-    this.animationManager = new AnimationManager(this.anims);
-    this.animationManager.addAnimations();
-
-    this.gamepadmanager = new GamepadManager(this);
-    this.gamepadmanager.init(this.player);
-    this.gamepadmanager.initStates();
-
-    this.keyboardmanager = new KeyboardManager(this);
-    this.keyboardmanager.init(this.player);
-    this.keyboardmanager.initStates();
-
-    this.checkForGamePad();
-
+  create() { 
+    super.create(); 
     sounds.play('Begin');
-  }
 
-  checkForGamePad(){
-    if(this.input.gamepad.total == 0){
-      this.input.gamepad.once('connected', function (pad) {
-        this.gamepad = pad;
-    }, this);
-   }
+    this.practiceText = this.add
+    .text(center.width-305, center.height+300, 'INPUT/ANIMATION SANDBOX', {
+      fill: '#000000',
+      font: `${22 * assetScale}pt Silom`
+    });
   }
-
+  
   addComponents(){
-    const center = { width: WIDTH * 0.5, height: HEIGHT * 0.5 };
-
-    this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
-
     this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
-
-    this.player = this.matter.add.sprite(center.width - 100, HEIGHT-200, 'player');
-
-    this.add.image(LEFTEDGE, center.height, 'leftborder');
-    this.add.image(RIGHTEDGE, center.height, 'rightborder');
+    super.addComponents();
   }
 
-  update(){
-    if(this.gamepad)
-      this.gamepadmanager.checkForGamePad(this.player);
-    else
-      this.keyboardmanager.checkKeyboardInput(this.player);
-  }
+  update(){ super.update(); }
 
   render() {}
 

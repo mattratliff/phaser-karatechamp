@@ -25,9 +25,8 @@ import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png'
 import begin from '../assets/begin.png';
 import good from '../assets/good.png';
 import line from '../assets/line.png';
-// import KeyboardManager from '../../input/keyboardmanager';
-// import GamepadManager from '../../input/gamepadManager';
-import AnimationManager from '../input/animationManager';
+
+import AnimationManager from '../controllers/animationManager';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 

@@ -9,7 +9,7 @@ import border from '../../assets/backgrounds/start/dojo-border.png';
 import vase from '../../assets/vase.png';
 import Player from '../../gameobjects/player';
 
-import AnimationManager from '../../input/animationManager';
+import AnimationManager from '../../controllers/animationManager';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -76,9 +76,9 @@ export default class PhysicsSandbox extends Phaser.Scene {
     this.player.setInputManager(this.inputmanager);
     this.player.setCollisionCategory(cat1);
 
-    this.challengeObjects = [];
-    this.challengeObjects.push(this.matter.add.image(RIGHTEDGE, center.height-15, 'vase'));
-    this.challengeObjects[0].setCollisionCategory(cat1);
+    this.challengeObject = this.matter.add.image(RIGHTEDGE-400, center.height+50, 'vase');
+    this.challengeObject.setIgnoreGravity(true);
+    this.challengeObject.setCollisionCategory(cat1);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
