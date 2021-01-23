@@ -12,6 +12,7 @@ import border from '../assets/backgrounds/start/dojo-border.png';
 import Player from '../gameobjects/player';
 
 import AnimationManager from '../controllers/animationManager';
+import GameSessionManager from './gameSessionManager';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -31,7 +32,6 @@ const LEFTEDGE = center.width - 462;
  */
 export default class AnimationSandbox extends Phaser.Scene {
   constructor({scenekey}) {
-      console.log("scene = "+scenekey);
     super({ key: scenekey });
     this.gamepad = null;
   }
@@ -44,6 +44,8 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   create() {
+    this.GameSessionManager = new GameSessionManager();
+
     this.addComponents();
 
     this.animationManager = new AnimationManager(this.anims);

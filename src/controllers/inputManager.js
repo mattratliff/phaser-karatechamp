@@ -179,6 +179,9 @@ export default class InputManager {
     win(){
         this.player.play('win', true);
     }
+    sweat(){
+        this.player.play('sweat', true);
+    }
     //RAGDOLL
     /**
      * round house kick, flying side kick, lunge punch
@@ -205,6 +208,10 @@ export default class InputManager {
      */
     fallForward(){
 
+    }
+
+    sendVaseFlying(){
+        
     }
    
 }

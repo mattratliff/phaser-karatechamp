@@ -23,6 +23,7 @@ import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.
 import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
 
 import begin from '../assets/begin.png';
+import stop from '../assets/stop.png';
 import good from '../assets/good.png';
 import line from '../assets/line.png';
 
@@ -72,6 +73,7 @@ export default class TrainingBoard extends Phaser.Scene {
     this.load.image('spectatorred', spectatorred);
 
     this.load.image('begin', begin);
+    this.load.image('stop', stop);
     this.load.image('good', good);
     this.load.image('line', line);
 
@@ -371,18 +373,23 @@ checkMoveForward(){
   startBegin(){
     sounds.play('Begin');
     this.begin = this.add.image(center.width+50, center.height-200, 'begin');
-    this.time.delayedCall(2000, this.endBegin, [], this);
+    this.time.delayedCall(2000, function(){ this.begin.visible = false; this.startPractice();}, [], this);
   }
-  endBegin(){
-    this.begin.visible = false;
-    this.startPractice();
+
+  startStop(){
+    // sounds.play('Begin');
+    this.stop = this.add.image(center.width+50, center.height-200, 'stop');
+    this.time.delayedCall(2000, function(){ this.stop.visible = false; this.stopPractice();}, [], this);
   }
 
   startPractice() {
     this.practiceStarted = true; 
     this.gameState = 0;
-    console.log("setting gamesate to 0");
     this.completeStep = false;
+
+  }
+
+  stopPractice(){
 
   }
 

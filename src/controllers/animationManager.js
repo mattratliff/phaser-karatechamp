@@ -163,5 +163,26 @@ export default class AnimationManager {
                 frameRate: 4, 
                 repeat: 10
             });
+
+            this.anims.create(
+              { key: 'walking', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'walking', start:1, end: 3, zeroPad: 1 }),
+                frameRate: 8, 
+                repeat: 20
+            });
+
+            this.anims.create(
+              { key: 'bow', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'bow', start:1, end: 10, zeroPad: 1 }),
+                frameRate: 8, 
+                repeat: 0
+            });
+
+            this.anims.create(
+              { key: 'sweat', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'sweat', start:1, end: 2, zeroPad: 1 }),
+                frameRate: 2, 
+                repeat: 20
+            });
         }  
 }
