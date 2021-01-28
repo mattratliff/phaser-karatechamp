@@ -12,6 +12,7 @@ export default class KeyboardManager extends InputManager {
         this.input = this.scene.input;
         this.anims = this.scene.anims;
         this.player = player;
+        this.pause = false;
 
         this.registerInputHandlers();
     }
@@ -47,6 +48,9 @@ export default class KeyboardManager extends InputManager {
     }
 
     checkForInput(){
+        if(this.pause)
+            return;
+
         this.player.x -= (this.isBackFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 10) ? 3 : 0;
         this.player.x += (this.isFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 12) ? 3 : 0;
     

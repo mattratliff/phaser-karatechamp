@@ -36,16 +36,18 @@ const config = {
     ]
   },
   physics: {
-    default: "matter",
+    default: 'matter',
     matter: {
-      // This is the default value
-      gravity: { y: 1 },
-
-      // You can also pass in Matter.Engine config properties:
-      //  http://brm.io/matter-js/docs/classes/Engine.html#properties
-      enableSleep: true
+        // enableSleeping: true,
+        gravity: {
+            // y: 0
+        },
+        debug: {
+            // showBody: true,
+            // showStaticBody: true
+        }
     }
-  },
+},
   scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, AISandbox, PhysicsSandbox, AnimationSandbox, MultiplayerSandbox, GameBoard, TrainingBoard],
   pixelArt: true,
   antialias: false

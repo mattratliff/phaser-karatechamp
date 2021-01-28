@@ -59,6 +59,7 @@
     },
     "dependencies": {
         "howler": "^2.1.2",
+        "json-query": "^2.2.2",
         "lodash": "^4.17.15",
         "machina": "^4.0.2",
         "matter-js": "^0.15.0",

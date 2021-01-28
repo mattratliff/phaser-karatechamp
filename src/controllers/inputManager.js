@@ -118,6 +118,7 @@ export default class InputManager {
         this.player.play('lowkick', true); 
     }
     forward(){
+        this.pause = false;
         this.player.play('forward', true);
         this.player.x += 1;
     }

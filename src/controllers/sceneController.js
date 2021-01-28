@@ -3,15 +3,21 @@ import Phaser, { Game, Input } from 'phaser';
 //assets
 import constants from '../config/constants';
 import ground from '../assets/backgrounds/game/practice/practice-ground.png';
+
 import playerPNG from '../assets/white/spritesheet.png';
 import playerJSON from '../assets/white/sprites.json';
+
+import vasePNG from '../assets/objects/spritesheet.png';
+import vaseJSON from '../assets/objects/sprites.json';
 
 import border from '../assets/backgrounds/start/dojo-border.png';
 
 //game objects
 import Player from '../gameobjects/player';
+import ChallengeObject from '../gameobjects/challengeobject';
 
 import AnimationManager from '../controllers/animationManager';
+import CollisionSystem from '../controllers/collisionSystem';
 import GameSessionManager from './gameSessionManager';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -38,6 +44,8 @@ export default class AnimationSandbox extends Phaser.Scene {
 
   preload() {
     this.load.atlas('player', playerPNG, playerJSON);
+    this.load.atlas('vase', vasePNG, vaseJSON);
+
     this.load.image('ground', ground);
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
@@ -46,12 +54,14 @@ export default class AnimationSandbox extends Phaser.Scene {
   create() {
     this.GameSessionManager = new GameSessionManager();
 
-    this.addComponents();
+    this.collisionSystem = new CollisionSystem();
 
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();
 
     this.checkForGamePad();
+
+    this.addComponents();
   }
 
   checkForGamePad(){
@@ -63,18 +73,61 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   addComponents(){
+
+    const center = { width: WIDTH * 0.5, height: HEIGHT * 0.5 };
+
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
-    this.player = new Player({ scene: this, x: center.width - 100, y: HEIGHT-200 });
+    this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
+
+    var cat1 = this.matter.world.nextCategory();
+    
+    this.player = new Player({ scene: this, startx: center.width, starty: HEIGHT-200, readyx: center.width-100 });
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
+    this.player.setCollisionCategory(cat1);
+    
+    // this.playerwalking = true;
+
+    this.vase = new ChallengeObject({ scene: this, x: RIGHTEDGE, y: center.height+80, object: 'vase' });
+    this.vase.setIgnoreGravity(true);
+    this.vase.setCollisionCategory(cat1);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
+    this.player.startwalking = true;
+    this.vase.active = true;
+
+    this.registerCollider();
   }
 
+  registerCollider(){
+      this.player.setOnCollide(pair => {
+          var result = this.collisionSystem.checkCollision(pair);
+          // console.log("result = "+JSON.stringify(result));
+          if(result){
+            // console.log(result.object);
+              if(result.object == "player"){
+                  this.player.inputmanager.gutKick();
+                  this.player.inputmanager.pause = true;
+                  this.vase.play('vase', true);
+                  this.time.delayedCall(500, this.removeVase, [], this);
+              }
+              if(result.object == "vase"){
+                  this.vase.play('vase', true); 
+                  this.time.delayedCall(500, this.removeVase, [], this);
+              }
+          }
+        });
+  }
+
+  removeVase(){
+    this.vase.destroy();
+  }
   update(){
     this.player.update();
+    if(this.vase)
+        this.vase.update();
   }
 
   render() {}

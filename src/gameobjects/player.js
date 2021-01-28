@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import KeyboardManager from '../controllers/keyboardManager';
 import GamepadManager from '../controllers/gamepadManager';
 
+// import kickfixtures from '../assets/white/frontkick.json';
+
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor({scene, startx, starty, readyx}) {
         super(scene.matter.world, startx, starty, 'player');
@@ -17,11 +19,18 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.bowing = false;
 
         scene.add.existing(this);
+
+        this.create();
       }
       preload(){
 
       }
       create(){
+          console.log("creating");
+        // this.scene.load.json('kickfixtures', kickfixtures);
+
+
+
 
       }
       setInputManager(){
@@ -36,15 +45,13 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       usesGamePad(){
           return (this.gamepad === null) ? false : true;
       }
-      update(){
-        this.inputmanager.checkForInput();
+      entrance(){
         if(this.startwalking){
             this.play('walking', true);
             this.startwalking = false;
             this.walking = true;
         }
         if(this.walking){
-            //play walking animation
             this.x += 1;
             if(this.x >= this.readyx){
                 this.walking = false;
@@ -54,8 +61,10 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         if(this.startbowing){
             this.play('bow', true);
             this.startbowing = false;
-            //play bow animation
-            //animation finished then this.bowing = false;
         }
+      }
+      update(){
+        this.inputmanager.checkForInput();
+        // this.entrance();
       }
 }

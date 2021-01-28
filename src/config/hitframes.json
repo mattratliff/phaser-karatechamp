@@ -1,7 +1,7 @@
 [
 	{
-		"label": "kick",
-		"hitframes": ["05", "06", "07"],
+		"label": "frontkick",
+		"hitframes": ["kick05", "kick06", "kick07"],
 		"direction": "forward"
 	},
 		{
