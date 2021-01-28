@@ -54,7 +54,7 @@ export default class AnimationSandbox extends Phaser.Scene {
   create() {
     this.GameSessionManager = new GameSessionManager();
 
-    this.collisionSystem = new CollisionSystem();
+    this.collisionSystem = new CollisionSystem(this.matter);
 
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();
@@ -111,23 +111,19 @@ export default class AnimationSandbox extends Phaser.Scene {
                   this.player.inputmanager.gutKick();
                   this.player.inputmanager.pause = true;
                   this.vase.play('vase', true);
-                  this.time.delayedCall(500, this.removeVase, [], this);
+                  this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
               }
               if(result.object == "vase"){
                   this.vase.play('vase', true); 
-                  this.time.delayedCall(500, this.removeVase, [], this);
+                  this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
               }
           }
         });
   }
 
-  removeVase(){
-    this.vase.destroy();
-  }
   update(){
     this.player.update();
-    if(this.vase)
-        this.vase.update();
+    this.vase.update();
   }
 
   render() {}
