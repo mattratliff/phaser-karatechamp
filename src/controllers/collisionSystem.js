@@ -1,57 +1,38 @@
-//Class that handles all of the collision between game objects
-// check for collision and then determines the nature of the collision pass back the result
-
-// import blockingframes from '../config/blocking.json';
-// import hitframes from '../config/hitframes.json';
-//  var fixtures = require('../assets/white/frontkick.json');
 var jsonQuery = require('json-query')
-const json = require('../assets/white/frontkick.json');
+const fixtures = require('../assets/white/fixtures.json');
 
 
 export default class CollisionSystem{
     constructor(matter){
-        this.fixtures = json;
+        this.fixtures = fixtures;
         this.matter = matter;
-        console.log("matter = ");
-        console.log(this.matter);
     }
-    
 
-    checkCollision(pair){
-        console.log("fixtures = "+this.fixtures);
+    checkCollision(player, vase){
+        if(player.anims.currentFrame){
+            var bodyAFixtures = jsonQuery('[*label='+player.anims.currentFrame.frame.name+'].fixtures', {data: this.fixtures}).value;
+            if(bodyAFixtures.length > 0){
+                //need to add player.x to each x coordinate in vertices
+                var points = [];
+                for(var i=0; i<bodyAFixtures[0].vertices[0].length; i++){
+                    var point = {
+                        x: bodyAFixtures[0].vertices[0][i].x + player.body.bounds.min.x - 15,
+                        y: bodyAFixtures[0].vertices[0][i].y + player.body.bounds.min.y
+                    };
+                    points.push(point);
+                }
+                var bodyAfixture = this.matter.bounds.create(points);
+                var bodyBfixture = this.matter.bounds.create([vase.body.bounds.min, vase.body.bounds.max]);
 
-        if(!pair.bodyA.gameObject)
-            return null;
-
-        if(pair.bodyA.gameObject.anims.currentFrame){
-            var keyframe = pair.bodyA.gameObject.anims.currentFrame.frame.name;
-            var fixtures = jsonQuery('[*label='+keyframe+'].fixtures', {data: this.fixtures}).value;
-            //if the animation frame isnt the one we're looking for
-            
-
-
-            if(fixtures){
-                var vertices = fixtures[0].vertices[0];
-                var fixture = this.matter.bounds.create(vertices);
-
-                var vert2 = [pair.bodyB.bounds.min, pair.bodyB.bounds.max];
-                var fixture2 = this.matter.bounds.create(vert2);
-
-                console.log(fixture);
-                console.log(fixture2);
-
-                console.log(this.matter.bounds.overlaps(fixture, fixture2));
-
-                // console.log(vertices);
-                return {object: "vase", animation: ""};
+                return this.matter.bounds.overlaps(bodyBfixture, bodyAfixture);
             }
             else{
-                return {object: "player", animation: ""};
+                return false;
             }
         }
         else{
             //if no animations are playing
-            return {object: "player", animation: ""};
+            return false;
         }
     }
 }

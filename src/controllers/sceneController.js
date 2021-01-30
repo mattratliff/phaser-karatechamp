@@ -85,45 +85,47 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.player = new Player({ scene: this, startx: center.width, starty: HEIGHT-200, readyx: center.width-100 });
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionCategory(cat1);
+    this.player.setCollisionGroup(-1);
     
+    console.log("starty ", HEIGHT-200);
     // this.playerwalking = true;
 
+    var cat2 = this.matter.world.nextCategory();
+
     this.vase = new ChallengeObject({ scene: this, x: RIGHTEDGE, y: center.height+80, object: 'vase' });
+    this.vase.setCollisionGroup(-1);
     this.vase.setIgnoreGravity(true);
-    this.vase.setCollisionCategory(cat1);
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
     this.player.startwalking = true;
     this.vase.active = true;
-
-    this.registerCollider();
-  }
-
-  registerCollider(){
-      this.player.setOnCollide(pair => {
-          var result = this.collisionSystem.checkCollision(pair);
-          // console.log("result = "+JSON.stringify(result));
-          if(result){
-            // console.log(result.object);
-              if(result.object == "player"){
-                  this.player.inputmanager.gutKick();
-                  this.player.inputmanager.pause = true;
-                  this.vase.play('vase', true);
-                  this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
-              }
-              if(result.object == "vase"){
-                  this.vase.play('vase', true); 
-                  this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
-              }
-          }
-        });
   }
 
   update(){
+    // console.log((this.player.x + this.player.width) - this.vase.x);
+
+    
+    if(this.vase.x - this.player.body.bounds.max.x < 40 && this.vase.x > this.player.x && this.vase.velocity != 0){
+      if(this.collisionSystem.checkCollision(this.player, this.vase)){
+        console.log("playing vase animation");
+        this.vase.play('vase', true);
+        this.vase.velocity = 0;
+        this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
+      }
+    }
+    if(this.player.x >= this.vase.body.bounds.min.x && this.vase.velocity != 0){
+      this.player.inputmanager.gutKick();
+      this.player.inputmanager.pause = true;
+      this.vase.play('vase', true);
+      this.vase.velocity = 0;
+      this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
+    }
+
+      this.vase.update();
+
     this.player.update();
-    this.vase.update();
+    
   }
 
   render() {}

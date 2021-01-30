@@ -6,6 +6,8 @@ export default class ChallengeObject extends Phaser.Physics.Matter.Sprite {
         this.movementState = 'idle';
         this.scene = scene;
         this.active = false;
+        this.velocity = -2;
+        this.active = false;
         scene.add.existing(this);
       }
       preload(){
@@ -17,12 +19,11 @@ export default class ChallengeObject extends Phaser.Physics.Matter.Sprite {
       activateObject(){
           this.movementState = 'flying';
       }
-      deactivate(location){
-        //   this.x = location;
-        //   this.active = false;
+      deactivate(){
+        this.velocity = 0;
       }
       update(){
-          if(this.active)
-            this.x -= 2;
+        if(this.active)
+            this.x += this.velocity;
       }
 }

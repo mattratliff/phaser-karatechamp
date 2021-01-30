@@ -13,7 +13,7 @@ export default class AnimationManager {
     addObjectAnimations(){
       this.anims.create(
         { key: 'vase', 
-          frames: this.anims.generateFrameNames('vase', { prefix: 'vase', start:1, end: 4, zeroPad: 1 }),
+          frames: this.anims.generateFrameNames('vase', { prefix: 'vase', start:1, end: 5, zeroPad: 1 }),
           frameRate: 10, 
           repeatDelay: 200,
           repeat: 0 

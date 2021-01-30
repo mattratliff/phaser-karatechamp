@@ -36,17 +36,7 @@ const config = {
     ]
   },
   physics: {
-    default: 'matter',
-    matter: {
-        // enableSleeping: true,
-        gravity: {
-            // y: 0
-        },
-        debug: {
-            // showBody: true,
-            // showStaticBody: true
-        }
-    }
+    default: 'matter'
 },
   scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, AISandbox, PhysicsSandbox, AnimationSandbox, MultiplayerSandbox, GameBoard, TrainingBoard],
   pixelArt: true,
