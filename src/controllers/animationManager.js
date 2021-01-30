@@ -47,6 +47,7 @@ export default class AnimationManager {
 
       this.anims.create(
           { key: 'forward', 
+          // frames: this.anims.generateFrameNames('player', { prefix: 'kick', start:1, end: 6, zeroPad: 2 }),
             frames: this.anims.generateFrameNames('player', { prefix: 'forward', start:1, end: 3, zeroPad: 2 }),
             frameRate: 10, 
             repeat: 0 

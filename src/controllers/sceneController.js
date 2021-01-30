@@ -109,23 +109,38 @@ export default class AnimationSandbox extends Phaser.Scene {
 
     
     if(this.vase.x - this.player.body.bounds.max.x < 40 && this.vase.x > this.player.x && this.vase.velocity != 0){
-      if(this.collisionSystem.checkCollision(this.player, this.vase)){
-        console.log("playing vase animation");
-        this.vase.play('vase', true);
-        this.vase.velocity = 0;
-        this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
+      var collision = this.collisionSystem.checkCollision(this.player, this.vase);
+      if(collision.collided){
+        if(collision.hit){
+          this.vase.play('vase', true);
+          this.vase.velocity = 0;
+          this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
+        }else{
+          console.log("location = ", collision.fixture);
+          if(collision.fixture == "body-fixture")
+            this.player.inputmanager.gutKick();
+          else if(collision.fixture == "head-fixture")
+            this.player.inputmanager.facePunch();
+          else if(collision.fixture == "leg-fixture")
+            this.player.inputmanager.gutKick();
+          
+          this.player.inputmanager.pause = true;
+          this.vase.play('vase', true);
+          this.vase.velocity = 0;
+          this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this); 
+        }
+
       }
     }
-    if(this.player.x >= this.vase.body.bounds.min.x && this.vase.velocity != 0){
-      this.player.inputmanager.gutKick();
-      this.player.inputmanager.pause = true;
-      this.vase.play('vase', true);
-      this.vase.velocity = 0;
-      this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
-    }
+    // if(this.player.x >= this.vase.body.bounds.min.x && this.vase.velocity != 0){
+    //   this.player.inputmanager.gutKick();
+    //   this.player.inputmanager.pause = true;
+    //   this.vase.play('vase', true);
+    //   this.vase.velocity = 0;
+    //   this.time.delayedCall(2000, this.vase.deactivate(RIGHTEDGE), [], this);
+    // }
 
-      this.vase.update();
-
+    this.vase.update();
     this.player.update();
     
   }

@@ -16,7 +16,7 @@
 		"fixtures": [
 			{
 				"label": "foot-fixture",
-				"isSensor": false,
+				"isSensor": true,
 				"vertices": [
 					[ { "x":115, "y":39 }, { "x":100, "y":61 }, { "x":111, "y":62 } ]
 				]
