@@ -86,6 +86,7 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
     this.player.setCollisionGroup(-1);
+    this.player.animated = true;
     
     console.log("starty ", HEIGHT-200);
     // this.playerwalking = true;
@@ -95,6 +96,7 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.vase = new ChallengeObject({ scene: this, x: RIGHTEDGE, y: center.height+80, object: 'vase' });
     this.vase.setCollisionGroup(-1);
     this.vase.setIgnoreGravity(true);
+    this.vase.animated = false;
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');

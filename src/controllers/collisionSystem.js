@@ -11,28 +11,38 @@ export default class CollisionSystem{
     checkCollision(player, vase){
         if(player.anims.currentFrame){
             var bodyAFixtures = jsonQuery('[*label='+player.anims.currentFrame.frame.name+'].fixtures', {data: this.fixtures}).value;
-            if(bodyAFixtures.length > 0){
-                //need to add player.x to each x coordinate in vertices
-                var points = [];
-                for(var i=0; i<bodyAFixtures[0].vertices[0].length; i++){
-                    var point = {
-                        x: bodyAFixtures[0].vertices[0][i].x + player.body.bounds.min.x - 15,
-                        y: bodyAFixtures[0].vertices[0][i].y + player.body.bounds.min.y
-                    };
-                    points.push(point);
-                }
-                var bodyAfixture = this.matter.bounds.create(points);
-                var bodyBfixture = this.matter.bounds.create([vase.body.bounds.min, vase.body.bounds.max]);
+            var bodyBFixtures = jsonQuery('[*label=vase].fixtures', {data: this.fixtures}).value;
+            
+            //if both bodies have fixtures
+            if(bodyAFixtures.length > 0 && bodyBFixtures.length > 0){
 
-                return this.matter.bounds.overlaps(bodyBfixture, bodyAfixture);
+                var bodyAfixture = this.matter.bounds.create(
+                    this.adjustForAbsolutePosition(player, bodyAFixtures)
+                );
+                var bodyBfixture = this.matter.bounds.create(
+                    this.adjustForAbsolutePosition(vase, bodyBFixtures)
+                );
+
+                return this.matter.bounds.overlaps(bodyAfixture, bodyBfixture);
             }
             else{
-                return false;
+                return false;   //not playing a hit animation
             }
         }
         else{
-            //if no animations are playing
-            return false;
+            return false;  //player not moving
         }
+    }
+
+    adjustForAbsolutePosition(gameObject, gameObjectFixtures){
+        var points = [];
+        for(var i=0; i<gameObjectFixtures[0].vertices[0].length; i++){
+            var point = {
+                x: gameObjectFixtures[0].vertices[0][i].x + gameObject.body.bounds.min.x-15,
+                y: gameObjectFixtures[0].vertices[0][i].y + gameObject.body.bounds.min.y
+            };
+            points.push(point);
+        }
+        return points;
     }
 }
