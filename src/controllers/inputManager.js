@@ -202,7 +202,8 @@ export default class InputManager {
      * low kick, leg sweep, reverse leg sweep, spinning heal kick
      */
     lowKick(){
-
+        this.player.play('fall', true);
+        this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**
      * any action to the back

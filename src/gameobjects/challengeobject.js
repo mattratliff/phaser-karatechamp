@@ -16,9 +16,9 @@ export default class ChallengeObject extends Phaser.Physics.Matter.Sprite {
       create(){
 
       }
-      activateObject(){
-          this.movementState = 'flying';
-      }
+      // activateObject(){
+      //     this.movementState = 'flying';
+      // }
       deactivate(){
         this.velocity = 0;
       }

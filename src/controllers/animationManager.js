@@ -171,6 +171,12 @@ export default class AnimationManager {
             frameRate: 12, 
             repeat: 0 
         });
+        this.anims.create(
+          { key: 'fall', 
+            frames: this.anims.generateFrameNames('player', { prefix: 'fall', start:1, end: 3, zeroPad: 1 }),
+            frameRate: 12, 
+            repeat: 0 
+        });
 
         //MISC
         this.anims.create(
@@ -200,6 +206,11 @@ export default class AnimationManager {
             frameRate: 2, 
             repeat: 20
         });
+
+        // this.anims.create(
+        //   { key: 'jellyfish', frames: this.anims.generateFrameNames('sea', { prefix: 'blueJellyfish', end: 32, zeroPad: 4 }), repeat: -1 }
+        // );
+
       }  
   
 }

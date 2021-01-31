@@ -1,4 +1,4 @@
-var jsonQuery = require('json-query')
+// var jsonQuery = require('json-query')
 const fixtures = require('../assets/fixtures.json');
 
 
@@ -6,20 +6,15 @@ export default class CollisionSystem{
     constructor(matter){
         this.fixtures = fixtures;
         this.matter = matter;
+        this.buffer = 15;  //offset to handle velocity
     }
 
     checkCollision(player, vase){
-        if(player.anims.currentFrame){
-            console.log(player.anims.currentFrame.frame.name);
-            var bodyAFixtures = jsonQuery('[*label='+player.anims.currentFrame.frame.name+'].fixtures', {data: this.fixtures}).value;
-            var bodyBFixtures = jsonQuery('[*label=vase].fixtures', {data: this.fixtures}).value;
-            
-            console.log(player);
-            console.log(bodyAFixtures);
+        if(player.anims.currentFrame && this.fixtures[player.anims.currentFrame.frame.name]){
+            var bodyAFixtures = this.fixtures[player.anims.currentFrame.frame.name].fixtures;
+            var bodyBFixtures = this.fixtures['vase'].fixtures;
             //if both bodies have fixtures
             if(bodyAFixtures.length > 0 && bodyBFixtures.length > 0){
-
-                
                 var bodyBfixture = this.matter.bounds.create(
                     this.adjustForAbsolutePosition(vase, bodyBFixtures[0])
                 );
@@ -31,9 +26,6 @@ export default class CollisionSystem{
                 for(var i=0; i<bodyAFixtures.length; i++){
                     hit = bodyAFixtures[i].isSensor;
                     fixtureLocation = bodyAFixtures[i].label;
-                    console.log("location = ", fixtureLocation);
-                    
-
                     var bodyAfixture = this.matter.bounds.create(
                         this.adjustForAbsolutePosition(player, bodyAFixtures[i])
                     );
@@ -41,10 +33,6 @@ export default class CollisionSystem{
                     if(collided)
                         break;
                 }
-                console.log('collision = '+collided);
-                console.log("hit = "+hit);
-                console.log("location = ", fixtureLocation);
-
                 return {
                     collided: collided,
                     hit: hit,
@@ -64,7 +52,7 @@ export default class CollisionSystem{
         var points = [];
         for(var i=0; i<fixtureSet.vertices[0].length; i++){
             var point = {
-                x: fixtureSet.vertices[0][i].x + gameObject.body.bounds.min.x-15,
+                x: fixtureSet.vertices[0][i].x + gameObject.body.bounds.min.x-this.buffer,
                 y: fixtureSet.vertices[0][i].y + gameObject.body.bounds.min.y
             };
             points.push(point);
