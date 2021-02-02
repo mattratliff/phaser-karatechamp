@@ -16,6 +16,8 @@ import AnimationSandbox from './scenes/sandboxes/animation-sandbox';
 import PhysicsSandbox from './scenes/sandboxes/physics-sandbox';
 import AISandbox from './scenes/sandboxes/ai-sandbox';
 import MultiplayerSandbox from './scenes/sandboxes/multiplayer-sandbox';
+import ChallengeBoard1 from './scenes/challengeboard1';
+import ChallengeBoard2 from './scenes/challengeboard2';
 
 window.Phaser = Phaser;
 
@@ -37,8 +39,22 @@ const config = {
   },
   physics: {
     default: 'matter'
+  //   matter: {
+  //     debug: true
+  // }
 },
-  scene: [PreBoot, StartScene, LeaderBoard, DojoBoard, AISandbox, PhysicsSandbox, AnimationSandbox, MultiplayerSandbox, GameBoard, TrainingBoard],
+  scene: [PreBoot, 
+    StartScene, 
+    LeaderBoard, 
+    DojoBoard, 
+    AISandbox, 
+    ChallengeBoard1, 
+    ChallengeBoard2, 
+    PhysicsSandbox, 
+    AnimationSandbox, 
+    MultiplayerSandbox, 
+    GameBoard, 
+    TrainingBoard],
   pixelArt: true,
   antialias: false
 };

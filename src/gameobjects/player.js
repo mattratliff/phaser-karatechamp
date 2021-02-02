@@ -17,24 +17,15 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.walking = false;
         this.startbowing = false;
         this.bowing = false;
+        this.ready = false;
 
         scene.add.existing(this);
 
         this.create();
       }
-      preload(){
-
-      }
-      create(){
-          console.log("creating");
-        // this.scene.load.json('kickfixtures', kickfixtures);
-
-
-
-
-      }
+      preload(){}
+      create(){}
       setInputManager(){
-          console.log('gamebad = '+this.usesGamePad());
           this.inputmanager = (this.usesGamePad()) ? new GamepadManager(this.scene) : new KeyboardManager(this.scene);
           this.inputmanager.init(this);
           this.inputmanager.initStates();
@@ -44,6 +35,9 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       }
       usesGamePad(){
           return (this.gamepad === null) ? false : true;
+      }
+      win(){
+        this.inputmanager.win()
       }
       entrance(){
         if(this.startwalking){
@@ -61,8 +55,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         if(this.startbowing){
             this.play('bow', true);
             this.startbowing = false;
+            this.scene.time.delayedCall(2000, this.setPlayerReady, [], this);
         }
       }
+
+      setPlayerReady(){
+          this.ready = true;
+      }
+
       update(){
         this.inputmanager.checkForInput();
         this.entrance();

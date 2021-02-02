@@ -6,7 +6,7 @@ export default class ChallengeObject extends Phaser.Physics.Matter.Sprite {
         this.movementState = 'idle';
         this.scene = scene;
         this.active = false;
-        this.velocity = -2;
+        this.velocity = -3;
         this.active = false;
         scene.add.existing(this);
       }

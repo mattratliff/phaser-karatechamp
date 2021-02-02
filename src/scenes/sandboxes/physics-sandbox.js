@@ -1,8 +1,11 @@
 import constants from '../../config/constants';
 import sounds from '../../assets/sounds/processed';
 import vase from '../../assets/vase.png';
-import practiceboard from '../../assets/backgrounds/gameboard1.png';
+import beachscene from '../../assets/backgrounds/game/beach_background.png';
 import SceneController from '../../controllers/sceneController';
+
+import shorelinePNG from '../../assets/backgrounds/game/shore-spritesheet.png';
+import shorelineJSON from '../../assets/backgrounds/game/shore.json';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -12,8 +15,6 @@ const center = {
 };
 
 const assetScale = SCALE;
-const RIGHTEDGE = center.width + 463;
-const LEFTEDGE = center.width - 462;
 
 export default class PhysicsSandbox extends SceneController {
   constructor() {
@@ -25,8 +26,9 @@ export default class PhysicsSandbox extends SceneController {
   preload() {
     super.preload();
 
-    this.load.image('practiceboard', practiceboard);
+    this.load.image('beachscene', beachscene);
     this.load.image('vase', vase);
+    this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
   }
 
   create() {
@@ -42,10 +44,15 @@ export default class PhysicsSandbox extends SceneController {
     });
 
     this.sendvaseflying = true;
-
   }
 
   addComponents(){
+    this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
+    this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+    this.shoreline.setIgnoreGravity(true);
+    this.shoreline.setCollisionGroup(-1);
+    this.shoreline.play('shore', true);
+
     super.addComponents();
   }
 

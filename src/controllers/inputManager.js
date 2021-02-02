@@ -189,21 +189,21 @@ export default class InputManager {
      */
     facePunch(){
         this.player.play('facepunch', true);
-        this.scene.time.delayedCall(4000, this.forward, [], this);
+        // this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**
      * front kick, reverse punch
      */
     gutKick(){
         this.player.play('gutkick', true);
-        this.scene.time.delayedCall(4000, this.forward, [], this);
+        // this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**
      * low kick, leg sweep, reverse leg sweep, spinning heal kick
      */
     lowKick(){
         this.player.play('fall', true);
-        this.scene.time.delayedCall(4000, this.forward, [], this);
+        // this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**
      * any action to the back

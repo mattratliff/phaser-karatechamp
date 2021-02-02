@@ -1,43 +1,81 @@
-import SceneController from '../../controllers/sceneController';
-import sounds from '../../assets/sounds/processed';
 import constants from '../../config/constants';
-import practiceboard from '../../assets/backgrounds/gameboard1.png';
+import beachscene from '../../assets/backgrounds/game/beach_background.png';
+import SceneController from '../../controllers/sceneController';
+
+import shorelinePNG from '../../assets/backgrounds/game/shore-spritesheet.png';
+import shorelineJSON from '../../assets/backgrounds/game/shore.json';
+
+import Bull from '../../gameobjects/bull';
+
+import bullPNG from '../../assets/bull/bull-spritesheet.png';
+import bullJSON from '../../assets/bull/bull.json';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
+
 const center = {
   width: WIDTH * 0.5,
   height: HEIGHT * 0.5
 };
+
 const assetScale = SCALE;
+const RIGHTEDGE = center.width + 463;
+const LEFTEDGE = center.width - 462;
 
 export default class AISandbox extends SceneController {
   constructor() {
     super({ scenekey: 'AISandbox' });
+    this.gamepad = null;
   }
 
-  preload() { 
-    super.preload(); 
-    this.load.image('practiceboard', practiceboard);
+  preload() {
+    super.preload();
+
+    this.load.atlas('bull', bullPNG, bullJSON);
+    this.load.image('beachscene', beachscene);
+    this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
   }
 
-  create() { 
-    super.create(); 
-    sounds.play('Begin');
-
-    this.practiceText = this.add
-    .text(center.width-305, center.height+300, 'AI SANDBOX', {
-      fill: '#000000',
-      font: `${22 * assetScale}pt Silom`
-    });
+  create() {
+    super.create();
   }
-  
+
   addComponents(){
-    this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
+    this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
+    this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+    this.shoreline.setIgnoreGravity(true);
+    this.shoreline.setCollisionGroup(-1);
+    this.shoreline.play('shore', true);
+
+    // this.bull = new Bull({ scene: this, x: RIGHTEDGE, y: HEIGHT-200, object: 'bull' });
+    // this.bull.setCollisionGroup(-1);
+    // this.bull.setIgnoreGravity(true);
+    // this.bull.play('bull', true);
+    // this.bull.activate();
+    
+    this.practiceText = this.add
+    .text(center.width-100, center.height-300, 'AI SANDBOX', {
+      fill: '#000000',
+      font: `${26 * SCALE}pt Silom`
+    });
+
     super.addComponents();
   }
 
-  update(){ super.update(); }
+  /**
+   * scene controller handles the player and this handles the vase
+   * after update check for collision
+   */
+  update(){
+    super.update();
+    // if(this.bull.x > LEFTEDGE && this.player.ready)
+    //     this.bull.update();
+
+
+  }
+  
+  completeChallenge(){
+    this.scene.switch('Start');
+  }
 
   render() {}
-
 }

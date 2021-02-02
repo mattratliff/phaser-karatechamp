@@ -83,9 +83,9 @@ export default class Start extends Phaser.Scene {
         if(this.selection == 0)
           this.scene.start('PhysicsSandbox');
         else if(this.selection == 1)
-          this.scene.start('AnimationSandbox');
-        else if(this.selection == 2)
           this.scene.start('AISandbox');
+        else if(this.selection == 2)
+          this.scene.start('ChallengeBoard2');
         else if(this.selection == 3)
           this.scene.start('MultiplayerSandbox');
       }
@@ -139,13 +139,13 @@ export default class Start extends Phaser.Scene {
     });
     this.devoption1.visible = false;
 
-    this.devoption2 = this.add.text(center.width-115, center.height+25, 'ANIMATION SANDBOX', {
+    this.devoption2 = this.add.text(center.width-115, center.height+25, 'AI SANDBOX', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
     this.devoption2.visible = false;
 
-    this.devoption3 = this.add.text(center.width-115, center.height+65, 'AI SANDBOX', {
+    this.devoption3 = this.add.text(center.width-115, center.height+65, 'CHALLENGEBOARD 2', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
@@ -240,14 +240,12 @@ export default class Start extends Phaser.Scene {
   };
 
   stopMusic() {
-    console.log("switching music");
     if(!this.musicplaying){
       sounds.volume(0, this.backgroundMusic);
       this.audio.visible = false;
       this.noaudio.visible = true;
     }
     else{
-      console.log("playing music");
       sounds.volume(0.6, this.backgroundMusic);
       this.audio.visible = true;
       this.noaudio.visible = false;

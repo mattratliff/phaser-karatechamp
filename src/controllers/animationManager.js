@@ -188,7 +188,14 @@ export default class AnimationManager {
 
         this.anims.create(
           { key: 'walking', 
-            frames: this.anims.generateFrameNames('player', { prefix: 'walking', start:1, end: 3, zeroPad: 1 }),
+            frames: this.anims.generateFrameNames('player', { prefix: 'walking', start:1, end: 4, zeroPad: 1 }),
+            frameRate: 8, 
+            repeat: 20
+        });
+
+        this.anims.create(
+          { key: 'ai-walking', 
+            frames: this.anims.generateFrameNames('aiplayer', { prefix: 'walking', start:1, end: 4, zeroPad: 1 }),
             frameRate: 8, 
             repeat: 20
         });
@@ -201,15 +208,39 @@ export default class AnimationManager {
         });
 
         this.anims.create(
+          { key: 'ai-bow', 
+            frames: this.anims.generateFrameNames('aiplayer', { prefix: 'bow', start:1, end: 10, zeroPad: 1 }),
+            frameRate: 8, 
+            repeat: 0
+        });
+
+        this.anims.create(
           { key: 'sweat', 
             frames: this.anims.generateFrameNames('player', { prefix: 'sweat', start:1, end: 2, zeroPad: 1 }),
             frameRate: 2, 
             repeat: 20
         });
 
-        // this.anims.create(
-        //   { key: 'jellyfish', frames: this.anims.generateFrameNames('sea', { prefix: 'blueJellyfish', end: 32, zeroPad: 4 }), repeat: -1 }
-        // );
+        this.anims.create(
+          { key: 'shore', 
+            frames: this.anims.generateFrameNames('shoreline', { prefix: 'shore', start:1, end: 6, zeroPad: 1 }),
+            frameRate: 1, 
+            repeat: -1
+        });
+
+        this.anims.create(
+          { key: 'bull', 
+            frames: this.anims.generateFrameNames('bull', { prefix: 'bull', start:1, end: 8, zeroPad: 2 }),
+            frameRate: 8, 
+            repeat: -1
+        });
+
+        this.anims.create(
+          { key: 'bullfall', 
+            frames: this.anims.generateFrameNames('bull', { prefix: 'bullfall', start:1, end: 2, zeroPad: 1 }),
+            frameRate: 1, 
+            repeat: 0
+        });
 
       }  
   
