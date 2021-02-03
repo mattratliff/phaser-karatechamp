@@ -16,8 +16,9 @@ import AnimationSandbox from './scenes/sandboxes/animation-sandbox';
 import PhysicsSandbox from './scenes/sandboxes/physics-sandbox';
 import AISandbox from './scenes/sandboxes/ai-sandbox';
 import MultiplayerSandbox from './scenes/sandboxes/multiplayer-sandbox';
-import ChallengeBoard1 from './scenes/challengeboard1';
-import ChallengeBoard2 from './scenes/challengeboard2';
+import ChallengeBoard1 from './scenes/challengeboard1';  //vase challenge
+import ChallengeBoard1b from './scenes/challengeboard1b';  //vase challenge
+import ChallengeBoard2 from './scenes/challengeboard2';  //bull challenge
 
 window.Phaser = Phaser;
 
@@ -49,6 +50,7 @@ const config = {
     DojoBoard, 
     AISandbox, 
     ChallengeBoard1, 
+    ChallengeBoard1b, 
     ChallengeBoard2, 
     PhysicsSandbox, 
     AnimationSandbox, 

@@ -7,6 +7,8 @@ import noaudio from '../assets/backgrounds/start/no-audio.png';
 import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 
+var utils = require('../helpers/util');
+
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 const center = {
@@ -84,10 +86,15 @@ export default class Start extends Phaser.Scene {
           this.scene.start('PhysicsSandbox');
         else if(this.selection == 1)
           this.scene.start('AISandbox');
-        else if(this.selection == 2)
-          this.scene.start('ChallengeBoard2');
+        else if(this.selection == 2){
+          //randomly choose either board1(dojo) or board1b(beach)
+          var board = utils.getRandomInt(2);
+          if(board==0)this.scene.start('ChallengeBoard1');
+          if(board==1)this.scene.start('ChallengeBoard1b');
+        }
+          
         else if(this.selection == 3)
-          this.scene.start('MultiplayerSandbox');
+          this.scene.start('ChallengeBoard2');
       }
    }
   }
@@ -145,13 +152,13 @@ export default class Start extends Phaser.Scene {
     });
     this.devoption2.visible = false;
 
-    this.devoption3 = this.add.text(center.width-115, center.height+65, 'CHALLENGEBOARD 2', {
+    this.devoption3 = this.add.text(center.width-115, center.height+65, 'VASE CHALLENGEBOARD', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
     this.devoption3.visible = false;
 
-    this.devoption4 = this.add.text(center.width-115, center.height+105, 'MULTIPLAYER SANDBOX', {
+    this.devoption4 = this.add.text(center.width-115, center.height+105, 'BULL CHALLENGEBOARD', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });

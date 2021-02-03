@@ -20,24 +20,20 @@ export default class CollisionSystem{
         this.buffer = 15;  //offset to handle velocity
     }
 
-    checkBullCollision(player, bull){
-      if(bull.body.bounds.min.x - player.body.bounds.max.x < 40 && bull.body.bounds.min.x > player.x && bull.velocity != 0){
-        // var collision = 
-        return this.checkBullCollision2(player, bull);
-      }
-    }
+    /**
+     * Check for the collision of 2 matter sprites during animation (uses hit fixtures created using PhysicsEditor)
+     * @param {Matter.Sprite} sprite1 
+     * @param {Matter.Sprite} sprite2 
+     */
+    checkForSpriteToSpriteCollision(sprite1, sprite2){
+      if(sprite2.body.bounds.min.x - sprite1.body.bounds.max.x < 40 && sprite2.body.bounds.min.x > sprite1.x && sprite2.velocity != 0){
+          if(sprite1.anims.currentFrame && this.fixtures[sprite1.anims.currentFrame.frame.name]){
+            var bodyAFixtures = this.fixtures[sprite1.anims.currentFrame.frame.name].fixtures;
+            var bodyBFixtures = this.fixtures[sprite2.anims.currentFrame.frame.name].fixtures;
 
-    checkBullCollision2(player, bull){
-        if(player.anims.currentFrame && this.fixtures[player.anims.currentFrame.frame.name]){
-            var bodyAFixtures = this.fixtures[player.anims.currentFrame.frame.name].fixtures;
-            var bodyBFixtures = this.fixtures[bull.anims.currentFrame.frame.name].fixtures;
-
-            // var bodyBFixtures = this.fixtures['vase'].fixtures;
-            //if both bodies have fixtures
             if(bodyAFixtures.length > 0 && bodyBFixtures.length > 0){
-              var bfixture = bodyBFixtures[0].label
                 var bodyBfixture = this.matter.bounds.create(
-                    this.adjustForAbsolutePosition(bull, bodyBFixtures[0])
+                    this.adjustForAbsolutePosition(sprite2, bodyBFixtures[0])
                 );
 
                 //loop over every fixture to test for collision (foot, body, head, leg)
@@ -49,7 +45,7 @@ export default class CollisionSystem{
                     hit = bodyAFixtures[i].isSensor;
                     fixtureLocation = bodyAFixtures[i].label;
                     var bodyAfixture = this.matter.bounds.create(
-                        this.adjustForAbsolutePosition(player, bodyAFixtures[i])
+                        this.adjustForAbsolutePosition(sprite1, bodyAFixtures[i])
                     );
                     fixture = bodyAfixture
                     collided = this.matter.bounds.overlaps(bodyAfixture, bodyBfixture);
@@ -69,76 +65,56 @@ export default class CollisionSystem{
         else{
             return { collided: false, hit: null, fixtureLocation: null };
         }
+      }
     }
 
-    
-    checkVaseCollision(player, vase){
-        if(vase.x - player.body.bounds.max.x < 40 && vase.x > player.x && vase.velocity != 0){
-          var collision = this.checkVaseCollision2(player, vase);
-          if(collision.collided){
-            //player hit vase
-            if(collision.hit){
-              vase.play('vase', true);
-              vase.velocity = 0;
-              this.scene.time.delayedCall(2000, vase.deactivate(RIGHTEDGE), [], this);
-            }
-            //vase hit player
-            else{
-              if(collision.fixture == "body-fixture")
-                player.inputmanager.gutKick();
-              else if(collision.fixture == "head-fixture")
-                player.inputmanager.facePunch();
-              else if(collision.fixture == "leg-fixture")
-                player.inputmanager.lowKick();
-              
-              player.inputmanager.pause = true;
-              vase.play('vase', true);
-              vase.velocity = 0;
-              this.scene.time.delayedCall(2000, vase.deactivate(RIGHTEDGE), [], this); 
-            }
-    
+    /**
+     * Check for the collision of a matter sprite body with a matter body
+     * @param {Matter.Sprite} sprite1 
+     * @param {Matter.Body} body1
+     */
+    checkForSpriteToBodyCollision(sprite1, body1){
+        if(body1.x - sprite1.body.bounds.max.x < 40 && body1.x > sprite1.x && body1.velocity != 0){
+            if(sprite1.anims.currentFrame && this.fixtures[sprite1.anims.currentFrame.frame.name]){
+              var bodyAFixtures = this.fixtures[sprite1.anims.currentFrame.frame.name].fixtures;
+              var bodyBFixtures = this.fixtures['vase'].fixtures;
+              //if both bodies have fixtures
+              if(bodyAFixtures.length > 0 && bodyBFixtures.length > 0){
+                  var bodyBfixture = this.matter.bounds.create(
+                      this.adjustForAbsolutePosition(body1, bodyBFixtures[0])
+                  );
+
+                  //loop over every fixture to test for collision (foot, body, head, leg)
+                  var hit = false;
+                  var collided = false;
+                  var fixtureLocation = null;
+                  for(var i=0; i<bodyAFixtures.length; i++){
+                      hit = bodyAFixtures[i].isSensor;
+                      fixtureLocation = bodyAFixtures[i].label;
+                      var bodyAfixture = this.matter.bounds.create(
+                          this.adjustForAbsolutePosition(sprite1, bodyAFixtures[i])
+                      );
+                      collided = this.matter.bounds.overlaps(bodyAfixture, bodyBfixture);
+                      if(collided)
+                          break;
+                  }
+                  return {
+                      collided: collided,
+                      hit: hit,
+                      fixture: fixtureLocation
+                  }
+              }
+              else{
+                  return { collided: false, hit: null, fixtureLocation: null };
+              }
+          }
+          else{
+              return { collided: false, hit: null, fixtureLocation: null };
           }
         }
       }
 
-    checkVaseCollision2(player, vase){
-        if(player.anims.currentFrame && this.fixtures[player.anims.currentFrame.frame.name]){
-            var bodyAFixtures = this.fixtures[player.anims.currentFrame.frame.name].fixtures;
-            var bodyBFixtures = this.fixtures['vase'].fixtures;
-            //if both bodies have fixtures
-            if(bodyAFixtures.length > 0 && bodyBFixtures.length > 0){
-                var bodyBfixture = this.matter.bounds.create(
-                    this.adjustForAbsolutePosition(vase, bodyBFixtures[0])
-                );
 
-                //loop over every fixture to test for collision (foot, body, head, leg)
-                var hit = false;
-                var collided = false;
-                var fixtureLocation = null;
-                for(var i=0; i<bodyAFixtures.length; i++){
-                    hit = bodyAFixtures[i].isSensor;
-                    fixtureLocation = bodyAFixtures[i].label;
-                    var bodyAfixture = this.matter.bounds.create(
-                        this.adjustForAbsolutePosition(player, bodyAFixtures[i])
-                    );
-                    collided = this.matter.bounds.overlaps(bodyAfixture, bodyBfixture);
-                    if(collided)
-                        break;
-                }
-                return {
-                    collided: collided,
-                    hit: hit,
-                    fixture: fixtureLocation
-                }
-            }
-            else{
-                return { collided: false, hit: null, fixtureLocation: null };
-            }
-        }
-        else{
-            return { collided: false, hit: null, fixtureLocation: null };
-        }
-    }
 
     adjustForAbsolutePosition(gameObject, fixtureSet){
         var points = [];

@@ -1,10 +1,10 @@
 import constants from '../config/constants';
-// import beachscene from '../assets/backgrounds/game/beach_background.png';
+import beachscene from '../assets/backgrounds/game/beach_background.png';
 import SceneController from '../controllers/sceneController';
 
-// import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
-// import shorelineJSON from '../assets/backgrounds/game/shore.json';
-import practiceboard from '../assets/backgrounds/gameboard1.png';
+import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
+import shorelineJSON from '../assets/backgrounds/game/shore.json';
+// import practiceboard from '../assets/backgrounds/gameboard1.png';
 
 import vasePNG from '../assets/objects/spritesheet.png';
 import vaseJSON from '../assets/objects/sprites.json';
@@ -22,9 +22,10 @@ const assetScale = SCALE;
 const RIGHTEDGE = center.width + 463;
 const LEFTEDGE = center.width - 462;
 
-export default class ChallengeBoard1 extends SceneController {
+export default class ChallengeBoard1b extends SceneController {
   constructor() {
-    super({ scenekey: 'ChallengeBoard1' });
+    super({ scenekey: 'ChallengeBoard1b' });
+    console.log('board 1b');
     this.gamepad = null;
     this.numbervases = 5;
   }
@@ -33,9 +34,9 @@ export default class ChallengeBoard1 extends SceneController {
     super.preload();
 
     this.load.atlas('vase', vasePNG, vaseJSON);
-    this.load.image('practiceboard', practiceboard);
-    // this.load.image('beachscene', beachscene);
-    // this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
+    // this.load.image('practiceboard', practiceboard);
+    this.load.image('beachscene', beachscene);
+    this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
   }
 
   create() {
@@ -43,13 +44,13 @@ export default class ChallengeBoard1 extends SceneController {
   }
 
   addComponents(){
-    // this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
-    // this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-    // this.shoreline.setIgnoreGravity(true);
-    // this.shoreline.setCollisionGroup(-1);
-    // this.shoreline.play('shore', true);
+    this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
+    this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+    this.shoreline.setIgnoreGravity(true);
+    this.shoreline.setCollisionGroup(-1);
+    this.shoreline.play('shore', true);
 
-    this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
+    // this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
 
     this.vase = new ChallengeObject({ scene: this, x: RIGHTEDGE, y: this.getVasePosition(), object: 'vase', rightedge: RIGHTEDGE });
     this.vase.setCollisionGroup(-1);

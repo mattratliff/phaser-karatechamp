@@ -8,9 +8,9 @@ import playerPNG from '../assets/white/spritesheet.png';
 import playerJSON from '../assets/white/sprites.json';
 import Player from '../gameobjects/player';
 
-import AIplayerPNG from '../assets/red/spritesheet.png';
-import AIplayerJSON from '../assets/red/sprites.json';
-import AIPlayer from '../gameobjects/aiplayer';
+// import AIplayerPNG from '../assets/red/spritesheet.png';
+// import AIplayerJSON from '../assets/red/sprites.json';
+// import AIPlayer from '../gameobjects/aiplayer';
 
 import border from '../assets/backgrounds/start/dojo-border.png';
 
@@ -40,7 +40,7 @@ export default class AnimationSandbox extends Phaser.Scene {
 
   preload() {
     this.load.atlas('player', playerPNG, playerJSON);
-    this.load.atlas('aiplayer', AIplayerPNG, AIplayerJSON);
+    // this.load.atlas('aiplayer', AIplayerPNG, AIplayerJSON);
 
     this.load.image('ground', ground);
     this.load.image('leftborder', border);
@@ -80,27 +80,26 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.player.animated = true;
     this.player.startwalking = true;
 
-    this.AIplayer = new AIPlayer({ scene: this, startx: RIGHTEDGE-75, starty: HEIGHT-200, readyx: center.width+150 });
-    // this.AIplayer.setGamePad(this.gamepad);
-    this.AIplayer.setCollisionGroup(-1);
-    this.AIplayer.animated = true;
-    this.AIplayer.startwalking = true;
+    // this.AIplayer = new AIPlayer({ scene: this, startx: RIGHTEDGE-75, starty: HEIGHT-200, readyx: center.width+150 });
+    // this.AIplayer.setCollisionGroup(-1);
+    // this.AIplayer.animated = true;
+    // this.AIplayer.startwalking = true;
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
   }
 
-  registerDropVasesForDebug(){
-    this.input.on('pointerdown', function (pointer) {  
-        this.vase.x = pointer.x;
-        this.vase.y = this.getVasePosition();
-        this.vase.velocity = -3;
-        this.vase.active = true;
-    }, this);
-  }
+  // registerDropVasesForDebug(){
+  //   this.input.on('pointerdown', function (pointer) {  
+  //       this.vase.x = pointer.x;
+  //       this.vase.y = this.getVasePosition();
+  //       this.vase.velocity = -3;
+  //       this.vase.active = true;
+  //   }, this);
+  // }
 
   update(){
     this.player.update();
-    this.AIplayer.update();
+    // this.AIplayer.update();
   }
 }

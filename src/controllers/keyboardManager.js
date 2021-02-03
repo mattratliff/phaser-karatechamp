@@ -36,10 +36,10 @@ export default class KeyboardManager extends InputManager {
         this.keyMainMenu = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
         //HITS
-        this.keyFacePunch = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
-        this.keyGutKick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
-        this.keyWin = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y);
-        this.keySweat = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
+        // this.keyFacePunch = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
+        // this.keyGutKick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
+        // this.keyWin = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y);
+        // this.keySweat = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
 
     }
 
@@ -98,14 +98,14 @@ export default class KeyboardManager extends InputManager {
         //BACK TO MAIN MENU
         else if(this.keyMainMenu.isDown)this.backToMainMenu();
         //FACE PUNCH RAGDOLL
-        else if(this.keyFacePunch.isDown)this.facePunch();
-        //GUT KICK RAGDOLL
-        else if(this.keyGutKick.isDown)this.gutKick();
-        //WIN JUMPING
-        else if(this.keyWin.isDown)this.win();
+        // else if(this.keyFacePunch.isDown)this.facePunch();
+        // //GUT KICK RAGDOLL
+        // else if(this.keyGutKick.isDown)this.gutKick();
+        // //WIN JUMPING
+        // else if(this.keyWin.isDown)this.win();
 
         //SEND VASE FLYING
-        else if(this.keyWin.isDown)this.sendVaseFlying();
-        else if(this.keySweat.isDown)this.sweat();
+        // else if(this.keyWin.isDown)this.sendVaseFlying();
+        // else if(this.keySweat.isDown)this.sweat();
       }
 }

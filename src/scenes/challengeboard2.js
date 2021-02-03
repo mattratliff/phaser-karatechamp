@@ -53,7 +53,7 @@ export default class ChallengeBoard2 extends SceneController {
     this.bull.activate();
     
     this.practiceText = this.add
-    .text(center.width-150, center.height-300, 'CHALLENGE BOARD', {
+    .text(center.width-150, center.height-300, 'CONQUER THE BULL', {
       fill: '#000000',
       font: `${26 * SCALE}pt Silom`
     });
@@ -70,7 +70,7 @@ export default class ChallengeBoard2 extends SceneController {
     if(this.bull.x > LEFTEDGE && this.player.ready)
         this.bull.update();
 
-    var collision = this.collisionSystem.checkBullCollision(this.player, this.bull);
+    var collision = this.collisionSystem.checkForSpriteToSpriteCollision(this.player, this.bull);
     if(collision && collision.collided){
         //player hit bull
         if(collision.hit){
