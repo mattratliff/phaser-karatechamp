@@ -19,6 +19,7 @@ import MultiplayerSandbox from './scenes/sandboxes/multiplayer-sandbox';
 import ChallengeBoard1 from './scenes/challengeboard1';  //vase challenge
 import ChallengeBoard1b from './scenes/challengeboard1b';  //vase challenge
 import ChallengeBoard2 from './scenes/challengeboard2';  //bull challenge
+import BrickBoard from './scenes/brickboard';  //bull challenge
 
 window.Phaser = Phaser;
 
@@ -51,7 +52,8 @@ const config = {
     AISandbox, 
     ChallengeBoard1, 
     ChallengeBoard1b, 
-    ChallengeBoard2, 
+    ChallengeBoard2,
+    BrickBoard, 
     PhysicsSandbox, 
     AnimationSandbox, 
     MultiplayerSandbox, 

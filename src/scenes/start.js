@@ -85,7 +85,7 @@ export default class Start extends Phaser.Scene {
         if(this.selection == 0)
           this.scene.start('PhysicsSandbox');
         else if(this.selection == 1)
-          this.scene.start('AISandbox');
+          this.scene.start('BrickBoard');
         else if(this.selection == 2){
           //randomly choose either board1(dojo) or board1b(beach)
           var board = utils.getRandomInt(2);
@@ -146,19 +146,19 @@ export default class Start extends Phaser.Scene {
     });
     this.devoption1.visible = false;
 
-    this.devoption2 = this.add.text(center.width-115, center.height+25, 'AI SANDBOX', {
+    this.devoption2 = this.add.text(center.width-115, center.height+25, 'BRICK BREAKING', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
     this.devoption2.visible = false;
 
-    this.devoption3 = this.add.text(center.width-115, center.height+65, 'VASE CHALLENGEBOARD', {
+    this.devoption3 = this.add.text(center.width-115, center.height+65, 'VASE CHALLENGE', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
     this.devoption3.visible = false;
 
-    this.devoption4 = this.add.text(center.width-115, center.height+105, 'BULL CHALLENGEBOARD', {
+    this.devoption4 = this.add.text(center.width-115, center.height+105, 'BULL CHALLENGE', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
