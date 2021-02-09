@@ -1,23 +1,37 @@
 import Phaser from 'phaser';
 import KeyboardManager from '../controllers/keyboardManager';
 import GamepadManager from '../controllers/gamepadManager';
-
+var utils = require('../helpers/util');
 // import kickfixtures from '../assets/white/frontkick.json';
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
-    constructor({scene, startx, starty, readyx}) {
-        super(scene.matter.world, startx, starty, 'player');
+    constructor({scene, startx, starty, readyx, frame}) {
+        console.log("frame = ", frame);
+        super(scene.matter.world, startx, starty, 'player', frame);
         this.readyx = readyx;
         this.movementState = 'idle';
         this.scene = scene;
         this.inputmanager = null;
         this.gamepad = null;
+        this.direction = 1;
+        this.verticaldistance = 0;
+        this.horizontaldistance = 0;
+        this.yoffset = 4;
+        this.xoffset = 3;
+        this.starty = starty;
+        this.startx = startx;
 
         this.startwalking = false;
         this.walking = false;
         this.startbowing = false;
         this.bowing = false;
         this.ready = false;
+
+        this.chopping = false;
+        this.chopped = false;
+        
+        this.breaking = false;
+        this.broke = false;
 
         scene.add.existing(this);
 
@@ -65,6 +79,16 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
       update(){
         this.inputmanager.checkForInput();
-        this.entrance();
+        if(!this.chopping && !this.breaking)
+            this.entrance();
+
+        if(this.chopping){
+            if(!this.chopped)
+                utils.bounce(this);
+        }
+        if(this.breaking){
+            if(!this.broke)
+                utils.breaking(this);
+        }
       }
 }

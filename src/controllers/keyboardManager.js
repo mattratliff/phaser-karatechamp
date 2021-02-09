@@ -36,11 +36,7 @@ export default class KeyboardManager extends InputManager {
         this.keyMainMenu = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
         //HITS
-        // this.keyFacePunch = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
-        // this.keyGutKick = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.G);
-        // this.keyWin = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Y);
-        // this.keySweat = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B);
-
+        this.keyChop = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.H);
     }
 
     initStates(){
@@ -48,6 +44,11 @@ export default class KeyboardManager extends InputManager {
     }
 
     checkForInput(){
+        //check to see if player is breaking a brick
+        if(this.player.chopping){
+            if(this.keyChop.isDown)this.chop();
+        }
+
         if(this.pause)
             return;
 
@@ -97,15 +98,5 @@ export default class KeyboardManager extends InputManager {
         else if(!this.keyLeftDown.isDown && this.isSquating)this.standup();
         //BACK TO MAIN MENU
         else if(this.keyMainMenu.isDown)this.backToMainMenu();
-        //FACE PUNCH RAGDOLL
-        // else if(this.keyFacePunch.isDown)this.facePunch();
-        // //GUT KICK RAGDOLL
-        // else if(this.keyGutKick.isDown)this.gutKick();
-        // //WIN JUMPING
-        // else if(this.keyWin.isDown)this.win();
-
-        //SEND VASE FLYING
-        // else if(this.keyWin.isDown)this.sendVaseFlying();
-        // else if(this.keySweat.isDown)this.sweat();
       }
 }

@@ -187,6 +187,13 @@ export default class AnimationManager {
         });
 
         this.anims.create(
+          { key: 'happy', 
+            frames: this.anims.generateFrameNames('player', { prefix: 'happy', start:1, end: 1, zeroPad: 1 }),
+            frameRate: 4, 
+            repeat: 10
+        });
+
+        this.anims.create(
           { key: 'walking', 
             frames: this.anims.generateFrameNames('player', { prefix: 'walking', start:1, end: 4, zeroPad: 1 }),
             frameRate: 8, 
@@ -219,6 +226,74 @@ export default class AnimationManager {
             frames: this.anims.generateFrameNames('player', { prefix: 'sweat', start:1, end: 2, zeroPad: 1 }),
             frameRate: 2, 
             repeat: 20
+        });
+
+        this.anims.create(
+          { key: 'chop', 
+            frames: this.anims.generateFrameNames('player', { prefix: 'chop', start:1, end: 2, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+
+        this.anims.create(
+          { key: 'brick1', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 2, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick2', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 3, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick3', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 4, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick4', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 5, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick5', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 6, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick6', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 7, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick7', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 8, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick8', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 9, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick9', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 10, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'brick10', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 11, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
         });
 
         this.anims.create(

@@ -30,7 +30,7 @@ export default class Start extends Phaser.Scene {
     this.showleaderboard = false;
     this.selection = 0;
     this.inDevMode = false;
-    this.maxSelections = 3;
+    this.maxSelections = 4;
   }
 
   preloadBackground() {
@@ -62,39 +62,35 @@ export default class Start extends Phaser.Scene {
     this.playMusic();
   }
   startGame(){
-    if((this.selection == 3 && !this.inDevMode) || (this.selection == 4 && this.inDevMode)){
+    if((this.selection == 3 && !this.inDevMode) || (this.selection == 5 && this.inDevMode)){
       this.switchModes();
     }else{
       sounds.stop(this.title_track);
+      // this.scene.stop('Start');
+
       if(!this.inDevMode){
-        if(this.selection == 0){
-          this.scene.stop('Start');
-          this.scene.start('DojoBoard');
-        }
-        else if(this.selection == 1){
-          this.scene.stop('Start');
+        if(this.selection == 0)
+          this.scene.start('SinglePlayer');
+        else if(this.selection == 1)
           this.scene.start('Multiplayer');
-        }
-        else if(this.selection == 2){
-          this.scene.stop('Start');
+        else if(this.selection == 2)
           this.scene.start('TrainingBoard');
-        }
       }
       else{
         this.scene.stop('Start');
         if(this.selection == 0)
-          this.scene.start('PhysicsSandbox');
-        else if(this.selection == 1)
           this.scene.start('BrickBoard');
-        else if(this.selection == 2){
-          //randomly choose either board1(dojo) or board1b(beach)
-          var board = utils.getRandomInt(2);
-          if(board==0)this.scene.start('ChallengeBoard1');
-          if(board==1)this.scene.start('ChallengeBoard1b');
-        }
-          
+        else if(this.selection == 1)
+          this.scene.start('BrickBoard2');
+        else if(this.selection == 2)
+          this.scene.start('VaseBoard');
         else if(this.selection == 3)
-          this.scene.start('ChallengeBoard2');
+          this.scene.start('BullBoard');
+        // else if(this.selection == 3){
+        //   this.scene.start('Start');
+        //   this.inDevMode = false;
+        //   this.selection = 0;
+        // }
       }
    }
   }
@@ -140,13 +136,13 @@ export default class Start extends Phaser.Scene {
     });
     this.menuoption4.visible = true;
 
-    this.devoption1 = this.add.text(center.width-115, center.height-15, 'PHYSICS SANDBOX', {
+    this.devoption1 = this.add.text(center.width-115, center.height-15, 'VERTICAL BREAKING', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
     this.devoption1.visible = false;
 
-    this.devoption2 = this.add.text(center.width-115, center.height+25, 'BRICK BREAKING', {
+    this.devoption2 = this.add.text(center.width-115, center.height+25, 'HORIZONTAL BREAKING', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
@@ -164,7 +160,7 @@ export default class Start extends Phaser.Scene {
     });
     this.devoption4.visible = false;
 
-    this.devoption5 = this.add.text(center.width-115, center.height+145, 'MAINMENU', {
+    this.devoption5 = this.add.text(center.width-115, center.height+145, 'MAIN MENU', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
@@ -172,13 +168,11 @@ export default class Start extends Phaser.Scene {
   }
 
   switchModes(){
-
     this.resetTimer();
     this.hand.y = center.height+10;
     this.selection = 0;
     this.inDevMode = !this.inDevMode;
     if(this.inDevMode){
-      this.maxSelections = 5;
       this.menuoption1.visible = false;
       this.menuoption2.visible = false;
       this.menuoption3.visible = false;
@@ -188,10 +182,8 @@ export default class Start extends Phaser.Scene {
       this.devoption2.visible = true;
       this.devoption3.visible = true;
       this.devoption4.visible = true;
-      this.devoption5.visible = true;
-    }
+      this.devoption5.visible = true;    }
     else{
-      this.maxSelections = 4;
       this.menuoption1.visible = true;
       this.menuoption2.visible = true;
       this.menuoption3.visible = true;
@@ -232,7 +224,7 @@ export default class Start extends Phaser.Scene {
     }
     if(this.input.keyboard.checkDown(cursors.down, 250))
     {
-      if(this.selection < this.maxSelections){
+      if(this.selection < this.maxSelections-1){
       this.hand.y = this.hand.y + 40;
       this.selection++;
       }

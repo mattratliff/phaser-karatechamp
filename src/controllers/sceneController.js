@@ -6,7 +6,7 @@ import ground from '../assets/backgrounds/game/practice/practice-ground.png';
 
 import playerPNG from '../assets/white/spritesheet.png';
 import playerJSON from '../assets/white/sprites.json';
-import Player from '../gameobjects/player';
+// import Player from '../gameobjects/player';
 
 // import AIplayerPNG from '../assets/red/spritesheet.png';
 // import AIplayerJSON from '../assets/red/sprites.json';
@@ -71,19 +71,13 @@ export default class AnimationSandbox extends Phaser.Scene {
   addComponents(){
     const center = { width: WIDTH * 0.5, height: HEIGHT * 0.5 };
 
-    this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
+    // this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
-    this.player = new Player({ scene: this, startx: LEFTEDGE+75, starty: HEIGHT-200, readyx: center.width-150 });
-    this.player.setGamePad(this.gamepad);
-    this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionGroup(-1);
-    this.player.animated = true;
-    this.player.startwalking = true;
-
-    // this.AIplayer = new AIPlayer({ scene: this, startx: RIGHTEDGE-75, starty: HEIGHT-200, readyx: center.width+150 });
-    // this.AIplayer.setCollisionGroup(-1);
-    // this.AIplayer.animated = true;
-    // this.AIplayer.startwalking = true;
+    // this.player = new Player({ scene: this, startx: center.width, starty: HEIGHT-200, readyx: center.width-150 });
+    // this.player.setGamePad(this.gamepad);
+    // this.player.setInputManager(this.inputmanager);
+    // this.player.setCollisionGroup(-1);
+    // this.player.animated = true;
 
     this.add.image(LEFTEDGE, center.height, 'leftborder');
     this.add.image(RIGHTEDGE, center.height, 'rightborder');
@@ -99,7 +93,7 @@ export default class AnimationSandbox extends Phaser.Scene {
   // }
 
   update(){
-    this.player.update();
+    // this.player.update();
     // this.AIplayer.update();
   }
 }

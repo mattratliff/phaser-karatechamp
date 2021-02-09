@@ -1,15 +1,11 @@
 import constants from '../config/constants';
-// import beachscene from '../assets/backgrounds/game/beach_background.png';
 import SceneController from '../controllers/sceneController';
+import background from '../assets/backgrounds/game/stadium1.png';
 
-// import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
-// import shorelineJSON from '../assets/backgrounds/game/shore.json';
-import practiceboard from '../assets/backgrounds/game/stadium1.png';
-
-import vasePNG from '../assets/objects/spritesheet.png';
-import vaseJSON from '../assets/objects/sprites.json';
-
-import ChallengeObject from '../gameobjects/challengeobject';
+import brickPNG from '../assets/bricks/brickspritesheet.png';
+import brickJSON from '../assets/bricks/bricks.json';
+import Brick from '../gameobjects/bricks';
+import Player from '../gameobjects/player';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -19,8 +15,6 @@ const center = {
 };
 
 const assetScale = SCALE;
-const RIGHTEDGE = center.width + 463;
-const LEFTEDGE = center.width - 462;
 
 export default class BrickBoard extends SceneController {
   constructor() {
@@ -31,9 +25,8 @@ export default class BrickBoard extends SceneController {
 
   preload() {
     super.preload();
-
-    this.load.atlas('vase', vasePNG, vaseJSON);
-    this.load.image('practiceboard', practiceboard);
+    this.load.image('background', background);
+    this.load.atlas('brick', brickPNG, brickJSON);
   }
 
   create() {
@@ -41,95 +34,70 @@ export default class BrickBoard extends SceneController {
   }
 
   addComponents(){
-    // this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
-    // this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-    // this.shoreline.setIgnoreGravity(true);
-    // this.shoreline.setCollisionGroup(-1);
-    // this.shoreline.play('shore', true);
+    this.add.image(center.width, center.height, 'background').setScale(assetScale);
 
-    this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
+    super.addComponents();    
+    
+    this.player = new Player({ scene: this, startx: center.width, starty: center.height, readyx: center.width-150, frame: 'chop1' });
+    this.player.setGamePad(this.gamepad);
+    this.player.setIgnoreGravity(true);
+    this.player.setInputManager(this.inputmanager);
+    this.player.setCollisionGroup(-1);
+    this.player.animated = true;
+    this.player.verticaldistance = 50;  //how much vertical space to bounce
+    this.player.chopping = true;
+    this.player.chopped = false;
 
-    this.vase = new ChallengeObject({ scene: this, x: RIGHTEDGE, y: this.getVasePosition(), object: 'vase', rightedge: RIGHTEDGE });
-    this.vase.setCollisionGroup(-1);
-    this.vase.setIgnoreGravity(true);
-    this.vase.animated = false;
+    this.bricks = new Brick({ scene: this, x: center.width, y: center.height+150, object: 'brick' });
+    this.bricks.setScale(0.5);
+    this.bricks.setIgnoreGravity(true);
+    this.bricks.setCollisionGroup(-1);
+    this.bricks.breaking = false;
+    
 
     this.practiceText = this.add
-    .text(center.width-220, center.height-300, 'FLYING OBJECT CHALLENGE', {
-      fill: '#000000',
-      font: `${26 * SCALE}pt Silom`
+    .text(center.width-20, center.height-253, '30', {
+      fill: '#ffffff',
+      font: `${20 * SCALE}pt Silom`
     });
-
-    this.practiceText = this.add
-    .text(center.width-230, center.height+300, 'Click where you want the vase to begin', {
-      fill: '#000000',
-      font: `${16 * SCALE}pt Silom`
-    });
-
-    super.addComponents();
-
-    this.registerDropVasesForDebug();
   }
 
-    registerDropVasesForDebug(){
-    this.input.on('pointerdown', function (pointer) {  
-        this.vase.x = pointer.x;
-        // this.vase.y = this.getVasePosition();
-        this.vase.y = pointer.y;
-        this.vase.velocity = -3;
-        this.vase.active = true;
-    }, this);
-  }
-
-  /**
-   * Randomly choose a y coordinate to start the vase
-   */
-  getVasePosition(){
-    return center.height + 120 - (Math.random() * 130);
-  }
-
-  resetVase(){
-    this.vase.x = RIGHTEDGE;
-  }
-  /**
-   * scene controller handles the player and this handles the vase
-   * after update check for collision
-   */
   update(){
     super.update();
-    if(this.player.ready && this.vase.x > LEFTEDGE)
-        this.vase.update();
+    
+    if(this.player.chopped){
+      var distance = this.player.y - this.bricks.body.bounds.min.y;
+        if(!this.bricks.breaking){
+          if(distance < 0)this.bricks.play('brick1', true);
+          else if(distance > 0 && distance < 3)this.bricks.play('brick2', true);
+          else if(distance > 3 && distance < 9)this.bricks.play('brick3', true);
+          else if(distance > 9 && distance < 12)this.bricks.play('brick4', true);
+          else if(distance > 12 && distance < 15)this.bricks.play('brick5', true);
+          else if(distance > 15 && distance < 18)this.bricks.play('brick6', true);
+          else if(distance > 18 && distance < 21)this.bricks.play('brick7', true);
+          else if(distance > 21 && distance < 24)this.bricks.play('brick8', true);
+          else if(distance > 24 && distance < 27)this.bricks.play('brick9', true);
+          else if(distance > 27 && distance < 30)this.bricks.play('brick10', true);
+          
+          this.time.delayedCall(4000, this.checkSuccess(distance), [], this);
 
-    var collision = this.collisionSystem.checkForSpriteToBodyCollision(this.player, this.vase);
-    if(collision && collision.collided){
-
-      console.log("exploding vase");
-      this.vase.play('vase', true);
-      this.vase.velocity = 0;
-      this.time.delayedCall(300, this.resetVase, [], this);
-
-      //vase hit player
-      if(!collision.hit){
-        if(collision.fixture == "body-fixture")
-          this.player.play('gutkick');
-        else if(collision.fixture == "head-fixture")
-          this.player.play('facepunch');
-        else if(collision.fixture == "leg-fixture")
-          this.player.play('fall');
-
-        // this.time.delayedCall(2000, this.player.inputmanager.sweat, [], this);
-      }
-      else{
-        this.numbervases--;
-        if(this.numbervases==0){
-          this.player.inputmanager.pause = true;
-          this.time.delayedCall(500, this.player.inputmanager.win, [], this);
+          this.bricks.breaking = true;
         }
-      }
-
     }
-
+    else
+      this.player.update();
   }
 
+  checkSuccess(distance){
+    if(distance > 21){
+      this.player.play('happy', true);
+    }
+    this.time.delayedCall(4000, this.changeScene, [], this);
+  }
+
+  changeScene(){
+    this.scene.stop('BrickBoard');
+    this.scene.start('BrickBoard');
+  }
   render() {}
 }

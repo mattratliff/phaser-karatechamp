@@ -13,13 +13,12 @@ import GameBoard from './scenes/gameboard';
 import TrainingBoard from './scenes/trainingboard';
 
 import AnimationSandbox from './scenes/sandboxes/animation-sandbox';
-import PhysicsSandbox from './scenes/sandboxes/physics-sandbox';
 import AISandbox from './scenes/sandboxes/ai-sandbox';
 import MultiplayerSandbox from './scenes/sandboxes/multiplayer-sandbox';
-import ChallengeBoard1 from './scenes/challengeboard1';  //vase challenge
-import ChallengeBoard1b from './scenes/challengeboard1b';  //vase challenge
-import ChallengeBoard2 from './scenes/challengeboard2';  //bull challenge
-import BrickBoard from './scenes/brickboard';  //bull challenge
+import VaseBoard from './scenes/VaseBoard';  //vase challenge
+import BullBoard from './scenes/BullBoard';  //bull challenge
+import BrickBoard from './scenes/brickboard';  //verical breaking
+import BrickBoard2 from './scenes/brickboard2';  //horizontal breaking
 
 window.Phaser = Phaser;
 
@@ -50,11 +49,10 @@ const config = {
     LeaderBoard, 
     DojoBoard, 
     AISandbox, 
-    ChallengeBoard1, 
-    ChallengeBoard1b, 
-    ChallengeBoard2,
-    BrickBoard, 
-    PhysicsSandbox, 
+    VaseBoard, 
+    BullBoard,
+    BrickBoard,
+    BrickBoard2, 
     AnimationSandbox, 
     MultiplayerSandbox, 
     GameBoard, 
