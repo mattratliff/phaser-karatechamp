@@ -1,7 +1,6 @@
 import { linearScale } from '../utils';
 
-var ybouncespeed = 1;
-var xbouncespeed = 4;
+var xbouncespeed = 5;
 
 export function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
@@ -24,7 +23,7 @@ export function getRandomInt(max) {
   }
 
   export function breaking(player){
-    var boundary = player.startx + 200;
+    var boundary = player.startx + 224;
   
     //adjust for x
     if(player.x <= player.startx)
@@ -34,7 +33,7 @@ export function getRandomInt(max) {
     player.x = player.x + xbouncespeed * player.direction;
 
     //adjust for y
-    if(player.x > player.startx && player.x < (player.startx + 100)){
+    if(player.x > player.startx && player.x < (player.startx + 112)){
       if(player.direction > 0)
         player.y = player.y - 1
       else

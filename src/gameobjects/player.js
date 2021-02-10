@@ -6,7 +6,6 @@ var utils = require('../helpers/util');
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor({scene, startx, starty, readyx, frame}) {
-        console.log("frame = ", frame);
         super(scene.matter.world, startx, starty, 'player', frame);
         this.readyx = readyx;
         this.movementState = 'idle';

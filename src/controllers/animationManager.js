@@ -234,6 +234,12 @@ export default class AnimationManager {
             frameRate: 15, 
             repeat: 0
         });
+        this.anims.create(
+          { key: 'break', 
+            frames: this.anims.generateFrameNames('player', { prefix: 'horizontal', start:1, end: 2, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
 
         this.anims.create(
           { key: 'brick1', 
@@ -292,6 +298,67 @@ export default class AnimationManager {
         this.anims.create(
           { key: 'brick10', 
             frames: this.anims.generateFrameNames('brick', { prefix: 'brick', start:1, end: 11, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+
+        this.anims.create(
+          { key: 'horizontalbrick1', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 2, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick2', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 3, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick3', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 4, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick4', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 5, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick5', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 6, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick6', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 7, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick7', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 8, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick8', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 9, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick9', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 10, zeroPad: 1 }),
+            frameRate: 15, 
+            repeat: 0
+        });
+        this.anims.create(
+          { key: 'horizontalbrick10', 
+            frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 11, zeroPad: 1 }),
             frameRate: 15, 
             repeat: 0
         });

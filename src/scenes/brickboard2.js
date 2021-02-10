@@ -2,10 +2,9 @@ import constants from '../config/constants';
 import SceneController from '../controllers/sceneController';
 import background from '../assets/backgrounds/game/stadium1.png';
 
-// import brickPNG from '../assets/bricks/brickspritesheet.png';
-// import brickJSON from '../assets/bricks/bricks.json';
+import brickPNG from '../assets/bricks/brickspritesheet.png';
+import brickJSON from '../assets/bricks/bricks.json';
 import brickboard from '../assets/bricks/brickboard.png';
-import horizontal from '../../processed images/white/WHITE-COMBINED/horizontal2.png';
 import indicator from '../assets/backgrounds/game/joystick-indicator.png';
 import Brick from '../gameobjects/bricks';
 import Player from '../gameobjects/player';
@@ -31,8 +30,7 @@ export default class BrickBoard2 extends SceneController {
     this.load.image('background', background);
     this.load.image('brickboard', brickboard);
     this.load.image('indicator', indicator);
-    // this.load.image('horizontal', horizontal);
-    // this.load.atlas('brick', brickPNG, brickJSON);
+    this.load.atlas('brick', brickPNG, brickJSON);
   }
 
   create() {
@@ -46,8 +44,6 @@ export default class BrickBoard2 extends SceneController {
 
     this.add.image(center.width+200, center.height+250, 'indicator');
 
-    // this.add.image(center.width-100, center.height+80, 'horizontal');
-
     super.addComponents();    
     
     this.player = new Player({ scene: this, startx: center.width-200, starty: center.height+80, readyx: center.width-150, frame: 'horizontal1' });
@@ -58,12 +54,10 @@ export default class BrickBoard2 extends SceneController {
     this.player.animated = true;
     this.player.breaking = true;
 
-    // this.bricks = new Brick({ scene: this, x: center.width, y: center.height+150, object: 'brick' });
-    // this.bricks.setScale(0.5);
-    // this.bricks.setIgnoreGravity(true);
-    // this.bricks.setCollisionGroup(-1);
-    // this.bricks.breaking = false;
-    
+    this.bricks = new Brick({ scene: this, x: center.width+120, y: center.height+55, object: 'brick', frame: 'horizontalbrick1' });
+    this.bricks.setIgnoreGravity(true);
+    this.bricks.setCollisionGroup(-1);
+    this.bricks.breaking = false;
 
     this.practiceText = this.add
     .text(center.width-20, center.height-253, '30', {
@@ -73,41 +67,43 @@ export default class BrickBoard2 extends SceneController {
   }
 
   update(){
-    super.update();
+    // super.update();
     
-    // if(this.player.chopped){
-    //   var distance = this.player.y - this.bricks.body.bounds.min.y;
-    //     if(!this.bricks.breaking){
-    //       if(distance < 0)this.bricks.play('brick1', true);
-    //       if(distance > 0 && distance < 3)this.bricks.play('brick2', true);
-    //       if(distance > 3 && distance < 9)this.bricks.play('brick3', true);
-    //       if(distance > 9 && distance < 12)this.bricks.play('brick4', true);
-    //       if(distance > 12 && distance < 15)this.bricks.play('brick5', true);
-    //       if(distance > 15 && distance < 18)this.bricks.play('brick6', true);
-    //       if(distance > 18 && distance < 21)this.bricks.play('brick7', true);
-    //       if(distance > 21 && distance < 24)this.bricks.play('brick8', true);
-    //       if(distance > 24 && distance < 27)this.bricks.play('brick9', true);
-    //       if(distance > 27 && distance < 30)this.bricks.play('brick10', true);
-          
-    //       this.time.delayedCall(4000, this.checkSuccess(distance), [], this);
+    if(this.player.broke){
+      var distance = this.player.body.bounds.max.x - this.bricks.body.bounds.min.x;
 
-    //       this.bricks.breaking = true;
-    //     }
-    // }
-    // else
+        if(!this.bricks.breaking){
+          console.log('distance = ', distance);
+          if(distance < 0)this.bricks.play('horizontalbrick1', true);
+          if(distance > 0 && distance < 5)this.bricks.play('horizontalbrick2', true);
+          if(distance > 5 && distance < 10)this.bricks.play('horizontalbrick3', true);
+          if(distance > 10 && distance < 25)this.bricks.play('horizontalbrick4', true);
+          if(distance > 15 && distance < 30)this.bricks.play('horizontalbrick5', true);
+          if(distance > 20 && distance < 35)this.bricks.play('horizontalbrick6', true);
+          if(distance > 25 && distance < 30)this.bricks.play('horizontalbrick7', true);
+          if(distance > 30 && distance < 35)this.bricks.play('horizontalbrick8', true);
+          if(distance > 35 && distance < 40)this.bricks.play('horizontalbrick9', true);
+          if(distance > 40)this.bricks.play('horizontalbrick10', true);
+          
+          this.time.delayedCall(4000, this.checkSuccess(distance), [], this);
+
+          this.bricks.breaking = true;
+        }
+    }
+    else
       this.player.update();
   }
 
-  // checkSuccess(distance){
-  //   if(distance > 21){
-  //     this.player.play('happy', true);
-  //   }
-  //   this.time.delayedCall(8000, this.changeScene, [], this);
-  // }
+  checkSuccess(distance){
+    // if(distance > 21){
+    //   this.player.play('happy', true);
+    // }
+    this.time.delayedCall(5000, this.changeScene, [], this);
+  }
 
   changeScene(){
-    this.scene.stop('BrickBoard');
-    this.scene.start('BrickBoard');
+    this.scene.stop('BrickBoard2');
+    this.scene.start('BrickBoard2');
   }
   render() {}
 }

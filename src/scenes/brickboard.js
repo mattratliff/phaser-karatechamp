@@ -48,7 +48,7 @@ export default class BrickBoard extends SceneController {
     this.player.chopping = true;
     this.player.chopped = false;
 
-    this.bricks = new Brick({ scene: this, x: center.width, y: center.height+150, object: 'brick' });
+    this.bricks = new Brick({ scene: this, x: center.width, y: center.height+150, object: 'brick', frame: 'brick1' });
     this.bricks.setScale(0.5);
     this.bricks.setIgnoreGravity(true);
     this.bricks.setCollisionGroup(-1);

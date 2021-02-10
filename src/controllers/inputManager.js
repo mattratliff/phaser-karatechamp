@@ -217,6 +217,11 @@ export default class InputManager {
         this.player.chopped = true;
         this.player.play('chop', true);
     }
+    break(){
+        //play chop animation
+        this.player.broke = true;
+        this.player.play('break', true);
+    }
     sendVaseFlying(){
         
     }

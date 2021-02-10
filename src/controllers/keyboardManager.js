@@ -49,6 +49,10 @@ export default class KeyboardManager extends InputManager {
             if(this.keyChop.isDown)this.chop();
         }
 
+        if(this.player.breaking){
+            if(this.keyChop.isDown)this.break();
+        }
+
         if(this.pause)
             return;
 
