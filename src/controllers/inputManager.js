@@ -41,6 +41,7 @@ export default class InputManager {
         this.isLowKick = false;
         this.isFrontSweep = false;
         this.isBackSweep = false;
+        this.isJumping = false;
         this.isSpinningHealKick = false;
         this.isFlipping = false;
         this.isJumpingBackKick = false;
@@ -128,6 +129,7 @@ export default class InputManager {
     }
     jump(){
         this.player.play('jump', true); 
+        this.isJumping = true;
     }
     squat(){
         this.player.play('squat', true); 
