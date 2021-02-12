@@ -20,7 +20,6 @@ export default class InputManager {
             if(this.isFrontSweep)this.isFrontSweep = false;
             if(this.isBackSweep)this.isBackSweep = false;
             if(this.isBackKick)this.isBackKick = false;
-            if(this.isLungePunching)this.isLungePunching = false;
             if(this.isSpinningHealKick)this.isSpinningHealKick = false;
             if(this.isJumpingForward)this.isJumpingForward = false;
             if(this.isFlipping)this.isFlipping = false;
@@ -198,13 +197,6 @@ export default class InputManager {
      */
     gutKick(){
         this.player.play('gutkick', true);
-        // this.scene.time.delayedCall(4000, this.forward, [], this);
-    }
-    /**
-     * low kick, leg sweep, reverse leg sweep, spinning heal kick
-     */
-    lowKick(){
-        this.player.play('fall', true);
         // this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**

@@ -112,22 +112,44 @@ export default class TrainingBoard extends SceneController {
             case 5:
                 this.checkMove(this.moves['ROUNDKICK'], function(){});
                 break;
+            case 6:
+                this.checkMove(this.moves['BACKKICK'], function(){});
+                break;
+            case 7:
+                this.checkMove(this.moves['LOWKICK'], function(){});
+                break;
+            case 8:
+                this.checkMove(this.moves['LUNGEPUNCH'], function(){});
+                break;
+                case 9:
+                  this.checkMove(this.moves['HIGHBLOCK'], function(){});
+                  break;
+                              case 10:
+                this.checkMove(this.moves['MIDDLEBLOCK'], function(){});
+                break;
+                case 11:
+                  this.checkMove(this.moves['LOWBLOCK'], function(){});
+                  break;
         }
     }
 }
 
 checkMove(option, callback){
       this.movementText.setText(option.statusText);
-      option.leftcontrol.visible = false
-      option.leftactivecontrol.visible = true;
+      if(option.leftcontrol != ''){
+        option.leftcontrol.visible = false
+        option.leftactivecontrol.visible = true;
+      }
       if(option.rightcontrol != ''){
         option.rightcontrol.visible = false
         option.rightactivecontrol.visible = true;
       }
       if(option.condition(this.player, this.line)){
           this.completeStep = true;
-          option.leftcontrol.visible = true;
-          option.leftactivecontrol.visible = false;
+          if(option.leftcontrol != ''){
+            option.leftcontrol.visible = true;
+            option.leftactivecontrol.visible = false;
+          }
           if(option.rightcontrol != ''){
             option.rightcontrol.visible = true;
             option.rightactivecontrol.visible = false;
@@ -312,20 +334,76 @@ checkMove(option, callback){
             };
     data['FRONTKICK'] = {
             'statusText':'FRONT KICK', 
-            'leftcontrol':this.rightarrowright, 
-            'leftactivecontrol':this.yellowrightarrowright,
-            'rightcontrol':'', 
-            'rightactivecontrol':'',
+            'rightcontrol':this.rightarrowright, 
+            'rightactivecontrol':this.yellowrightarrowright,
+            'leftcontrol':'', 
+            'leftactivecontrol':'',
             'condition':function(player){return player.inputmanager.isKicking;}
             };
     data['ROUNDKICK'] = {
             'statusText':'ROUND KICK', 
-            'leftcontrol':this.rightarrowup, 
-            'leftactivecontrol':this.yellowrightarrowup,
-            'rightcontrol':'', 
-            'rightactivecontrol':'',
+            'rightcontrol':this.rightarrowup, 
+            'rightactivecontrol':this.yellowrightarrowup,
+            'leftcontrol':'', 
+            'leftactivecontrol':'',
             'condition':function(player){return player.inputmanager.isRoundHouseKicking;}
             };
+    data['BACKKICK'] = {
+            'statusText':'BACK KICK', 
+            'rightcontrol':this.rightarrowleft, 
+            'rightactivecontrol':this.yellowrightarrowleft,
+            'leftcontrol':'', 
+            'leftactivecontrol':'',
+            'condition':function(player){return player.inputmanager.isBackKick;}
+            };
+    data['LOWKICK'] = {
+            'statusText':'LOW KICK', 
+            'rightcontrol':this.rightarrowdown, 
+            'rightactivecontrol':this.yellowrightarrowdown,
+            'leftcontrol':'', 
+            'leftactivecontrol':'',
+            'condition':function(player){return player.inputmanager.isLowKick;}
+            };
+    data['LUNGEPUNCH'] = {
+            'statusText':'LUNGE PUNCH', 
+            'rightcontrol':this.rightarrowright, 
+            'rightactivecontrol':this.yellowrightarrowright,
+            'leftcontrol':this.leftarrowright,
+            'leftactivecontrol':this.yellowleftarrowright,
+            'condition':function(player){return player.inputmanager.isLungePunching;}
+            };
+      data['FRONTSWEEP'] = {
+        'statusText':'FRONT SWEEP', 
+        'leftcontrol':this.leftarrowdown,
+        'leftactivecontrol':this.yellowleftarrowdown,
+        'rightcontrol':this.rightarrowright, 
+        'rightactivecontrol':this.yellowrightarrowright,
+        'condition':function(player){return player.inputmanager.isFrontSweep;}
+        };
+      data['HIGHBLOCK'] = {
+        'statusText':'HIGH BLOCK', 
+        'leftcontrol':this.leftarrowup,
+        'leftactivecontrol':this.yellowleftarrowup,
+        'rightcontrol':this.rightarrowup, 
+        'rightactivecontrol':this.yellowrightarrowup,
+        'condition':function(player){return player.inputmanager.isHighBlocking;}
+        };
+      data['MIDDLEBLOCK'] = {
+        'statusText':'MIDDLE BLOCK', 
+        'leftcontrol':this.leftarrowleft,
+        'leftactivecontrol':this.yellowleftarrowleft,
+        'rightcontrol':this.rightarrowleft, 
+        'rightactivecontrol':this.yellowrightarrowleft,
+        'condition':function(player){return player.inputmanager.isMiddleBlocking;}
+        };
+        data['LOWBLOCK'] = {
+          'statusText':'LOW BLOCK', 
+          'leftcontrol':this.leftarrowdown,
+          'leftactivecontrol':this.yellowleftarrowdown,
+          'rightcontrol':this.rightarrowdown, 
+          'rightactivecontrol':this.yellowrightarrowdown,
+          'condition':function(player){return player.inputmanager.isLowBlocking;}
+          };
     return data;
   }
 }

@@ -130,7 +130,7 @@ export default class Start extends Phaser.Scene {
     });
     this.menuoption3.visible = true;
 
-    this.menuoption4 = this.add.text(center.width-115, center.height+105, 'DEVELOPMENT MODE', {
+    this.menuoption4 = this.add.text(center.width-115, center.height+105, 'CHALLENGE BOARDS', {
       fill: '#FFFFFF',
       font: `${20 * SCALE}pt Silom`
     });
@@ -233,7 +233,7 @@ export default class Start extends Phaser.Scene {
   render() {}
 
   playMusic = () => {
-    this.backgroundMusic = sounds.play('Main_Menu');
+    // this.backgroundMusic = sounds.play('Main_Menu');
     sounds.loop(true, this.backgroundMusic);
     sounds.volume(0.6, this.backgroundMusic);
   };
