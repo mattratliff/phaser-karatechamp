@@ -24,6 +24,7 @@ import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png'
 import begin from '../assets/begin.png';
 import stop from '../assets/stop.png';
 import good from '../assets/good.png';
+import verygood from '../assets/verygood.png';
 import line from '../assets/line.png';
 
 import Player from '../gameobjects/player';
@@ -70,9 +71,14 @@ export default class TrainingBoard extends SceneController {
     this.load.image('stop', stop);
     this.load.image('good', good);
     this.load.image('line', line);
+    this.load.image('verygood', verygood);
 
-    this.good = this.add.image(center.width+50, center.height-200, 'good');
-    this.good.visible = false;
+    
+    // this.whitespectator1 = this.add.image(center.width-250, center.height-30, 'spectatorwhite').setScale(assetScale);
+
+    // this.begin.visible = true;
+    // this.verygood = this.add.image(center.width+50, center.height-200, 'verygood');
+    // this.verygood.visible = true;
   }
 
   create() {
@@ -121,15 +127,27 @@ export default class TrainingBoard extends SceneController {
             case 8:
                 this.checkMove(this.moves['LUNGEPUNCH'], function(){});
                 break;
-                case 9:
-                  this.checkMove(this.moves['HIGHBLOCK'], function(){});
-                  break;
-                              case 10:
+            case 9:
+                this.checkMove(this.moves['HIGHBLOCK'], function(){});
+                break;
+            case 10:
                 this.checkMove(this.moves['MIDDLEBLOCK'], function(){});
                 break;
-                case 11:
-                  this.checkMove(this.moves['LOWBLOCK'], function(){});
-                  break;
+            case 11:
+                this.checkMove(this.moves['LOWBLOCK'], function(){});
+                break;
+            case 12:
+              this.checkMove(this.moves['FLYINGSIDEKICK'], function(){});
+              break;
+            case 13:
+                this.checkMove(this.moves['SPINNINGHEALKICK'], function(){});
+                break;
+            case 14:
+              this.checkMove(this.moves['FRONTFLIP'], function(){});
+              break;
+            case 15:
+              this.checkMove(this.moves['BACKFLIP'], function(){});
+              break;
         }
     }
 }
@@ -155,17 +173,25 @@ checkMove(option, callback){
             option.rightactivecontrol.visible = false;
           }
           callback(this.line, this.movehereText);
-          this.startGood();
+          this.time.delayedCall(2000, this.startGood, [], this);
           this.gameState++;
       }
   }
 
   startGood(){
-    this.good.visible = true;
+    this.good = this.add.image(center.width+50, center.height-200, 'good');
     this.time.delayedCall(2000, function(){
         this.good.visible = false;
         this.completeStep = false;
     }, [], this);      
+  }
+
+  playerVeryGood(){
+    this.verygood = this.add.image(center.width+50, center.height-200, 'verygood');
+    this.time.delayedCall(2000, function(){
+        this.verygood.visible = false;
+        this.completeStep = false;
+    }, [], this);     
   }
 
   startBegin(){
@@ -179,6 +205,7 @@ checkMove(option, callback){
         this.completeStep = false;
     }, [], this);
   }
+
 
   startStop(){
     this.stop = this.add.image(center.width+50, center.height-200, 'stop');
@@ -281,6 +308,12 @@ checkMove(option, callback){
     this.redspectator3 = this.add.image(center.width+280, center.height+150, 'spectatorred').setScale(assetScale);
   }
 
+  completeTraining(){
+    //display very good
+    this.playerVeryGood();
+    //display animation for success
+    this.player.inputmanager.win();
+  }
   /**
    * scene controller handles the player and this handles the vase
    * after update check for collision
@@ -293,7 +326,11 @@ checkMove(option, callback){
         this.gameState = 0;
         this.startBegin();
     }
-    this.checkPracticeStep();
+    if(this.gameState==16){
+      this.time.delayedCall(3000, this.completeTraining, [], this);
+      // this.completeTraining();
+    }else
+      this.checkPracticeStep();
   }
 
   render() {}
@@ -396,14 +433,46 @@ checkMove(option, callback){
         'rightactivecontrol':this.yellowrightarrowleft,
         'condition':function(player){return player.inputmanager.isMiddleBlocking;}
         };
-        data['LOWBLOCK'] = {
-          'statusText':'LOW BLOCK', 
-          'leftcontrol':this.leftarrowdown,
-          'leftactivecontrol':this.yellowleftarrowdown,
-          'rightcontrol':this.rightarrowdown, 
-          'rightactivecontrol':this.yellowrightarrowdown,
-          'condition':function(player){return player.inputmanager.isLowBlocking;}
+      data['LOWBLOCK'] = {
+        'statusText':'LOW BLOCK', 
+        'leftcontrol':this.leftarrowdown,
+        'leftactivecontrol':this.yellowleftarrowdown,
+        'rightcontrol':this.rightarrowdown, 
+        'rightactivecontrol':this.yellowrightarrowdown,
+        'condition':function(player){return player.inputmanager.isLowBlocking;}
+        };
+      data['FLYINGSIDEKICK'] = {
+        'statusText':'FLYING SIDE KICK', 
+        'leftcontrol':this.leftarrowup,
+        'leftactivecontrol':this.yellowleftarrowup,
+        'rightcontrol':this.rightarrowright, 
+        'rightactivecontrol':this.yellowrightarrowright,
+        'condition':function(player){return player.inputmanager.isFlyingSideKick;}
+        };
+        data['SPINNINGHEALKICK'] = {
+          'statusText':'SPINNING HEAL KICK', 
+          'leftcontrol':this.leftarrowleft,
+          'leftactivecontrol':this.yellowleftarrowleft,
+          'rightcontrol':this.rightarrowright, 
+          'rightactivecontrol':this.yellowrightarrowright,
+          'condition':function(player){return player.inputmanager.isSpinningHealKick;}
           };
+      data['FRONTFLIP'] = {
+        'statusText':'FRONT FLIP', 
+        'leftcontrol':this.leftarrowdown,
+        'leftactivecontrol':this.yellowleftarrowdown,
+        'rightcontrol':this.rightarrowup, 
+        'rightactivecontrol':this.yellowrightarrowup,
+        'condition':function(player){return player.inputmanager.isFlipping;}
+        };
+      data['BACKFLIP'] = {
+        'statusText':'BACK FLIP', 
+        'leftcontrol':this.leftarrowup,
+        'leftactivecontrol':this.yellowleftarrowup,
+        'rightcontrol':this.rightarrowdown, 
+        'rightactivecontrol':this.yellowrightarrowdown,
+        'condition':function(player){return player.inputmanager.isBackFlipping;}
+        };
     return data;
   }
 }
