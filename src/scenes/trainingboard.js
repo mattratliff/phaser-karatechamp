@@ -21,14 +21,12 @@ import yellowarrowright from '../assets/backgrounds/game/practice/yellow-arrow-r
 import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.png';
 import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
 
-import begin from '../assets/begin.png';
-import stop from '../assets/stop.png';
-import good from '../assets/good.png';
-import verygood from '../assets/verygood.png';
+import {begin, stop, good, verygood} from '../helpers/balloons';
+
 import line from '../assets/line.png';
 
 import Player from '../gameobjects/player';
-
+var utils = require('../helpers/util');
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 const center = {
@@ -72,13 +70,6 @@ export default class TrainingBoard extends SceneController {
     this.load.image('good', good);
     this.load.image('line', line);
     this.load.image('verygood', verygood);
-
-    
-    // this.whitespectator1 = this.add.image(center.width-250, center.height-30, 'spectatorwhite').setScale(assetScale);
-
-    // this.begin.visible = true;
-    // this.verygood = this.add.image(center.width+50, center.height-200, 'verygood');
-    // this.verygood.visible = true;
   }
 
   create() {
@@ -150,7 +141,7 @@ export default class TrainingBoard extends SceneController {
               break;
         }
     }
-}
+  }
 
 checkMove(option, callback){
       this.movementText.setText(option.statusText);
@@ -172,17 +163,20 @@ checkMove(option, callback){
             option.rightcontrol.visible = true;
             option.rightactivecontrol.visible = false;
           }
-          callback(this.line, this.movehereText);
-          this.time.delayedCall(2000, this.startGood, [], this);
+          callback(this.line, this.movehereText);    
+          this.time.delayedCall(1000, this.startGood, [], this);
           this.gameState++;
       }
   }
 
   startGood(){
-    this.good = this.add.image(center.width+50, center.height-200, 'good');
+    this.good = null;
+    if(utils.getRandomInt(3)==1)   // %33 chance of getting "Good"
+        this.good = this.add.image(center.width+50, center.height-200, 'good');
     this.time.delayedCall(2000, function(){
+      if(this.good)
         this.good.visible = false;
-        this.completeStep = false;
+      this.completeStep = false;
     }, [], this);      
   }
 
@@ -200,17 +194,6 @@ checkMove(option, callback){
     this.begin = this.add.image(center.width+50, center.height-200, 'begin');
     this.time.delayedCall(2000, function(){ 
         this.begin.visible = false; 
-        this.practiceStarted = true; 
-        this.gameState = 0;
-        this.completeStep = false;
-    }, [], this);
-  }
-
-
-  startStop(){
-    this.stop = this.add.image(center.width+50, center.height-200, 'stop');
-    this.time.delayedCall(2000, function(){ 
-        this.stop.visible = false; 
         this.practiceStarted = true; 
         this.gameState = 0;
         this.completeStep = false;
@@ -294,6 +277,9 @@ checkMove(option, callback){
     this.whitespectator1 = this.add.image(center.width-250, center.height-30, 'spectatorwhite').setScale(assetScale);
     this.whitespectator2 = this.add.image(center.width-265, center.height+60, 'spectatorwhite').setScale(assetScale);
 
+    this.redspectator1 = this.add.image(center.width+250, center.height-30, 'spectatorred').setScale(assetScale);
+    this.redspectator2 = this.add.image(center.width+265, center.height+60, 'spectatorred').setScale(assetScale);
+
     //add the player here so that he walks between the spectators
     this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-100 });
     this.player.setGamePad(this.gamepad);
@@ -303,17 +289,22 @@ checkMove(option, callback){
     this.player.chopping = false;
         
     this.whitespectator3 = this.add.image(center.width-280, center.height+150, 'spectatorwhite').setScale(assetScale);
-    this.redspectator1 = this.add.image(center.width+250, center.height-30, 'spectatorred').setScale(assetScale);
-    this.redspectator2 = this.add.image(center.width+265, center.height+60, 'spectatorred').setScale(assetScale);
     this.redspectator3 = this.add.image(center.width+280, center.height+150, 'spectatorred').setScale(assetScale);
   }
 
   completeTraining(){
-    //display very good
     this.playerVeryGood();
-    //display animation for success
     this.player.inputmanager.win();
+    //need to display girl walking out to player and giving player the belt
+    this.givePlayerBelt();
   }
+
+  givePlayerBelt(){
+    //show standing animation
+    //show animation of girl walking to give player the belt
+    //show animation of player face smiling holding up the belt
+  }
+  
   /**
    * scene controller handles the player and this handles the vase
    * after update check for collision
