@@ -3,7 +3,8 @@ import constants from '../config/constants';
 import SceneController from '../controllers/sceneController';
 
 import beachscene from '../assets/backgrounds/game/beach_background.png';
-import practiceboard from '../assets/backgrounds/gameboard1.png';
+
+import practiceboard from '../assets/backgrounds/boards/board5.png';
 
 import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
 import shorelineJSON from '../assets/backgrounds/game/shore.json';
@@ -48,32 +49,32 @@ export default class VaseBoard extends SceneController {
   }
 
   preloadBackground(){
-    if(this.board==0){
-      this.load.image('beachscene', beachscene);
-      this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
-    }
-    if(this.board==1)
+    // if(this.board==0){
+    //   this.load.image('beachscene', beachscene);
+    //   this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
+    // }
+    // if(this.board==1)
       this.load.image('practiceboard', practiceboard);
   }
 
   loadBackground(){
-    if(this.board==0)
-      this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
-    if(this.board==1)
+    // if(this.board==0)
+    //   this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
+    // if(this.board==1)
       this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
   }
 
   addComponents(){
     this.loadBackground();
 
-    this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
+    this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-180);
 
-    if(this.board==0){
-    this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-    this.shoreline.setIgnoreGravity(true);
-    this.shoreline.setCollisionGroup(-1);
-    this.shoreline.play('shore', true);
-    }
+    // if(this.board==0){
+    // this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+    // this.shoreline.setIgnoreGravity(true);
+    // this.shoreline.setCollisionGroup(-1);
+    // this.shoreline.play('shore', true);
+    // }
 
     this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
     this.player.setGamePad(this.gamepad);
@@ -87,12 +88,12 @@ export default class VaseBoard extends SceneController {
     this.vase.setIgnoreGravity(true);
     this.vase.animated = false;
 
-    if(this.board==0)
-    this.practiceText = this.add
-    .text(center.width-220, center.height-300, 'FLYING OBJECT CHALLENGE', {
-      fill: '#000000',
-      font: `${26 * SCALE}pt Silom`
-    });
+    // if(this.board==0)
+    // this.practiceText = this.add
+    // .text(center.width-220, center.height-300, 'FLYING OBJECT CHALLENGE', {
+    //   fill: '#000000',
+    //   font: `${26 * SCALE}pt Silom`
+    // });
 
     this.practiceText = this.add
     .text(center.width-230, center.height+300, 'Click where you want the vase to begin', {

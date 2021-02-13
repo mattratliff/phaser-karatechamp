@@ -1,0 +1,26 @@
+{
+    "board1": {
+        "groundOffset": 180,
+        "hasSpectators": false
+    },
+    "board2": {
+        "groundOffset": 210,
+        "hasSpectators": false
+    },
+    "board3": {
+        "groundOffset": 170,
+        "hasSpectators": false
+    },
+    "board4": {
+        "groundOffset": 120,
+        "hasSpectators": false
+    },
+    "board5": {
+        "groundOffset": 100,
+        "hasSpectators": false
+    },
+    "board6": {
+        "groundOffset": 200,
+        "hasSpectators": true
+    }
+}

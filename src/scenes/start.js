@@ -29,8 +29,9 @@ export default class Start extends Phaser.Scene {
     this.musicplaying = true;
     this.showleaderboard = false;
     this.selection = 0;
-    this.inDevMode = false;
-    this.maxSelections = 4;
+    this.page = 1;
+    this.firstpageSelections = 4;
+    this.secondpageSelections = 5;
   }
 
   preloadBackground() {
@@ -62,13 +63,13 @@ export default class Start extends Phaser.Scene {
     this.playMusic();
   }
   startGame(){
-    if((this.selection == 3 && !this.inDevMode) || (this.selection == 5 && this.inDevMode)){
-      this.switchModes();
+    if((this.selection == 3 && this.page==1) || (this.selection == 5 && this.page==2)){
+      this.changePages();
     }else{
       sounds.stop(this.title_track);
       // this.scene.stop('Start');
 
-      if(!this.inDevMode){
+      if(this.page==1){
         if(this.selection == 0)
           this.scene.start('SinglePlayer');
         else if(this.selection == 1)
@@ -86,11 +87,11 @@ export default class Start extends Phaser.Scene {
           this.scene.start('VaseBoard');
         else if(this.selection == 3)
           this.scene.start('BullBoard');
-        // else if(this.selection == 3){
-        //   this.scene.start('Start');
-        //   this.inDevMode = false;
-        //   this.selection = 0;
-        // }
+        else if(this.selection == 4){
+          this.scene.stop('Start');
+          this.scene.start('Start');
+          this.selection = 0;
+        }
       }
    }
   }
@@ -167,35 +168,22 @@ export default class Start extends Phaser.Scene {
     this.devoption5.visible = false;
   }
 
-  switchModes(){
+  changePages(){
     this.resetTimer();
     this.hand.y = center.height+10;
     this.selection = 0;
-    this.inDevMode = !this.inDevMode;
-    if(this.inDevMode){
-      this.menuoption1.visible = false;
-      this.menuoption2.visible = false;
-      this.menuoption3.visible = false;
-      this.menuoption4.visible = false;
-  
-      this.devoption1.visible = true;
-      this.devoption2.visible = true;
-      this.devoption3.visible = true;
-      this.devoption4.visible = true;
-      this.devoption5.visible = true;    }
-    else{
-      this.menuoption1.visible = true;
-      this.menuoption2.visible = true;
-      this.menuoption3.visible = true;
-      this.menuoption4.visible = true;
-  
-      this.devoption1.visible = false;
-      this.devoption2.visible = false;
-      this.devoption3.visible = false;
-      this.devoption4.visible = false;
-      this.devoption5.visible = false;
-    }
-    
+    this.page = (this.page==1 ? 2 : 1);
+
+    this.menuoption1.visible = this.page==1;
+    this.menuoption2.visible = this.page==1;
+    this.menuoption3.visible = this.page==1;
+    this.menuoption4.visible = this.page==1;
+
+    this.devoption1.visible = this.page==2;
+    this.devoption2.visible = this.page==2;
+    this.devoption3.visible = this.page==2;
+    this.devoption4.visible = this.page==2;
+    this.devoption5.visible = this.page==2;        
   }
 
   resetTimer(){
@@ -224,9 +212,10 @@ export default class Start extends Phaser.Scene {
     }
     if(this.input.keyboard.checkDown(cursors.down, 250))
     {
-      if(this.selection < this.maxSelections-1){
-      this.hand.y = this.hand.y + 40;
-      this.selection++;
+      var maxSelections = (this.page==2 ? this.secondpageSelections : this.firstpageSelections);
+      if(this.selection < maxSelections-1){
+        this.hand.y = this.hand.y + 40;
+        this.selection++;
       }
     }
   }

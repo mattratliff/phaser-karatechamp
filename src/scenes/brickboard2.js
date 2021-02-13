@@ -1,6 +1,6 @@
 import constants from '../config/constants';
 import SceneController from '../controllers/sceneController';
-import background from '../assets/backgrounds/game/stadium1.png';
+import background from '../assets/backgrounds/boards/board4.png';
 
 import brickPNG from '../assets/bricks/brickspritesheet.png';
 import brickJSON from '../assets/bricks/bricks.json';

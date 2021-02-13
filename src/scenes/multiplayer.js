@@ -16,9 +16,9 @@ const assetScale = SCALE;
 const RIGHTEDGE = center.width + 463;
 const LEFTEDGE = center.width - 462;
 
-export default class GameBoard extends SceneController {
+export default class Multiplayer extends SceneController {
   constructor() {
-    super({ scenekey: 'GameBoard' });
+    super({ scenekey: 'Multiplayer' });
     this.gamepad = null;
   }
 

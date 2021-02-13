@@ -2,7 +2,7 @@ import constants from '../config/constants';
 
 import SceneController from '../controllers/sceneController';
 
-import practiceboard from '../assets/backgrounds/gameboard1.png';
+import practiceboard from '../assets/backgrounds/boards/board3.png';
 
 import sounds from '../assets/sounds/processed';
 
@@ -25,6 +25,9 @@ import {begin, stop, good, verygood} from '../helpers/balloons';
 
 import line from '../assets/line.png';
 
+import girlPNG from '../assets/girls/girlspritesheet.png';
+import girlJSON from '../assets/girls/girls.json';
+
 import Player from '../gameobjects/player';
 var utils = require('../helpers/util');
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -43,6 +46,8 @@ export default class TrainingBoard extends SceneController {
     super({ scenekey: 'TrainingBoard' });
     this.gamepad = null;
     this.practiceStarted = false;
+    this.trainingCompleted = false;
+    this.deliverBelt = false;
     this.gameState = -1;
   }
 
@@ -64,6 +69,8 @@ export default class TrainingBoard extends SceneController {
 
     this.load.image('spectatorwhite', spectatorwhite);
     this.load.image('spectatorred', spectatorred);
+
+    this.load.atlas('girl', girlPNG, girlJSON);
 
     this.load.image('begin', begin);
     this.load.image('stop', stop);
@@ -139,6 +146,9 @@ export default class TrainingBoard extends SceneController {
             case 15:
               this.checkMove(this.moves['BACKFLIP'], function(){});
               break;
+            case 16:
+                this.trainingCompleted = true;
+                break;
         }
     }
   }
@@ -288,28 +298,33 @@ checkMove(option, callback){
     this.player.startwalking = true;
     this.player.chopping = false;
         
+    this.girl = this.matter.add.sprite(center.width+400, center.height, 'girl').setScale(assetScale * .9);
+    this.girl.setCollisionGroup(-1);
+    
+    
     this.whitespectator3 = this.add.image(center.width-280, center.height+150, 'spectatorwhite').setScale(assetScale);
     this.redspectator3 = this.add.image(center.width+280, center.height+150, 'spectatorred').setScale(assetScale);
   }
 
   completeTraining(){
     this.playerVeryGood();
-    this.player.inputmanager.win();
-    //need to display girl walking out to player and giving player the belt
-    this.givePlayerBelt();
+    this.deliverBelt = true;
+    this.girl.play('redgirlwalk', true);
+    this.player.play('sweat', true);
   }
 
-  givePlayerBelt(){
-    //show standing animation
-    //show animation of girl walking to give player the belt
-    //show animation of player face smiling holding up the belt
-  }
-  
   /**
    * scene controller handles the player and this handles the vase
    * after update check for collision
    */
   update(){
+    if(this.deliverBelt){
+      if(this.girl.body.bounds.min.x > this.player.body.bounds.max.x + 5){
+        this.girl.x -= 1;
+      }else
+        this.girl.stop('redgirlwalk');
+    }
+
     this.player.update();
     if(!this.player.ready)
         return;
@@ -317,9 +332,8 @@ checkMove(option, callback){
         this.gameState = 0;
         this.startBegin();
     }
-    if(this.gameState==16){
+    if(this.trainingCompleted){
       this.time.delayedCall(3000, this.completeTraining, [], this);
-      // this.completeTraining();
     }else
       this.checkPracticeStep();
   }

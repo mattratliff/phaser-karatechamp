@@ -55,7 +55,6 @@ export default class BullBoard extends SceneController {
     this.player.setInputManager(this.inputmanager);
     this.player.setCollisionGroup(-1);
     this.player.startwalking = true;
-    this.player.chopping = false;
 
     this.bull = new Bull({ scene: this, x: RIGHTEDGE, y: HEIGHT-200, object: 'bull' });
     this.bull.setCollisionGroup(-1);

@@ -9,12 +9,9 @@ import PreBoot from './scenes/preboot';
 import StartScene from './scenes/start';
 import LeaderBoard from './scenes/leaderboard';
 import DojoBoard from './scenes/dojoboard';
-import GameBoard from './scenes/gameboard';
+import SinglePlayer from './scenes/singleplayer';
+import MultiPlayer from './scenes/multiplayer';
 import TrainingBoard from './scenes/trainingboard';
-
-import AnimationSandbox from './scenes/sandboxes/animation-sandbox';
-import AISandbox from './scenes/sandboxes/ai-sandbox';
-import MultiplayerSandbox from './scenes/sandboxes/multiplayer-sandbox';
 import VaseBoard from './scenes/VaseBoard';  //vase challenge
 import BullBoard from './scenes/BullBoard';  //bull challenge
 import BrickBoard from './scenes/brickboard';  //verical breaking
@@ -48,14 +45,12 @@ const config = {
     StartScene, 
     LeaderBoard, 
     DojoBoard, 
-    AISandbox, 
     VaseBoard, 
     BullBoard,
     BrickBoard,
     BrickBoard2, 
-    AnimationSandbox, 
-    MultiplayerSandbox, 
-    GameBoard, 
+    SinglePlayer,
+    MultiPlayer, 
     TrainingBoard],
   pixelArt: true,
   antialias: false

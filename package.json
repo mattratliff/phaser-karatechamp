@@ -1,8 +1,8 @@
 {
-    "name": "create-phaser-app",
+    "name": "karate-champ-app",
     "version": "0.0.22",
     "description": "A boiler plate to start your phaser app with webpack4, babel7+ and Phaser 3",
-    "author": "Jesse Harlin",
+    "author": "Matt Ratliff",
     "homepage": "https://github.com/simiancraft/create-phaser-app",
     "scripts": {
         "start": "webpack-dev-server --mode development --env.development",

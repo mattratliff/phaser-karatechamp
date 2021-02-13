@@ -188,7 +188,7 @@ export default class AnimationManager {
 
         this.anims.create(
           { key: 'happy', 
-            frames: this.anims.generateFrameNames('player', { prefix: 'happy', start:1, end: 1, zeroPad: 1 }),
+            frames: this.anims.generateFrameNames('player', { prefix: 'happy', start:1, end: 2, zeroPad: 1 }),
             frameRate: 4, 
             repeat: 10
         });
@@ -361,6 +361,13 @@ export default class AnimationManager {
             frames: this.anims.generateFrameNames('brick', { prefix: 'horizontalbrick', start:1, end: 11, zeroPad: 1 }),
             frameRate: 15, 
             repeat: 0
+        });
+
+        this.anims.create(
+          { key: 'redgirlwalk', 
+            frames: this.anims.generateFrameNames('girl', { prefix: 'redgirl', start:1, end: 2, zeroPad: 1 }),
+            frameRate: 5, 
+            repeat: -1
         });
 
         this.anims.create(
