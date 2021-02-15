@@ -203,7 +203,7 @@ export default class AnimationManager {
             { key: 'forward', 
             // frames: this.anims.generateFrameNames('player', { prefix: 'kick', start:1, end: 6, zeroPad: 2 }),
               frames: this.anims.generateFrameNames('player', { prefix: 'forward', start:1, end: 3, zeroPad: 2 }),
-              frameRate: 10, 
+              frameRate: 12, 
               repeat: 0 
           });
   
@@ -280,21 +280,21 @@ export default class AnimationManager {
           this.anims.create(
             { key: 'highblock', 
               frames: this.anims.generateFrameNames('player', { prefix: 'highblock', start:1, end: 9, zeroPad: 2 }),
-              frameRate: 10, 
+              frameRate: 15, 
               repeat: 0 
           });
   
           this.anims.create(
             { key: 'middleblock', 
               frames: this.anims.generateFrameNames('player', { prefix: 'middleblock', start:1, end: 9, zeroPad: 2 }),
-              frameRate: 10, 
+              frameRate: 15, 
               repeat: 0 
           });
   
           this.anims.create(
             { key: 'lowblock', 
               frames: this.anims.generateFrameNames('player', { prefix: 'lowblock', start:1, end: 11, zeroPad: 2 }),
-              frameRate: 10, 
+              frameRate: 15, 
               repeat: 0 
           });
   
@@ -305,6 +305,13 @@ export default class AnimationManager {
               repeat: 0 
           });
   
+          this.anims.create(
+            { key: 'reversesweep', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'reversesweep', start:1, end: 16, zeroPad: 1 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
           this.anims.create(
             { key: 'lungepunch', 
               frames: this.anims.generateFrameNames('player', { prefix: 'lungepunch', start:1, end: 11, zeroPad: 2 }),

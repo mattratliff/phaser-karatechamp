@@ -28,6 +28,7 @@ export default class InputManager {
             if(this.isHighBlocking)this.isHighBlocking = false;
             if(this.isMiddleBlocking)this.isMiddleBlocking = false;
             if(this.isLowBlocking)this.isLowBlocking = false;
+            this.pause = false;
         }, this);
     }
 
@@ -54,10 +55,12 @@ export default class InputManager {
     flipping(){
         this.player.play('flip', true); 
         this.isFlipping = true;
+        this.pause = true;
     }
     backFlipping(){
         this.player.play('backflip', true); 
         this.isBackFlipping = true;
+        this.pause = true;
     }
     spinningHealKick(){                                                     
         if(!this.isSpinningHealKick){
@@ -66,6 +69,7 @@ export default class InputManager {
         }
         this.player.play('spinningheal', true); 
         this.isSpinningHealKick = true;
+        this.pause = true;
     }
     frontLegSweep(){
         if(!this.isFrontSweep){
@@ -73,7 +77,17 @@ export default class InputManager {
             sounds.volume(0.3, frontkick);
         }
         this.isFrontSweep = true;
-        this.player.play('frontsweep', true); 
+        this.player.play('frontsweep', true);
+        this.pause = true; 
+    }
+    reverseSweep(){
+        if(!this.isBackSweep){
+            // var frontkick = sounds.play('Front_Kick', false);
+            // sounds.volume(0.3, frontkick);
+        }
+        this.isBackSweep = true;
+        this.player.play('reversesweep', true); 
+        this.pause = true;
     }
     flyingSideKick(){
         if(!this.isFlyingSideKick){
@@ -82,7 +96,8 @@ export default class InputManager {
         }
         this.isFlyingSideKick = true;
         this.player.play('flyingside', true); 
-        this.player.x += 1;
+        this.pause = true;
+        this.player.x += 40;
     }
     frontKick(){
         if(!this.isKicking){
@@ -92,6 +107,7 @@ export default class InputManager {
         this.isKicking = true;
         this.player.play('frontkick', true); 
         this.player.x += 1;
+        this.pause = true;
     }
     roundHouseKick(){
         if(!this.isRoundHouseKicking){
@@ -100,6 +116,7 @@ export default class InputManager {
         }
         this.isRoundHouseKicking = true;
         this.player.play('roundhousekick', true); 
+        this.pause = true;
     }
     backKick(){
         if(!this.isBackKick){
@@ -108,6 +125,7 @@ export default class InputManager {
         }
         this.isBackKick = true;
         this.player.play('backkick', true); 
+        this.pause = true;
     }
     lowKick(){
         if(!this.isLowKick){
@@ -116,23 +134,27 @@ export default class InputManager {
         }
         this.isLowKick = true;
         this.player.play('lowkick', true); 
+        this.pause = true;
     }
     forward(){
-        this.pause = false;
         this.player.play('forward', true);
-        this.player.x += 1;
+        this.player.x += 20;
+        this.pause = true;
     }
     backward(){
         this.player.play('backward', true);
-        this.player.x -= 1;
+        this.player.x -= 20;
+        this.pause = true;
     }
     jump(){
         this.player.play('jump', true); 
         this.isJumping = true;
+        this.pause = true;
     }
     squat(){
         this.player.play('squat', true); 
         this.isSquating = true;
+        this.pause = true;
     }
     standup(){
         this.player.play('standup', true); 
@@ -152,14 +174,17 @@ export default class InputManager {
     highBlock(){
         this.player.play('highblock', true);
         this.isHighBlocking = true;
+        this.pause = true;
     }
     middleBlock(){
         this.player.play('middleblock', true);
         this.isMiddleBlocking = true;
+        this.pause = true;
     }
     lowBlock(){
         this.player.play('lowblock', true);
         this.isLowBlocking = true;
+        this.pause = true;
     }
     lungePunch(){
         if(!this.isLungePunching){
@@ -172,6 +197,7 @@ export default class InputManager {
         this.player.x -= 1;
       else
         this.player.x += 1;
+    this.pause = true;
     }
     backToMainMenu(currentscene){
         this.scene.stop(currentscene);
@@ -180,9 +206,11 @@ export default class InputManager {
 
     win(){
         this.player.play('win', true);
+        this.pause = true;
     }
     sweat(){
         this.player.play('sweat', true);
+        this.pause = true;
     }
     //RAGDOLL
     /**
@@ -190,6 +218,7 @@ export default class InputManager {
      */
     facePunch(){
         this.player.play('facepunch', true);
+        this.pause = true;
         // this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**
@@ -197,6 +226,7 @@ export default class InputManager {
      */
     gutKick(){
         this.player.play('gutkick', true);
+        this.pause = true;
         // this.scene.time.delayedCall(4000, this.forward, [], this);
     }
     /**

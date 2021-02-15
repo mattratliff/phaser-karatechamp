@@ -9,6 +9,7 @@ export default class BehaviorManager{
         this.player = player;
     }
     update(){
+        
         this.player.play("red-frontkick", true);
     }
 }

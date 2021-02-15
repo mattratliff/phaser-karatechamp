@@ -36,7 +36,7 @@ import AnimationManager from '../controllers/animationManager';
 import CollisionSystem from '../controllers/collisionSystem';
 
 import Teacher from '../gameobjects/teacher';
-import GameManager from './gameManager';
+import SessionManager from './sessionManager';
 
 import {begin, stop, good, verygood, fullpoint, halfpoint, white} from '../helpers/balloons';
 
@@ -118,10 +118,10 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();
 
-    this.gameManager = new GameManager(this);
-    this.gameManager.setCallbackOnComplete(this.completeMatch);
+    this.sessionManager = new SessionManager(this);
+    this.sessionManager.setCallbackOnComplete(this.completeMatch);
 
-    this.gameManager.setState(GameState.NEW);
+    this.sessionManager.setState(GameState.NEW);
 
     this.checkForGamePad();
 
@@ -171,8 +171,8 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.useTimer = this.boardConfig.useTimer;
     this.timerAmount = this.boardConfig.timerAmount;
 
-    this.gameManager.timerAmount = this.timerAmount;
-    this.gameManager.setTimerLocation(this.boardConfig.timerOffset);
+    this.sessionManager.timerAmount = this.timerAmount;
+    this.sessionManager.setTimerLocation(this.boardConfig.timerOffset);
 
     var teacherOffsetX = this.boardConfig.teacherOffset.x;
     var teacherOffsetY = this.boardConfig.teacherOffset.y;
@@ -199,14 +199,14 @@ export default class AnimationSandbox extends Phaser.Scene {
         this.addSideLineSpectators();
     }
 
-    this.gameManager.createTimer(center.width-15, center.height-245, SCALE);
+    this.sessionManager.createTimer(center.width-15, center.height-245, SCALE);
 
     this.teacher = new Teacher({ scene: this, startx: center.width+teacherOffsetX, starty: center.height+teacherOffsetY });
     this.teacher.addComponents();
   }
 
   updateGameObjects(){
-    this.gameManager.setGameObjects(this.teacher, this.player, null);
+    this.sessionManager.setGameObjects(this.teacher, this.player, null);
   }
 
   createBoard(){
@@ -238,9 +238,9 @@ export default class AnimationSandbox extends Phaser.Scene {
       if(!this.timerstarted){
         this.timerstarted = true;
         this.teacher.playBegin();
-        this.gameManager.setState(GameState.INPROGRESS);
+        this.sessionManager.setState(GameState.INPROGRESS);
         if(this.useTimer)
-          this.time.delayedCall(3000, this.gameManager.startTimer(), [], this);
+          this.time.delayedCall(3000, this.sessionManager.startTimer(), [], this);
       }
       this.teacher.update();
     }

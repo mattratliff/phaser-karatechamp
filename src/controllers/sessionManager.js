@@ -11,7 +11,7 @@ const GameState = {
     COMPLETE: "Completed"
 };
 
-export default class GameManager{
+export default class SessionManager{
     constructor(scene) {
         this.scene = scene;
         this.useTimer = false;
@@ -53,14 +53,11 @@ export default class GameManager{
         this.timerText = this.scene.add.text(x+parseInt(this.timerOffset.x), y+parseInt(this.timerOffset.y), this.timerAmount.toString(), {fill: '#ffffff',font: `${16 * SCALE}pt Silom`});
     }
     startTimer(){
-        console.log("timer = ",this.timerAmount);
         if(this.timerAmount == 0){
             this.gameState = GameState.COMPLETE;
-            console.log("stopping match with player = ",this.whiteplayer);
             this.sceneCallback(this.teacher, this.whiteplayer);
         }else{
           this.timerAmount -= 1;
-          console.log("timer text =",this.timerText);
           this.timerText.setText(this.timerAmount);
           this.scene.time.delayedCall(1000, this.startTimer, [], this);
         }
