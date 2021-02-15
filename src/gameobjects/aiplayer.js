@@ -1,16 +1,10 @@
-import Phaser from 'phaser';
-import BehaviorManager from '../controllers/behaviorManager';
+import BehaviorManager from '../managers/behaviorManager';
+import GameObject from './gameobject';
+var utils = require('../helpers/util');
 
-const PlayerDirection = {
-  RIGHT: 1,
-  LEFT: -1
-};
-
-export default class AIPlayer extends Phaser.Physics.Matter.Sprite {
+export default class AIPlayer extends GameObject {
     constructor({scene, startx, starty, readyx}) {
-        super(scene.matter.world, startx, starty, 'aiplayer');
-        this.setIgnoreGravity(true);
-        this.setCollisionGroup(-1);
+        super(scene, startx, starty, 'aiplayer');
         
         this.readyx = readyx;
         this.scene = scene;
@@ -23,9 +17,7 @@ export default class AIPlayer extends Phaser.Physics.Matter.Sprite {
 
         this.kickonce = false;
 
-        this.direction = PlayerDirection.LEFT;
-
-        scene.add.existing(this);
+        this.direction = utils.Direction.LEFT;
 
         this.create();
       }

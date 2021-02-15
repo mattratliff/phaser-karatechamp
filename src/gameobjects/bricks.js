@@ -1,11 +1,10 @@
-import Phaser from 'phaser';
+var utils = require('../helpers/util');
+import GameObject from './gameobject';
 
-export default class Brick extends Phaser.Physics.Matter.Sprite {
-    constructor({scene, x, y, object, frame}) {
-        super(scene.matter.world, x, y, object, frame);
-        this.scene = scene;
+export default class Brick extends GameObject {
+    constructor({scene, x, y, texturemap, frame}) {
+        super(scene, x, y, texturemap, frame);
         this.breaking = false;
-        scene.add.existing(this);
       }
       preload(){}
       create(){}

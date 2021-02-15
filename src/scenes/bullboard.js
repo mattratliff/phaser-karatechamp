@@ -1,6 +1,6 @@
 import constants from '../config/constants';
 import beachscene from '../assets/backgrounds/game/beach_background.png';
-import SceneController from '../controllers/sceneController';
+import SceneController from './sceneController';
 
 import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
 import shorelineJSON from '../assets/backgrounds/game/shore.json';
@@ -81,7 +81,7 @@ export default class BullBoard extends SceneController {
     if(this.bull.x > LEFTEDGE && this.player.ready)
         this.bull.update();
 
-    var collision = this.collisionSystem.checkForSpriteToSpriteCollision(this.player, this.bull);
+    var collision = this.collisionManager.checkForSpriteToSpriteCollision(this.player, this.bull);
     if(collision && collision.collided){
         //player hit bull
         if(collision.hit){

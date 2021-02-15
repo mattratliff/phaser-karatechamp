@@ -1,21 +1,19 @@
-import Phaser from 'phaser';
+import GameObject from './gameobject';
 import sounds from '../assets/sounds/processed';
 var utils = require('../helpers/util');
-export default class Teacher extends Phaser.Physics.Matter.Sprite {
+
+export default class Teacher extends GameObject {
     constructor({scene, startx, starty}) {
-        super(scene.matter.world, startx, starty, 'teacher');
+        super(scene, startx, starty, 'teacher');
         this.startx = startx;
         this.starty = starty;
-        this.scene = scene;
         this.velocity = -0.5;
         this.startMatch = true;
         this.isWalking = false;
         this.canWalk = false;
         this.travelDistance = 50;
         this.active = false;
-        scene.add.existing(this);
-        this.setIgnoreGravity(true);
-        this.setCollisionGroup(-1);
+
         this.setScale(0.35);
 
         this.create();

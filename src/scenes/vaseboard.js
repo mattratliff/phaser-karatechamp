@@ -1,6 +1,6 @@
 import constants from '../config/constants';
 
-import SceneController from '../controllers/sceneController';
+import SceneController from './sceneController';
 
 import beachscene from '../assets/backgrounds/game/beach_background.png';
 
@@ -123,7 +123,7 @@ export default class VaseBoard extends SceneController {
     if(this.player.ready && this.vase.x > LEFTEDGE)
         this.vase.update();
 
-    var collision = this.collisionSystem.checkForSpriteToBodyCollision(this.player, this.vase);
+    var collision = this.collisionManager.checkForSpriteToBodyCollision(this.player, this.vase);
     if(collision && collision.collided){
 
       console.log("exploding vase");

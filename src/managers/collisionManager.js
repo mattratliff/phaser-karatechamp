@@ -12,7 +12,7 @@ const assetScale = SCALE;
 const RIGHTEDGE = center.width + 463;
 const LEFTEDGE = center.width - 462;
 
-export default class CollisionSystem{
+export default class CollisionManager{
     constructor(matter, scene){
         this.fixtures = fixtures;
         this.matter = matter;

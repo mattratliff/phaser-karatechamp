@@ -32,11 +32,11 @@ import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png'
 
 import border from '../assets/backgrounds/start/dojo-border.png';
 
-import AnimationManager from '../controllers/animationManager';
-import CollisionSystem from '../controllers/collisionSystem';
+import AnimationManager from '../managers/animationManager';
+import CollisionManager from '../managers/collisionmanager';
 
 import Teacher from '../gameobjects/teacher';
-import SessionManager from './sessionManager';
+import SessionManager from '../managers/sessionManager';
 
 import {begin, stop, good, verygood, fullpoint, halfpoint, white} from '../helpers/balloons';
 
@@ -113,7 +113,7 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   create() {
-    this.collisionSystem = new CollisionSystem(this.matter, this);
+    this.collisionManager = new CollisionManager(this.matter, this);
 
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();

@@ -1,6 +1,6 @@
 import constants from '../config/constants';
 // import beachscene from '../assets/backgrounds/game/beach_background.png';
-import SceneController from '../controllers/sceneController';
+import SceneController from './sceneController';
 
 import Player from '../gameobjects/player';
 import AIPlayer from '../gameobjects/aiplayer';

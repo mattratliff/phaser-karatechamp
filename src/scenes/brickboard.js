@@ -1,5 +1,5 @@
 import constants from '../config/constants';
-import SceneController from '../controllers/sceneController';
+import SceneController from './sceneController';
 // import background from '../assets/backgrounds/boards/board4.png';
 
 import brickPNG from '../assets/bricks/brickspritesheet.png';

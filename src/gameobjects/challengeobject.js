@@ -1,29 +1,20 @@
-import Phaser from 'phaser';
+import GameObject from './gameobject';
+import sounds from '../assets/sounds/processed';
+var utils = require('../helpers/util');
 
-export default class ChallengeObject extends Phaser.Physics.Matter.Sprite {
-    constructor({scene, x, y, object, rightedge}) {
-        super(scene.matter.world, x, y, object);
-        this.movementState = 'idle';
-        this.scene = scene;
+export default class ChallengeObject extends GameObject {
+    constructor({scene, x, y, texturemap, rightedge}) {
+        super(scene, x, y, texturemap);
         this.active = false;
         this.velocity = -3;
         this.active = false;
         this.rightedge = rightedge;
-        console.log("resetting to ", this.rightedge);
-        scene.add.existing(this);
       }
-      preload(){
-
-      }
-      create(){
-
-      }
+      preload(){}
+      create(){}
       reset(RIGHTEDGE){
-        console.log(RIGHTEDGE);
         this.active = false;
         this.x = RIGHTEDGE;
-        
-        console.log(this.x);
       }
       update(){
         if(this.active)

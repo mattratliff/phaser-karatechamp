@@ -47,3 +47,8 @@ export function getRandomInt(max) {
     }
       
   }
+
+  export const Direction = {
+    RIGHT: 1,
+    LEFT: -1
+  };

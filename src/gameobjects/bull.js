@@ -1,16 +1,10 @@
-import Phaser from 'phaser';
+import GameObject from './gameobject';
 
-export default class Bull extends Phaser.Physics.Matter.Sprite {
-    constructor({scene, x, y, object}) {
-        super(scene.matter.world, x, y, object);
-        this.setCollisionGroup(-1);
-        this.setIgnoreGravity(true);
-        this.movementState = 'idle';
-        this.scene = scene;
+export default class Bull extends GameObject {
+    constructor({scene, x, y, texturemap}) {
+        super(scene, x, y, texturemap);
         this.active = false;
         this.velocity = -2;
-        this.active = false;
-        scene.add.existing(this);
       }
       preload(){}
       create(){}

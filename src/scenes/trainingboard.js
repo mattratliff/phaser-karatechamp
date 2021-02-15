@@ -1,6 +1,6 @@
 import constants from '../config/constants';
 
-import SceneController from '../controllers/sceneController';
+import SceneController from './sceneController';
 
 import sounds from '../assets/sounds/processed';
 

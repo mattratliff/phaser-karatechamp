@@ -1,30 +1,17 @@
-import Phaser from 'phaser';
-import KeyboardManager from '../controllers/keyboardManager';
-import GamepadManager from '../controllers/gamepadManager';
 var utils = require('../helpers/util');
+import GameObject from './gameobject';
 
-const PlayerDirection = {
-    RIGHT: 1,
-    LEFT: -1
-  };
-
-export default class Player extends Phaser.Physics.Matter.Sprite {
+export default class Player extends GameObject {
     constructor({scene, startx, starty, readyx, frame}) {
-        super(scene.matter.world, startx, starty, 'player', frame);
-        this.setIgnoreGravity(true);
-        this.setCollisionGroup(-1);
+        super(scene, startx, starty, 'player', frame);
 
         this.readyx = readyx;
-        this.scene = scene;
-        this.inputmanager = null;
-        this.gamepad = null;
-        this.direction = PlayerDirection.RIGHT;
+        this.startx = startx;
+        this.starty = starty;
         this.verticaldistance = 0;
         this.horizontaldistance = 0;
         this.yoffset = 4;
         this.xoffset = 3;
-        this.starty = starty;
-        this.startx = startx;
 
         this.startwalking = false;
         this.walking = false;
@@ -38,22 +25,15 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.breaking = false;
         this.broke = false;
 
-        scene.add.existing(this);
-
         this.create();
       }
       preload(){}
       create(){}
       setInputManager(){
-          this.inputmanager = (this.usesGamePad()) ? new GamepadManager(this.scene) : new KeyboardManager(this.scene);
-          this.inputmanager.init(this);
-          this.inputmanager.initStates();
+          super.setInputManager();
       }
       setGamePad(gamepad){
-          this.gamepad = gamepad;
-      }
-      usesGamePad(){
-          return (this.gamepad === null) ? false : true;
+        super.setGamePad(gamepad);
       }
       win(){
         this.inputmanager.win()
