@@ -1,9 +1,9 @@
 import constants from '../config/constants';
-import beachscene from '../assets/backgrounds/game/beach_background.png';
+// import beachscene from '../assets/backgrounds/game/beach_background.png';
 import SceneController from '../controllers/sceneController';
 
-import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
-import shorelineJSON from '../assets/backgrounds/game/shore.json';
+import Player from '../gameobjects/player';
+import AIPlayer from '../gameobjects/aiplayer';
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -24,9 +24,6 @@ export default class Multiplayer extends SceneController {
 
   preload() {
     super.preload();
-
-    this.load.image('beachscene', beachscene);
-    this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
   }
 
   create() {
@@ -34,13 +31,23 @@ export default class Multiplayer extends SceneController {
   }
 
   addComponents(){
-    this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
-    this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-    this.shoreline.setIgnoreGravity(true);
-    this.shoreline.setCollisionGroup(-1);
-    this.shoreline.play('shore', true);
-
     super.addComponents();
+
+    this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-this.groundOffset);
+
+    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
+    this.player.setGamePad(this.gamepad);
+    this.player.setInputManager(this.inputmanager);
+    this.player.startwalking = true;
+
+    this.aiplayer = new AIPlayer({ scene: this, startx: RIGHTEDGE-20, starty: HEIGHT-200, readyx: center.width+150 });
+    this.aiplayer.startwalking = true;
+
+    super.addBorders();
+
+    if(this.hasSpectators && this.board!=null){
+      super.animateSpectators();
+    }
   }
   
 
@@ -49,7 +56,9 @@ export default class Multiplayer extends SceneController {
    * after update check for collision
    */
   update(){
-    super.update();
+    this.player.update();
+    this.aiplayer.update();
+
   }
 
   render() {}

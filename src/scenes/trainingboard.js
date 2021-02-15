@@ -2,8 +2,6 @@ import constants from '../config/constants';
 
 import SceneController from '../controllers/sceneController';
 
-import practiceboard from '../assets/backgrounds/boards/board3.png';
-
 import sounds from '../assets/sounds/processed';
 
 import controllers from '../assets/backgrounds/game/controllers.png';
@@ -53,8 +51,6 @@ export default class TrainingBoard extends SceneController {
 
   preload() {
     super.preload();
-    this.load.image('practiceboard', practiceboard);
-
     this.load.image('controllers', controllers);
 
     this.load.image('arrowup', arrowup);
@@ -211,15 +207,26 @@ checkMove(option, callback){
   }
 
   addComponents(){
-    this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
+
+    super.addComponents();
     
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
     this.line = this.add.image(center.width, center.height+120, 'line').setScale(assetScale * .5);
     this.line.visible = false;
 
+    //add the player here so that he walks between the spectators
+    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-100 });
+    this.player.setGamePad(this.gamepad);
+    this.player.setInputManager(this.inputmanager);
+    this.player.setCollisionGroup(-1);
+    this.player.startwalking = true;
+    this.player.chopping = false;
+        
+    this.girl = this.matter.add.sprite(center.width+400, center.height, 'girl').setScale(assetScale * .9);
+    this.girl.setCollisionGroup(-1);
+        
     this.addPracticeControllersComponent();
-    this.addSpectators();
 
     this.practiceText = this.add
     .text(center.width-305, center.height-235, 'PRACTICE', {
@@ -239,9 +246,11 @@ checkMove(option, callback){
       font: `${14 * SCALE}pt Silom`
     });
     this.movehereText.visible = false;
-    super.addComponents();
+    
     
     this.moves = this.loadMoves();
+
+    super.addBorders();
   }
 
   addPracticeControllersComponent(){
@@ -290,16 +299,7 @@ checkMove(option, callback){
     this.redspectator1 = this.add.image(center.width+250, center.height-30, 'spectatorred').setScale(assetScale);
     this.redspectator2 = this.add.image(center.width+265, center.height+60, 'spectatorred').setScale(assetScale);
 
-    //add the player here so that he walks between the spectators
-    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-100 });
-    this.player.setGamePad(this.gamepad);
-    this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionGroup(-1);
-    this.player.startwalking = true;
-    this.player.chopping = false;
-        
-    this.girl = this.matter.add.sprite(center.width+400, center.height, 'girl').setScale(assetScale * .9);
-    this.girl.setCollisionGroup(-1);
+
     
     
     this.whitespectator3 = this.add.image(center.width-280, center.height+150, 'spectatorwhite').setScale(assetScale);

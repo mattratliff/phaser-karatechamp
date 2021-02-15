@@ -5,6 +5,7 @@ import SceneController from '../controllers/sceneController';
 import Player from '../gameobjects/player';
 import AIPlayer from '../gameobjects/aiplayer';
 
+
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 const center = {
@@ -38,20 +39,16 @@ export default class SinglePlayer extends SceneController {
     this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionGroup(-1);
     this.player.startwalking = true;
 
+    super.player = this.player;
+
     this.aiplayer = new AIPlayer({ scene: this, startx: RIGHTEDGE-20, starty: HEIGHT-200, readyx: center.width+150 });
-    this.aiplayer.setCollisionGroup(-1);
     this.aiplayer.startwalking = true;
 
-    super.addBorders();
-    console.log("spec = ", this.hasSpectators);
-    console.log("board = ", this.board);
-    if(this.hasSpectators && this.board!=null){
-      console.log("animate spectators");
-      super.animateSpectators();
-    }
+    super.addBorders();  
+    super.updateGameObjects();  
+    // super.setAIPlayer(this.aiplayer);
   }
   
 
@@ -62,7 +59,8 @@ export default class SinglePlayer extends SceneController {
   update(){
     this.player.update();
     this.aiplayer.update();
-
+    
+    super.update();
   }
 
   render() {}

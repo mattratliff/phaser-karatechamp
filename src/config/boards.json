@@ -1,26 +1,62 @@
 {
     "board1": {
         "groundOffset": 180,
-        "hasSpectators": false
+        "hasSpectators": false,
+        "hasSideLineSpectators": false,
+        "teacherOffset": {"x": 220, "y": -100},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": 0, "y": 0},
+        "isBreakingBoard": true
     },
     "board2": {
         "groundOffset": 210,
-        "hasSpectators": false
+        "hasSpectators": false,
+        "hasSideLineSpectators": false,
+        "teacherOffset": {"x": 0, "y": 0},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": 1, "y": -2},
+        "isBreakingBoard": true
     },
     "board3": {
         "groundOffset": 170,
-        "hasSpectators": false
+        "hasSpectators": false,
+        "hasSideLineSpectators": false,
+        "teacherOffset": {"x": 0, "y": 0},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": 0, "y": -8},
+        "isBreakingBoard": true
     },
     "board4": {
         "groundOffset": 120,
-        "hasSpectators": false
+        "hasSpectators": false,
+        "hasSideLineSpectators": false,
+        "teacherOffset": {"x": 0, "y": 0},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": 0, "y": -5},
+        "isBreakingBoard": true
     },
     "board5": {
         "groundOffset": 100,
-        "hasSpectators": false
+        "hasSpectators": false,
+        "hasSideLineSpectators": false,
+        "teacherOffset": {"x": 0, "y": 0},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": 0, "y": -5},
+        "isBreakingBoard": true
     },
     "board6": {
         "groundOffset": 200,
-        "hasSpectators": true
+        "hasSpectators": true,
+        "hasSideLineSpectators": true,
+        "teacherOffset": {"x": 0, "y": 0},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": -250, "y": 10},
+        "isBreakingBoard": true
     }
 }

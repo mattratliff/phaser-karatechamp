@@ -40,32 +40,15 @@ export default class VaseBoard extends SceneController {
     super.preload();
 
     this.load.atlas('vase', vasePNG, vaseJSON);
-
-    this.preloadBackground();
   }
 
   create() {
     super.create();
   }
 
-  preloadBackground(){
-    // if(this.board==0){
-    //   this.load.image('beachscene', beachscene);
-    //   this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
-    // }
-    // if(this.board==1)
-      this.load.image('practiceboard', practiceboard);
-  }
-
-  loadBackground(){
-    // if(this.board==0)
-    //   this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
-    // if(this.board==1)
-      this.add.image(center.width, center.height, 'practiceboard').setScale(assetScale);
-  }
-
   addComponents(){
-    this.loadBackground();
+
+    super.addComponents();
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-180);
 
@@ -101,9 +84,11 @@ export default class VaseBoard extends SceneController {
       font: `${16 * SCALE}pt Silom`
     });
 
-    super.addComponents();
+    
 
     this.registerDropVasesForDebug();
+
+    super.addBorders();
   }
 
     registerDropVasesForDebug(){

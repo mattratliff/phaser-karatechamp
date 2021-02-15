@@ -17,6 +17,9 @@ import playerJSON from '../assets/white/sprites.json';
 import AIplayerPNG from '../assets/red/spritesheet.png';
 import AIplayerJSON from '../assets/red/sprites.json';
 
+import teacherPNG from '../assets/teacher/spritesheet.png';
+import teacherJSON from '../assets/teacher/sprites.json';
+
 import board1 from '../assets/backgrounds/boards/board1.png';
 import board2 from '../assets/backgrounds/boards/board2.png';
 import board3 from '../assets/backgrounds/boards/board3.png';
@@ -24,10 +27,19 @@ import board4 from '../assets/backgrounds/boards/board4.png';
 import board5 from '../assets/backgrounds/boards/board5.png';
 import board6 from '../assets/backgrounds/boards/board6.png';
 
+import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.png';
+import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
+
 import border from '../assets/backgrounds/start/dojo-border.png';
 
 import AnimationManager from '../controllers/animationManager';
 import CollisionSystem from '../controllers/collisionSystem';
+
+import Teacher from '../gameobjects/teacher';
+import GameManager from './gameManager';
+
+import {begin, stop, good, verygood, fullpoint, halfpoint, white} from '../helpers/balloons';
+
 const boardConfig = require('../config/boards.json');
 var utils = require('../helpers/util');
 
@@ -38,6 +50,13 @@ const center = {
   height: HEIGHT * 0.5
 };
 
+const GameState = {
+  NEW: "New",
+  INPROGRESS: "In Progress",
+  COMPLETE: "Completed"
+};
+
+const assetScale = SCALE;
 const RIGHTEDGE = center.width + 463;
 const LEFTEDGE = center.width - 462;
 
@@ -52,10 +71,20 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.gamepad = null;
     this.board = null;
     this.hasSpectators = false;
+    this.player = null;
+    this.boardConfig = null;
+    this.timerstarted = false;
     this.spectators = [];
+    this.useTimer = null;
+    this.timerAmount = 0;
   }
 
   preload() {
+    this.load.image('begin', begin);
+    this.load.image('stop', stop);
+    this.load.image('good', good);
+    this.load.image('verygood', verygood);
+
     this.load.image('board1', board1);
     this.load.image('board2', board2);
     this.load.image('board3', board3);
@@ -65,14 +94,20 @@ export default class AnimationSandbox extends Phaser.Scene {
 
     this.load.atlas('player', playerPNG, playerJSON);
     this.load.atlas('aiplayer', AIplayerPNG, AIplayerJSON);
+    this.load.atlas('teacher', teacherPNG, teacherJSON);
 
     this.load.image('ground', ground);
+
     this.load.image('spectators1', spectators1);
     this.load.image('spectators2', spectators2);
     this.load.image('spectators3', spectators3);
     this.load.image('spectators4', spectators4);
     this.load.image('spectators5', spectators5);
     this.load.image('spectators6', spectators6);
+
+    this.load.image('spectatorwhite', spectatorwhite);
+    this.load.image('spectatorred', spectatorred);
+
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
   }
@@ -83,12 +118,25 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.animationManager = new AnimationManager(this.anims);
     this.animationManager.addAnimations();
 
+    this.gameManager = new GameManager(this);
+    this.gameManager.setCallbackOnComplete(this.completeMatch);
+
+    this.gameManager.setState(GameState.NEW);
+
     this.checkForGamePad();
 
     this.addComponents();
   }
 
   render() {}
+
+  addSideLineSpectators(){
+    this.whitespectator1 = this.add.image(center.width-250, center.height-30, 'spectatorwhite').setScale(assetScale);
+    this.whitespectator2 = this.add.image(center.width-265, center.height+60, 'spectatorwhite').setScale(assetScale);
+
+    this.redspectator1 = this.add.image(center.width+250, center.height-30, 'spectatorred').setScale(assetScale);
+    this.redspectator2 = this.add.image(center.width+265, center.height+60, 'spectatorred').setScale(assetScale);
+  }
 
   checkForGamePad(){
     if(this.input.gamepad.total == 0){
@@ -99,19 +147,37 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   getRandomBoard(){
-    return "board"+(utils.getRandomInt(6)+1);
+    return utils.getRandomInt(5)+1;
+  }
+
+  // setAIPlayer(aiplayer){
+  //   this.aiManager.setPlayer(aiplayer);
+  // }
+  /**
+   * 
+   * Callback from game manager once match is complete for cleanup
+   */
+  completeMatch(teacher, player){
+    teacher.stopMatch();
+    player.inputmanager.pause = true;
+
+    //TODO: judge will have to award points here based on something
   }
 
   addComponents(){
     const center = { width: WIDTH * 0.5, height: HEIGHT * 0.5 };
-    // this.board = this.getRandomBoard();
-    this.board = 5;
-    var index = "board"+(this.board+1);
-    this.groundOffset = boardConfig[index].groundOffset;
 
-    this.add.image(center.width, center.height, index);
+    this.boardConfig = this.createBoard();
+    this.useTimer = this.boardConfig.useTimer;
+    this.timerAmount = this.boardConfig.timerAmount;
 
-    this.hasSpectators=boardConfig[index].hasSpectators;
+    this.gameManager.timerAmount = this.timerAmount;
+    this.gameManager.setTimerLocation(this.boardConfig.timerOffset);
+
+    var teacherOffsetX = this.boardConfig.teacherOffset.x;
+    var teacherOffsetY = this.boardConfig.teacherOffset.y;
+
+    this.hasSpectators=this.boardConfig.hasSpectators;
     if(this.hasSpectators){
       this.spectators = [
         this.add.image(center.width, center.height+280, 'spectators1'),
@@ -124,12 +190,34 @@ export default class AnimationSandbox extends Phaser.Scene {
       this.spectators.forEach(spectator => {
         spectator.visible = false;
       });
-      console.log(this.spectators);
+
+      if(this.hasSpectators && this.board!=null){
+        this.animateSpectators();
+      }
+
+      if(this.boardConfig.hasSideLineSpectators)
+        this.addSideLineSpectators();
     }
+
+    this.gameManager.createTimer(center.width-15, center.height-245, SCALE);
+
+    this.teacher = new Teacher({ scene: this, startx: center.width+teacherOffsetX, starty: center.height+teacherOffsetY });
+    this.teacher.addComponents();
+  }
+
+  updateGameObjects(){
+    this.gameManager.setGameObjects(this.teacher, this.player, null);
+  }
+
+  createBoard(){
+    this.board = this.getRandomBoard();
+    var index = "board"+(this.board+1);
+    this.groundOffset = boardConfig[index].groundOffset;
+    this.add.image(center.width, center.height, index);
+    return boardConfig[index];
   }
 
   animateSpectators(){
-    //50% of the time look ahead, the other 50% select 2 through 6 images
     this.spectators[this.board].visible = false;
     if(utils.getRandomInt(2)==1){
       this.board = 0;
@@ -137,9 +225,7 @@ export default class AnimationSandbox extends Phaser.Scene {
       this.board = utils.getRandomInt(5);
     }
     this.spectators[this.board].visible = true;
-    console.log("chagning image")
     this.time.delayedCall(3000, this.animateSpectators, [], this);
-
   }
 
   addBorders(){
@@ -148,5 +234,15 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   update(){
+    if(this.player.ready){
+      if(!this.timerstarted){
+        this.timerstarted = true;
+        this.teacher.playBegin();
+        this.gameManager.setState(GameState.INPROGRESS);
+        if(this.useTimer)
+          this.time.delayedCall(3000, this.gameManager.startTimer(), [], this);
+      }
+      this.teacher.update();
+    }
   }
 }

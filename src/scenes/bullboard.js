@@ -41,6 +41,8 @@ export default class BullBoard extends SceneController {
   }
 
   addComponents(){
+    super.addComponents();
+
     this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
 
     this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
@@ -53,14 +55,13 @@ export default class BullBoard extends SceneController {
     this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionGroup(-1);
     this.player.startwalking = true;
 
     this.bull = new Bull({ scene: this, x: RIGHTEDGE, y: HEIGHT-200, object: 'bull' });
-    this.bull.setCollisionGroup(-1);
-    this.bull.setIgnoreGravity(true);
     this.bull.play('bull', true);
     this.bull.activate();
+    
+    super.addBorders();
     
     this.practiceText = this.add
     .text(center.width-150, center.height-300, 'CONQUER THE BULL', {
@@ -68,7 +69,7 @@ export default class BullBoard extends SceneController {
       font: `${26 * SCALE}pt Silom`
     });
 
-    super.addComponents();
+    
   }
 
   /**

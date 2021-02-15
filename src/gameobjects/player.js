@@ -2,17 +2,23 @@ import Phaser from 'phaser';
 import KeyboardManager from '../controllers/keyboardManager';
 import GamepadManager from '../controllers/gamepadManager';
 var utils = require('../helpers/util');
-// import kickfixtures from '../assets/white/frontkick.json';
+
+const PlayerDirection = {
+    RIGHT: 1,
+    LEFT: -1
+  };
 
 export default class Player extends Phaser.Physics.Matter.Sprite {
     constructor({scene, startx, starty, readyx, frame}) {
         super(scene.matter.world, startx, starty, 'player', frame);
+        this.setIgnoreGravity(true);
+        this.setCollisionGroup(-1);
+
         this.readyx = readyx;
-        this.movementState = 'idle';
         this.scene = scene;
         this.inputmanager = null;
         this.gamepad = null;
-        this.direction = 1;
+        this.direction = PlayerDirection.RIGHT;
         this.verticaldistance = 0;
         this.horizontaldistance = 0;
         this.yoffset = 4;
@@ -54,6 +60,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
       }
       entrance(){
         if(this.startwalking){
+            this.inputmanager.pause = true;
             this.play('walking', true);
             this.startwalking = false;
             this.walking = true;
@@ -74,6 +81,7 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
 
       setPlayerReady(){
           this.ready = true;
+          this.inputmanager.pause = false;
       }
 
       update(){

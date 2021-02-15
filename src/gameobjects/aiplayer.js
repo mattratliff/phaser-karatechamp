@@ -1,10 +1,18 @@
 import Phaser from 'phaser';
+import BehaviorManager from '../controllers/behaviorManager';
+
+const PlayerDirection = {
+  RIGHT: 1,
+  LEFT: -1
+};
 
 export default class AIPlayer extends Phaser.Physics.Matter.Sprite {
     constructor({scene, startx, starty, readyx}) {
         super(scene.matter.world, startx, starty, 'aiplayer');
+        this.setIgnoreGravity(true);
+        this.setCollisionGroup(-1);
+        
         this.readyx = readyx;
-        this.movementState = 'idle';
         this.scene = scene;
 
         this.startwalking = false;
@@ -13,18 +21,24 @@ export default class AIPlayer extends Phaser.Physics.Matter.Sprite {
         this.bowing = false;
         this.ready = false;
 
+        this.kickonce = false;
+
+        this.direction = PlayerDirection.LEFT;
+
         scene.add.existing(this);
 
         this.create();
       }
       preload(){}
-      create(){}
+      create(){
+        this.behavior = new BehaviorManager(this);
+      }
       win(){
         this.inputmanager.win()
       }
       entrance(){
         if(this.startwalking){
-            this.play('ai-walking', true);
+            this.play('red-walking', true);
             this.startwalking = false;
             this.walking = true;
         }
@@ -36,7 +50,7 @@ export default class AIPlayer extends Phaser.Physics.Matter.Sprite {
             }
         }
         if(this.startbowing){
-            this.play('ai-bow', true);
+            this.play('red-bow', true);
             this.startbowing = false;
             this.scene.time.delayedCall(2000, this.setPlayerReady, [], this);
         }
@@ -46,7 +60,12 @@ export default class AIPlayer extends Phaser.Physics.Matter.Sprite {
           this.ready = true;
       }
 
+
       update(){
-        this.entrance();
+        if(!this.ready)
+          this.entrance();
+        else{
+          this.behavior.update(); 
+        }
       }
 }

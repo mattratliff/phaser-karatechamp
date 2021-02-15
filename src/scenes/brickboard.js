@@ -1,6 +1,6 @@
 import constants from '../config/constants';
 import SceneController from '../controllers/sceneController';
-import background from '../assets/backgrounds/boards/board4.png';
+// import background from '../assets/backgrounds/boards/board4.png';
 
 import brickPNG from '../assets/bricks/brickspritesheet.png';
 import brickJSON from '../assets/bricks/bricks.json';
@@ -25,7 +25,7 @@ export default class BrickBoard extends SceneController {
 
   preload() {
     super.preload();
-    this.load.image('background', background);
+    // this.load.image('background', background);
     this.load.atlas('brick', brickPNG, brickJSON);
   }
 
@@ -34,7 +34,7 @@ export default class BrickBoard extends SceneController {
   }
 
   addComponents(){
-    this.add.image(center.width, center.height, 'background').setScale(assetScale);
+    // this.add.image(center.width, center.height, 'background').setScale(assetScale);
 
     super.addComponents();    
     
