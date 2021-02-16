@@ -1,7 +1,7 @@
 import GameObject from './gameobject';
 
 export default class Bull extends GameObject {
-    constructor({scene, x, y, texturemap}) {
+    constructor(scene, x, y, texturemap) {
         super(scene, x, y, texturemap);
         this.active = false;
         this.velocity = -2;

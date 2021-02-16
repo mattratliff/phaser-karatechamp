@@ -2,7 +2,7 @@ var utils = require('../helpers/util');
 import GameObject from './gameobject';
 
 export default class Player extends GameObject {
-    constructor({scene, startx, starty, readyx, frame}) {
+    constructor(scene, startx, starty, readyx, frame) {
         super(scene, startx, starty, 'player', frame);
 
         this.readyx = readyx;

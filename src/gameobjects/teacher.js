@@ -3,7 +3,7 @@ import sounds from '../assets/sounds/processed';
 var utils = require('../helpers/util');
 
 export default class Teacher extends GameObject {
-    constructor({scene, startx, starty}) {
+    constructor(scene, startx, starty) {
         super(scene, startx, starty, 'teacher');
         this.startx = startx;
         this.starty = starty;

@@ -201,7 +201,7 @@ export default class AnimationSandbox extends Phaser.Scene {
 
     this.sessionManager.createTimer(center.width-15, center.height-245, SCALE);
 
-    this.teacher = new Teacher({ scene: this, startx: center.width+teacherOffsetX, starty: center.height+teacherOffsetY });
+    this.teacher = new Teacher(this, center.width+teacherOffsetX, center.height+teacherOffsetY);
     this.teacher.addComponents();
   }
 

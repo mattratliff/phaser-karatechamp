@@ -55,12 +55,10 @@ export default class InputManager {
     flipping(){
         this.player.play('flip', true); 
         this.isFlipping = true;
-        this.pause = true;
     }
     backFlipping(){
         this.player.play('backflip', true); 
         this.isBackFlipping = true;
-        this.pause = true;
     }
     spinningHealKick(){                                                     
         if(!this.isSpinningHealKick){

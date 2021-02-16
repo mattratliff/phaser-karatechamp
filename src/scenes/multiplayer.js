@@ -35,12 +35,12 @@ export default class Multiplayer extends SceneController {
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-this.groundOffset);
 
-    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
+    this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-150);
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
     this.player.startwalking = true;
 
-    this.aiplayer = new AIPlayer({ scene: this, startx: RIGHTEDGE-20, starty: HEIGHT-200, readyx: center.width+150 });
+    this.aiplayer = new AIPlayer(this, RIGHTEDGE-20, HEIGHT-200, center.width+150);
     this.aiplayer.startwalking = true;
 
     super.addBorders();

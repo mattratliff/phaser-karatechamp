@@ -52,12 +52,12 @@ export default class BullBoard extends SceneController {
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
-    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
+    this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-150);
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
     this.player.startwalking = true;
 
-    this.bull = new Bull({ scene: this, x: RIGHTEDGE, y: HEIGHT-200, object: 'bull' });
+    this.bull = new Bull(this, RIGHTEDGE, HEIGHT-200, 'bull');
     this.bull.play('bull', true);
     this.bull.activate();
     

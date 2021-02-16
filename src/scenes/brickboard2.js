@@ -46,7 +46,7 @@ export default class BrickBoard2 extends SceneController {
 
     super.addComponents();    
     
-    this.player = new Player({ scene: this, startx: center.width-200, starty: center.height+80, readyx: center.width-150, frame: 'horizontal1' });
+    this.player = new Player(this, center.width-200, center.height+80, center.width-150, 'horizontal1');
     this.player.setGamePad(this.gamepad);
     this.player.setIgnoreGravity(true);
     this.player.setInputManager(this.inputmanager);
@@ -54,7 +54,7 @@ export default class BrickBoard2 extends SceneController {
     this.player.animated = true;
     this.player.breaking = true;
 
-    this.bricks = new Brick({ scene: this, x: center.width+120, y: center.height+55, object: 'brick', frame: 'horizontalbrick1' });
+    this.bricks = new Brick(this, center.width+120, center.height+55, 'brick', 'horizontalbrick1');
     this.bricks.setIgnoreGravity(true);
     this.bricks.setCollisionGroup(-1);
     this.bricks.breaking = false;

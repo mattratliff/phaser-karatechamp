@@ -38,21 +38,19 @@ export default class BrickBoard extends SceneController {
 
     super.addComponents();    
     
-    this.player = new Player({ scene: this, startx: center.width, starty: center.height, readyx: center.width-150, frame: 'chop1' });
+    this.player = new Player(this, center.width, center.height, center.width-150, 'chop1');
     this.player.setGamePad(this.gamepad);
     this.player.setIgnoreGravity(true);
     this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionGroup(-1);
     this.player.animated = true;
     this.player.verticaldistance = 50;  //how much vertical space to bounce
     this.player.chopping = true;
     this.player.chopped = false;
     this.player.inputmanager.pause = true;
 
-    this.bricks = new Brick({ scene: this, x: center.width, y: center.height+150, object: 'brick', frame: 'brick1' });
+    this.bricks = new Brick(this, center.width, center.height+150, 'brick', 'brick1');
     this.bricks.setScale(0.5);
     this.bricks.setIgnoreGravity(true);
-    this.bricks.setCollisionGroup(-1);
     this.bricks.breaking = false;
     
 

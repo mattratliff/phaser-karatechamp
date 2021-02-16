@@ -3,7 +3,7 @@ import sounds from '../assets/sounds/processed';
 var utils = require('../helpers/util');
 
 export default class ChallengeObject extends GameObject {
-    constructor({scene, x, y, texturemap, rightedge}) {
+    constructor(scene, x, y, texturemap, rightedge) {
         super(scene, x, y, texturemap);
         this.active = false;
         this.velocity = -3;

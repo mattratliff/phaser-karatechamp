@@ -59,14 +59,14 @@ export default class VaseBoard extends SceneController {
     // this.shoreline.play('shore', true);
     // }
 
-    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-150 });
+    this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-150 );
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
     this.player.setCollisionGroup(-1);
     this.player.startwalking = true;
     this.player.chopping = false;
 
-    this.vase = new ChallengeObject({ scene: this, x: RIGHTEDGE, y: this.getVasePosition(), object: 'vase', rightedge: RIGHTEDGE });
+    this.vase = new ChallengeObject(this, RIGHTEDGE, this.getVasePosition(), 'vase', RIGHTEDGE );
     this.vase.setCollisionGroup(-1);
     this.vase.setIgnoreGravity(true);
     this.vase.animated = false;

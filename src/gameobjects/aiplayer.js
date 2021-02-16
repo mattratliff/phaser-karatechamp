@@ -3,7 +3,7 @@ import GameObject from './gameobject';
 var utils = require('../helpers/util');
 
 export default class AIPlayer extends GameObject {
-    constructor({scene, startx, starty, readyx}) {
+    constructor(scene, startx, starty, readyx) {
         super(scene, startx, starty, 'aiplayer');
         
         this.readyx = readyx;

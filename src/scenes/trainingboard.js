@@ -27,6 +27,8 @@ import girlPNG from '../assets/girls/girlspritesheet.png';
 import girlJSON from '../assets/girls/girls.json';
 
 import Player from '../gameobjects/player';
+import Girl from '../gameobjects/girl';
+
 var utils = require('../helpers/util');
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -216,15 +218,15 @@ checkMove(option, callback){
     this.line.visible = false;
 
     //add the player here so that he walks between the spectators
-    this.player = new Player({ scene: this, startx: LEFTEDGE+20, starty: HEIGHT-200, readyx: center.width-100 });
+    this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-100);
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
-    this.player.setCollisionGroup(-1);
     this.player.startwalking = true;
     this.player.chopping = false;
         
-    this.girl = this.matter.add.sprite(center.width+400, center.height, 'girl').setScale(assetScale * .9);
-    this.girl.setCollisionGroup(-1);
+    // this.girl = this.matter.add.sprite(center.width+400, center.height, 'girl').setScale(assetScale * .9);
+    // this.girl.setCollisionGroup(-1);
+    this.girl = new Girl(this, center.width+400, HEIGHT-200, 'girl');
         
     this.addPracticeControllersComponent();
 
@@ -299,9 +301,6 @@ checkMove(option, callback){
     this.redspectator1 = this.add.image(center.width+250, center.height-30, 'spectatorred').setScale(assetScale);
     this.redspectator2 = this.add.image(center.width+265, center.height+60, 'spectatorred').setScale(assetScale);
 
-
-    
-    
     this.whitespectator3 = this.add.image(center.width-280, center.height+150, 'spectatorwhite').setScale(assetScale);
     this.redspectator3 = this.add.image(center.width+280, center.height+150, 'spectatorred').setScale(assetScale);
   }
@@ -309,7 +308,7 @@ checkMove(option, callback){
   completeTraining(){
     this.playerVeryGood();
     this.deliverBelt = true;
-    this.girl.play('redgirlwalk', true);
+    this.girl.active = true;
     this.player.play('sweat', true);
   }
 
@@ -319,13 +318,13 @@ checkMove(option, callback){
    */
   update(){
     if(this.deliverBelt){
-      if(this.girl.body.bounds.min.x > this.player.body.bounds.max.x + 5){
-        this.girl.x -= 1;
-      }else
-        this.girl.stop('redgirlwalk');
+      if(this.girl.body.bounds.min.x < this.player.body.bounds.max.x + 5)
+        this.girl.standstill();
     }
 
     this.player.update();
+
+    this.girl.update();
     if(!this.player.ready)
         return;
     if(this.gameState==-1){
