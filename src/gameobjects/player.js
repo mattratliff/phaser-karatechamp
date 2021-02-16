@@ -1,10 +1,14 @@
 var utils = require('../helpers/util');
 import GameObject from './gameobject';
 
+// import playerPNG from '../assets/white/spritesheet.png';
+// import playerJSON from '../assets/white/sprites.json';
+
 export default class Player extends GameObject {
     constructor(scene, startx, starty, readyx, frame) {
         super(scene, startx, starty, 'player', frame);
 
+        this.scene = scene;
         this.readyx = readyx;
         this.startx = startx;
         this.starty = starty;
@@ -24,11 +28,14 @@ export default class Player extends GameObject {
         
         this.breaking = false;
         this.broke = false;
-
-        this.create();
       }
-      preload(){}
-      create(){}
+      preload(){
+        
+      }
+      create(){
+        //   this.scene.load.atlas('player', playerPNG, playerJSON);
+          this.addAnimations();
+      }
       setInputManager(){
           super.setInputManager();
       }
@@ -41,7 +48,7 @@ export default class Player extends GameObject {
       entrance(){
         if(this.startwalking){
             this.inputmanager.pause = true;
-            this.play('walking', true);
+            this.anims.play('walking', true);
             this.startwalking = false;
             this.walking = true;
         }
@@ -53,7 +60,7 @@ export default class Player extends GameObject {
             }
         }
         if(this.startbowing){
-            this.play('bow', true);
+            this.anims.play('bow', true);
             this.startbowing = false;
             this.scene.time.delayedCall(2000, this.setPlayerReady, [], this);
         }
@@ -77,5 +84,219 @@ export default class Player extends GameObject {
             if(!this.broke)
                 utils.breaking(this);
         }
+      }
+      addAnimations(){
+        this.anims.create(
+          { key: 'frontkick', 
+            frames: this.anims.generateFrameNames('player', { prefix: 'kick', start:1, end: 12, zeroPad: 2 }),
+            frameRate: 10, 
+            repeatDelay: 200,
+            repeat: 0 
+        });
+  
+        this.anims.create(
+            { key: 'roundhousekick', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'roundhouse', start:1, end: 12, zeroPad: 2 }),
+                frameRate: 10, 
+                repeatDelay: 200,
+                repeat: 0 
+            });
+  
+        this.anims.create(
+            { key: 'spinningheal', 
+                frames: this.anims.generateFrameNames('player', { prefix: 'spinningheal', start:1, end: 11, zeroPad: 2 }),
+                frameRate: 10, 
+                repeatDelay: 200,
+                repeat: 0 
+            });
+  
+        this.anims.create(
+            { key: 'forward', 
+            // frames: this.anims.generateFrameNames('player', { prefix: 'kick', start:1, end: 6, zeroPad: 2 }),
+              frames: this.anims.generateFrameNames('player', { prefix: 'forward', start:1, end: 3, zeroPad: 2 }),
+              frameRate: 12, 
+              repeat: 0 
+          });
+  
+        this.anims.create(
+            { key: 'backward', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'forward', start:1, end: 3, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'jump', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'jump', start:1, end: 11, zeroPad: 2 }),
+              frameRate: 12, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'squat', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'squat', start:1, end: 5, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'standup', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'standup', start:1, end: 4, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'lowkick', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'lowkick', start:1, end: 9, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'flyingside', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'flyingside', start:1, end: 13, zeroPad: 2 }),
+              frameRate: 12, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'backflip', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'backflip', start:1, end: 10, zeroPad: 2 }),
+              frameRate: 8, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'frontsweep', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'frontsweep', start:1, end: 9, zeroPad: 2 }),
+              frameRate: 8, 
+              repeat: 0 
+          });
+          
+          this.anims.create(
+            { key: 'backkick', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'backkick', start:1, end: 10, zeroPad: 2 }),
+              frameRate: 8, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'highblock', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'highblock', start:1, end: 9, zeroPad: 2 }),
+              frameRate: 15, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'middleblock', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'middleblock', start:1, end: 9, zeroPad: 2 }),
+              frameRate: 15, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'lowblock', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'lowblock', start:1, end: 11, zeroPad: 2 }),
+              frameRate: 15, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'reverse', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'reverse', start:1, end: 7, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'reversesweep', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'reversesweep', start:1, end: 16, zeroPad: 1 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
+          this.anims.create(
+            { key: 'lungepunch', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'lungepunch', start:1, end: 11, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          this.anims.create(
+            { key: 'flip', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'flip', start:1, end: 12, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+  
+          //RAGDOLL ANIMATIONS
+          this.anims.create(
+            { key: 'facepunch', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'facepunch', start:1, end: 3, zeroPad: 1 }),
+              frameRate: 12, 
+              repeat: 0 
+          });
+          this.anims.create(
+            { key: 'gutkick', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'gutkick', start:1, end: 3, zeroPad: 1 }),
+              frameRate: 12, 
+              repeat: 0 
+          });
+          this.anims.create(
+            { key: 'fall', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'fall', start:1, end: 3, zeroPad: 1 }),
+              frameRate: 12, 
+              repeat: 0 
+          });
+  
+          //MISC
+          this.anims.create(
+            { key: 'win', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'win', start:1, end: 2, zeroPad: 1 }),
+              frameRate: 4, 
+              repeat: 10
+          });
+  
+          this.anims.create(
+            { key: 'happy', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'happy', start:1, end: 2, zeroPad: 1 }),
+              frameRate: 4, 
+              repeat: 10
+          });
+  
+          this.anims.create(
+            { key: 'walking', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'walking', start:1, end: 4, zeroPad: 1 }),
+              frameRate: 8, 
+              repeat: 20
+          });  
+
+          this.anims.create(
+            { key: 'bow', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'bow', start:1, end: 10, zeroPad: 1 }),
+              frameRate: 8, 
+              repeat: 0
+          });
+
+          this.anims.create(
+            { key: 'sweat', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'sweat', start:1, end: 2, zeroPad: 1 }),
+              frameRate: 2, 
+              repeat: 20
+          });
+  
+          this.anims.create(
+            { key: 'chop', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'chop', start:1, end: 2, zeroPad: 1 }),
+              frameRate: 15, 
+              repeat: 0
+          });
+          this.anims.create(
+            { key: 'break', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'horizontal', start:1, end: 2, zeroPad: 1 }),
+              frameRate: 15, 
+              repeat: 0
+          });
       }
 }

@@ -24,6 +24,7 @@ export default class AIPlayer extends GameObject {
       preload(){}
       create(){
         this.behavior = new BehaviorManager(this);
+        this.addAnimations();
       }
       win(){
         this.inputmanager.win()
@@ -59,5 +60,29 @@ export default class AIPlayer extends GameObject {
         else{
           this.behavior.update(); 
         }
+      }
+
+      addAnimations(){
+        this.anims.create(
+          { key: 'red-walking', 
+            frames: this.anims.generateFrameNames('aiplayer', { prefix: 'walking', start:1, end: 4, zeroPad: 1 }),
+            frameRate: 8, 
+            repeat: 20
+        });
+
+        this.anims.create(
+          { key: 'red-bow', 
+            frames: this.anims.generateFrameNames('aiplayer', { prefix: 'bow', start:1, end: 10, zeroPad: 1 }),
+            frameRate: 8, 
+            repeat: 0
+        });
+
+        this.anims.create(
+          { key: 'red-frontkick', 
+            frames: this.anims.generateFrameNames('aiplayer', { prefix: 'kick', start:1, end: 12, zeroPad: 2 }),
+            frameRate: 10, 
+            repeatDelay: 200,
+            repeat: 1
+        });
       }
 }

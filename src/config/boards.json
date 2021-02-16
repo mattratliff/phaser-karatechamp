@@ -53,10 +53,20 @@
         "groundOffset": 200,
         "hasSpectators": true,
         "hasSideLineSpectators": true,
-        "teacherOffset": {"x": 0, "y": 0},
+        "teacherOffset": {"x": 0, "y": -130},
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": -250, "y": 10},
         "isBreakingBoard": true
+    },
+    "board7": {
+        "groundOffset": 200,
+        "hasSpectators": false,
+        "hasSideLineSpectators": false,
+        "teacherOffset": {"x": 0, "y": 0},
+        "useTimer": true,
+        "timerAmount": 60,
+        "timerOffset":  {"x": -250, "y": 10},
+        "isBreakingBoard": false
     }
 }

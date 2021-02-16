@@ -77,7 +77,7 @@ export default class KeyboardManager extends InputManager {
         //BACK FLIP
         else if(this.keyLeftUp.isDown && this.keyRightDown.isDown)this.backFlipping();
         //FRONT FLIP
-        else if(this.keyLeftDown.isDown && this.keyRightUp.isDown && !this.isSquating && !this.roundHouseKick)this.flipping();
+        else if(this.keyLeftDown.isDown && this.keyRightUp.isDown)this.flipping();
         //FRONT LEG SWEEP
         else if(this.keyLeftDown.isDown && this.keyRightRight.isDown && !this.isSpinningHealKick)this.frontLegSweep();
         //REVERSE LEG SWEEP

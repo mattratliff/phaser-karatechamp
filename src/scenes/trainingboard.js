@@ -28,6 +28,7 @@ import girlJSON from '../assets/girls/girls.json';
 
 import Player from '../gameobjects/player';
 import Girl from '../gameobjects/girl';
+import { textChangeRangeIsUnchanged } from 'typescript';
 
 var utils = require('../helpers/util');
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -224,8 +225,6 @@ checkMove(option, callback){
     this.player.startwalking = true;
     this.player.chopping = false;
         
-    // this.girl = this.matter.add.sprite(center.width+400, center.height, 'girl').setScale(assetScale * .9);
-    // this.girl.setCollisionGroup(-1);
     this.girl = new Girl(this, center.width+400, HEIGHT-200, 'girl');
         
     this.addPracticeControllersComponent();
@@ -309,6 +308,7 @@ checkMove(option, callback){
     this.playerVeryGood();
     this.deliverBelt = true;
     this.girl.active = true;
+    this.player.inputmanager.pause = true;
     this.player.play('sweat', true);
   }
 

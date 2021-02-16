@@ -3,6 +3,7 @@ import KeyboardManager from '../input/keyboardManager';
 import GamepadManager from '../input/gamepadManager';
 var utils = require('../helpers/util');
 
+
 export default class GameObject extends Phaser.Physics.Matter.Sprite {
     constructor(scene, startx, starty, texturemap, frame) {
         console.log("x = ",startx);
@@ -22,7 +23,10 @@ export default class GameObject extends Phaser.Physics.Matter.Sprite {
         this.create();
       }
       preload(){}
-      create(){}
+      create(){
+          console.log('creating')
+
+      }
       setInputManager(){
           this.inputmanager = (this.usesGamePad()) ? new GamepadManager(this.scene) : new KeyboardManager(this.scene);
           this.inputmanager.init(this);

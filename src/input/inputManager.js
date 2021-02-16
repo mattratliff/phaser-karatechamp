@@ -136,7 +136,7 @@ export default class InputManager {
     }
     forward(){
         this.player.play('forward', true);
-        this.player.x += 20;
+        this.player.x += 10;
         this.pause = true;
     }
     backward(){

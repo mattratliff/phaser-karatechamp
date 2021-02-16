@@ -19,12 +19,16 @@ export default class Teacher extends GameObject {
         this.create();
       }
       preload(){}
-      create(){}
+      create(){
+        this.addAnimations();
+      }
       addComponents(){
         this.stopmatch = this.scene.add.image(this.x+50, this.x-65, 'stop');
         this.stopmatch.visible = false;
         this.begin = this.scene.add.image(this.startx+50, this.starty-65, 'begin');
         this.begin.visible = false;
+        console.log("teacher x =",this.startx," y = ",this.starty);
+        console.log("teacher x =",this.begin.x," y = ",this.begin.y);
 
         //50% of the time the teacher will stand still
         this.canWalk = Boolean(utils.getRandomInt(2));
@@ -61,5 +65,13 @@ export default class Teacher extends GameObject {
           this.begin.x += this.velocity;
           this.x += this.velocity;
         }
+      }
+      addAnimations(){
+        this.anims.create(
+          { key: 'teacherwalking', 
+            frames: this.anims.generateFrameNames('teacher', { prefix: 'teacher', start:1, end: 4, zeroPad: 1 }),
+            frameRate: 5, 
+            repeat: -1
+        });
       }
 }

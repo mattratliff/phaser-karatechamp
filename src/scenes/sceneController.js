@@ -20,19 +20,23 @@ import AIplayerJSON from '../assets/red/sprites.json';
 import teacherPNG from '../assets/teacher/spritesheet.png';
 import teacherJSON from '../assets/teacher/sprites.json';
 
+import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
+import shorelineJSON from '../assets/backgrounds/game/shore.json';
+
 import board1 from '../assets/backgrounds/boards/board1.png';
 import board2 from '../assets/backgrounds/boards/board2.png';
 import board3 from '../assets/backgrounds/boards/board3.png';
 import board4 from '../assets/backgrounds/boards/board4.png';
 import board5 from '../assets/backgrounds/boards/board5.png';
 import board6 from '../assets/backgrounds/boards/board6.png';
+import board7 from '../assets/backgrounds/boards/board7.png';
 
 import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.png';
 import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
 
 import border from '../assets/backgrounds/start/dojo-border.png';
 
-import AnimationManager from '../managers/animationManager';
+// import AnimationManager from '../managers/animationManager';
 import CollisionManager from '../managers/collisionmanager';
 
 import Teacher from '../gameobjects/teacher';
@@ -50,11 +54,6 @@ const center = {
   height: HEIGHT * 0.5
 };
 
-const GameState = {
-  NEW: "New",
-  INPROGRESS: "In Progress",
-  COMPLETE: "Completed"
-};
 
 const assetScale = SCALE;
 const RIGHTEDGE = center.width + 463;
@@ -91,6 +90,8 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.load.image('board4', board4);
     this.load.image('board5', board5);
     this.load.image('board6', board6);
+    this.load.image('board7', board7);
+    this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
 
     this.load.atlas('player', playerPNG, playerJSON);
     this.load.atlas('aiplayer', AIplayerPNG, AIplayerJSON);
@@ -110,18 +111,21 @@ export default class AnimationSandbox extends Phaser.Scene {
 
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
+
+    this.anims.create(
+      { key: 'shore', 
+        frames: this.anims.generateFrameNames('shoreline', { prefix: 'shore', start:1, end: 6, zeroPad: 1 }),
+        frameRate: 1, 
+        repeat: -1
+    });
   }
 
   create() {
     this.collisionManager = new CollisionManager(this.matter, this);
 
-    this.animationManager = new AnimationManager(this.anims);
-    this.animationManager.addAnimations();
-
     this.sessionManager = new SessionManager(this);
     this.sessionManager.setCallbackOnComplete(this.completeMatch);
-
-    this.sessionManager.setState(GameState.NEW);
+    this.sessionManager.setState(utils.GameState.NEW);
 
     this.checkForGamePad();
 
@@ -150,9 +154,6 @@ export default class AnimationSandbox extends Phaser.Scene {
     return utils.getRandomInt(5)+1;
   }
 
-  // setAIPlayer(aiplayer){
-  //   this.aiManager.setPlayer(aiplayer);
-  // }
   /**
    * 
    * Callback from game manager once match is complete for cleanup
@@ -211,7 +212,17 @@ export default class AnimationSandbox extends Phaser.Scene {
 
   createBoard(){
     this.board = this.getRandomBoard();
+    // this.board=6;
     var index = "board"+(this.board+1);
+    console.log(index);
+    
+    if(this.board==6){
+      this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+      this.shoreline.setIgnoreGravity(true);
+      this.shoreline.setCollisionGroup(-1);
+      // this.shoreline.play('shore', true);
+    }
+
     this.groundOffset = boardConfig[index].groundOffset;
     this.add.image(center.width, center.height, index);
     return boardConfig[index];
@@ -238,7 +249,7 @@ export default class AnimationSandbox extends Phaser.Scene {
       if(!this.timerstarted){
         this.timerstarted = true;
         this.teacher.playBegin();
-        this.sessionManager.setState(GameState.INPROGRESS);
+        this.sessionManager.setState(utils.GameState.INPROGRESS);
         if(this.useTimer)
           this.time.delayedCall(3000, this.sessionManager.startTimer(), [], this);
       }

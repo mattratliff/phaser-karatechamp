@@ -52,3 +52,10 @@ export function getRandomInt(max) {
     RIGHT: 1,
     LEFT: -1
   };
+
+  export const GameState = {
+    NEW: "New",
+    INPROGRESS: "In Progress",
+    COMPLETE: "Completed"
+  };
+  
