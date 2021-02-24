@@ -58,6 +58,8 @@ export default class SessionManager{
             this.sceneCallback(this.teacher, this.whiteplayer);
         }else{
           this.timerAmount -= 1;
+          if(this.timerAmount < 20)
+            this.timerText.style.color = 'red'
           this.timerText.setText(this.timerAmount);
           this.scene.time.delayedCall(1000, this.startTimer, [], this);
         }

@@ -27,6 +27,11 @@ export default class Teacher extends GameObject {
         this.stopmatch.visible = false;
         this.begin = this.scene.add.image(this.startx+50, this.starty-65, 'begin');
         this.begin.visible = false;
+        this.good = this.scene.add.image(this.startx+50, this.starty-65, 'good');
+        this.good.visible = false;
+        this.verygood = this.scene.add.image(this.startx+50, this.starty-65, 'verygood');
+        this.verygood.visible = false;
+
         console.log("teacher x =",this.startx," y = ",this.starty);
         console.log("teacher x =",this.begin.x," y = ",this.begin.y);
 
@@ -43,14 +48,30 @@ export default class Teacher extends GameObject {
             this.isWalking = true;
         }, [], this);
       }
+      playGood(){
+        this.good.visible = true;
+        this.good.x = this.x+50;
+        this.good.y = this.y-65;
+        this.scene.time.delayedCall(2000, function(){ 
+            this.stop('teacherwalking', true); 
+            this.good.visible = false; 
+        }, [], this);
+      }
+      playerVeryGood(){
+        this.verygood.visible = true;
+        this.verygood.x = this.x+50;
+        this.verygood.y = this.y-65;
+        this.scene.time.delayedCall(2000, function(){ 
+            this.stop('teacherwalking', true); 
+            this.verygood.visible = false; 
+        }, [], this);
+      }
       stopMatch(){
         //need sound here for stop
         this.isWalking = false;
         this.stopmatch.x = this.x+50;
         this.stopmatch.y = this.y-65;
         this.stopmatch.visible = true;
-
-        console.log(this.stopmatch);
         this.scene.time.delayedCall(3000, function(){ 
             this.stop('teacherwalking', true); 
             this.stopmatch.visible = false; 

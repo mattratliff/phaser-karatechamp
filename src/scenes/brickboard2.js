@@ -40,12 +40,15 @@ export default class BrickBoard2 extends SceneController {
   addComponents(){
     this.add.image(center.width, center.height, 'background').setScale(assetScale);
 
-    this.add.image(center.width+150, center.height+100, 'brickboard');
+    
 
-    this.add.image(center.width+200, center.height+250, 'indicator');
+    
 
     super.addComponents();    
     
+    this.add.image(center.width+150, center.height+100, 'brickboard');
+    this.add.image(center.width+200, center.height+250, 'indicator');
+
     this.player = new Player(this, center.width-200, center.height+80, center.width-150, 'horizontal1');
     this.player.setGamePad(this.gamepad);
     this.player.setIgnoreGravity(true);
@@ -59,11 +62,11 @@ export default class BrickBoard2 extends SceneController {
     this.bricks.setCollisionGroup(-1);
     this.bricks.breaking = false;
 
-    this.practiceText = this.add
-    .text(center.width-20, center.height-253, '30', {
-      fill: '#ffffff',
-      font: `${20 * SCALE}pt Silom`
-    });
+    // this.practiceText = this.add
+    // .text(center.width-20, center.height-253, '30', {
+    //   fill: '#ffffff',
+    //   font: `${20 * SCALE}pt Silom`
+    // });
   }
 
   update(){

@@ -7,6 +7,7 @@ export default class Girl extends GameObject {
         super(scene, x, y, 'girl');
         this.active = false;
         this.velocity = -2;
+        this.walking = false;
         this.setScale(.9);
       }
       preload(){
@@ -25,8 +26,14 @@ export default class Girl extends GameObject {
           this.active = false;
       }
       update(){
-        if(this.active)
-            this.x -= 1;
+        if(this.active){
+          if(!this.walking){
+            this.walk();
+            this.walking = true;
+          }
+          this.x -= 1;
+        }
+            
       }
       addAnimations(){
         this.anims.create(

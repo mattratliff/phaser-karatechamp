@@ -29,6 +29,7 @@ export default class BullBoard extends SceneController {
   }
 
   preload() {
+    console.log("preloading")
     super.preload();
 
     this.load.atlas('bull', bullPNG, bullJSON);
@@ -48,7 +49,7 @@ export default class BullBoard extends SceneController {
     this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
     this.shoreline.setIgnoreGravity(true);
     this.shoreline.setCollisionGroup(-1);
-    this.shoreline.play('shore', true);
+    //this.shoreline.play('shore', true);
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 

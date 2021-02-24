@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import sounds from '../assets/sounds/processed';
+var utils = require('../helpers/util');
 
 export default class InputManager {
     constructor(scene) {
@@ -136,12 +137,14 @@ export default class InputManager {
     }
     forward(){
         this.player.play('forward', true);
-        this.player.x += 10;
+        if(this.player.canMoveForward())
+            this.player.x += 10;
         this.pause = true;
     }
     backward(){
         this.player.play('backward', true);
-        this.player.x -= 20;
+        if(this.player.canMoveBackward())
+            this.player.x -= 20;
         this.pause = true;
     }
     jump(){
@@ -163,7 +166,12 @@ export default class InputManager {
     }
     changeDirection(){
         this.scene.time.delayedCall(1000, this.finishChangeDirection, [], this);
-        this.player.flipX = !this.player.flipX;
+        
+        if(this.player.direction == utils.Direction.RIGHT)
+            this.player.direction = utils.Direction.LEFT;
+        else
+            this.player.direction = utils.Direction.RIGHT;
+
         this.changingDirection = true;
     }
     finishChangeDirection(){
@@ -191,7 +199,7 @@ export default class InputManager {
         }
       this.player.play('lungepunch', true); 
       this.isLungePunching = true;
-      if(this.player.flipX)
+      if(this.player.direction == utils.Direction.LEFT)
         this.player.x -= 1;
       else
         this.player.x += 1;
