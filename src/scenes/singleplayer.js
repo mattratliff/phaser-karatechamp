@@ -19,7 +19,7 @@ const LEFTEDGE = center.width - 462;
 
 export default class SinglePlayer extends SceneController {
   constructor() {
-    super({ scenekey: 'SinglePlayer' });
+    super('SinglePlayer');
     this.gamepad = null;
   }
 

@@ -30,7 +30,7 @@ const LEFTEDGE = center.width - 462;
 
 export default class VaseBoard extends SceneController {
   constructor() {
-    super({ scenekey: 'VaseBoard' });
+    super('VaseBoard');
     this.gamepad = null;
     this.numbervases = 5;
     this.board = utils.getRandomInt(2);
@@ -52,13 +52,6 @@ export default class VaseBoard extends SceneController {
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-180);
 
-    // if(this.board==0){
-    // this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-    // this.shoreline.setIgnoreGravity(true);
-    // this.shoreline.setCollisionGroup(-1);
-    // this.shoreline.play('shore', true);
-    // }
-
     this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-150 );
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
@@ -71,20 +64,11 @@ export default class VaseBoard extends SceneController {
     this.vase.setIgnoreGravity(true);
     this.vase.animated = false;
 
-    // if(this.board==0)
-    // this.practiceText = this.add
-    // .text(center.width-220, center.height-300, 'FLYING OBJECT CHALLENGE', {
-    //   fill: '#000000',
-    //   font: `${26 * SCALE}pt Silom`
-    // });
-
     this.practiceText = this.add
-    .text(center.width-230, center.height+300, 'Click where you want the vase to begin', {
+    .text(center.width-230, center.height+300, 'Click where you want the vase to start', {
       fill: '#000000',
       font: `${16 * SCALE}pt Silom`
     });
-
-    
 
     this.registerDropVasesForDebug();
 
@@ -129,7 +113,7 @@ export default class VaseBoard extends SceneController {
       console.log("exploding vase");
       this.vase.play('vase', true);
       this.vase.velocity = 0;
-      this.time.delayedCall(300, this.resetVase, [], this);
+      this.time.delayedCall(1000, this.resetVase, [], this);
 
       //vase hit player
       if(!collision.hit){

@@ -18,7 +18,7 @@ const assetScale = SCALE;
 
 export default class BrickBoard extends SceneController {
   constructor() {
-    super({ scenekey: 'BrickBoard' });
+    super('BrickBoard');
     this.gamepad = null;
     this.numbervases = 5;
   }
@@ -30,6 +30,7 @@ export default class BrickBoard extends SceneController {
   }
 
   create() {
+    super.verticalBreakingBoard = true;
     super.create();
   }
 
@@ -38,7 +39,7 @@ export default class BrickBoard extends SceneController {
 
     super.addComponents();    
     
-    this.player = new Player(this, center.width, center.height, center.width-150, 'chop1');
+    this.player = new Player(this, center.width-100, center.height, center.width-150, 'chop1');
     this.player.setGamePad(this.gamepad);
     this.player.setIgnoreGravity(true);
     this.player.setInputManager(this.inputmanager);
@@ -48,7 +49,7 @@ export default class BrickBoard extends SceneController {
     this.player.chopped = false;
     this.player.inputmanager.pause = true;
 
-    this.bricks = new Brick(this, center.width, center.height+150, 'brick', 'brick1');
+    this.bricks = new Brick(this, center.width-100, center.height+150, 'brick', 'brick1');
     this.bricks.setScale(0.5);
     this.bricks.setIgnoreGravity(true);
     this.bricks.breaking = false;

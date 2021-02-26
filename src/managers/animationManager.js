@@ -14,12 +14,12 @@ export default class AnimationManager {
       // this.addBoardAnimations();
       // this.addGirlAnimations();
 
-      this.anims.create(
-        { key: 'teacherwalking', 
-          frames: this.anims.generateFrameNames('teacher', { prefix: 'teacher', start:1, end: 4, zeroPad: 1 }),
-          frameRate: 5, 
-          repeat: -1
-      });
+      // this.anims.create(
+      //   { key: 'teacherwalking', 
+      //     frames: this.anims.generateFrameNames('teacher', { prefix: 'teacher', start:1, end: 4, zeroPad: 1 }),
+      //     frameRate: 5, 
+      //     repeat: -1
+      // });
     }
 
     // addGirlAnimations(){
@@ -32,12 +32,12 @@ export default class AnimationManager {
     // }
 
     addBoardAnimations(){
-      this.anims.create(
-        { key: 'shore', 
-          frames: this.anims.generateFrameNames('shoreline', { prefix: 'shore', start:1, end: 6, zeroPad: 1 }),
-          frameRate: 1, 
-          repeat: -1
-      });
+      // this.anims.create(
+      //   { key: 'shore', 
+      //     frames: this.anims.generateFrameNames('shoreline', { prefix: 'shore', start:1, end: 6, zeroPad: 1 }),
+      //     frameRate: 1, 
+      //     repeat: -1
+      // });
     }
 
     // addBullAnimations(){

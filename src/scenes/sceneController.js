@@ -64,15 +64,17 @@ const LEFTEDGE = center.width - 462;
  * Base class for different boards
  * Handles scene management, transition, etc..
  */
-export default class AnimationSandbox extends Phaser.Scene {
-  constructor({scenekey}) {
+export default class SceneController extends Phaser.Scene {
+  constructor(scenekey, anims) {
     super({ key: scenekey });
+    this.anims = anims;
     this.gamepad = null;
     this.board = null;
     this.hasSpectators = false;
     this.player = null;
     this.boardConfig = null;
     this.timerstarted = false;
+    this.verticalBreakingBoard = false;
     this.spectators = [];
     this.useTimer = null;
     this.timerAmount = 0;
@@ -112,6 +114,7 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
 
+    console.log('creating shore')
     this.anims.create(
       { key: 'shore', 
         frames: this.anims.generateFrameNames('shoreline', { prefix: 'shore', start:1, end: 6, zeroPad: 1 }),
@@ -130,6 +133,7 @@ export default class AnimationSandbox extends Phaser.Scene {
     this.checkForGamePad();
 
     this.addComponents();
+    // this.addAnimations();
   }
 
   render() {}
@@ -151,7 +155,7 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   getRandomBoard(){
-    return utils.getRandomInt(5)+1;
+    return utils.getRandomInt(6);
   }
 
   /**
@@ -211,21 +215,31 @@ export default class AnimationSandbox extends Phaser.Scene {
   }
 
   createBoard(){
-    this.board = this.getRandomBoard();
-    // this.board=6;
-    var index = "board"+(this.board+1);
-    console.log(index);
     
+    // this.board=6
+    var board = this.getRandomBoard();
+    var index = "board"+(board+1);
+    while(this.verticalBreakingBoard==true && boardConfig[index].isBreakingBoard==false){
+      board = this.getRandomBoard();
+      index = "board"+(board+1);
+    }
+    this.board = board;
+
     if(this.board==6){
       this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
       this.shoreline.setIgnoreGravity(true);
       this.shoreline.setCollisionGroup(-1);
-      // this.shoreline.play('shore', true);
+      // this.anims.play('shore', true);
     }
+
 
     this.groundOffset = boardConfig[index].groundOffset;
     this.add.image(center.width, center.height, index);
     return boardConfig[index];
+  }
+
+  addAnimations(){
+
   }
 
   animateSpectators(){

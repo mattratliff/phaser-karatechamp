@@ -24,7 +24,7 @@ const LEFTEDGE = center.width - 462;
 
 export default class BullBoard extends SceneController {
   constructor() {
-    super({ scenekey: 'BullBoard' });
+    super('BullBoard');
     this.gamepad = null;
   }
 
@@ -32,8 +32,6 @@ export default class BullBoard extends SceneController {
     super.preload();
 
     this.load.atlas('bull', bullPNG, bullJSON);
-    this.load.image('beachscene', beachscene);
-    this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
   }
 
   create() {
@@ -42,13 +40,6 @@ export default class BullBoard extends SceneController {
 
   addComponents(){
     super.addComponents();
-
-    this.add.image(center.width, center.height, 'beachscene').setScale(assetScale);
-
-    this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-    this.shoreline.setIgnoreGravity(true);
-    this.shoreline.setCollisionGroup(-1);
-    this.shoreline.play('shore', true);
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
@@ -68,7 +59,6 @@ export default class BullBoard extends SceneController {
       fill: '#000000',
       font: `${26 * SCALE}pt Silom`
     });
-
     
   }
 

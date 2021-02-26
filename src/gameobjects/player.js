@@ -14,7 +14,7 @@ export default class Player extends GameObject {
         this.starty = starty;
         this.verticaldistance = 0;
         this.horizontaldistance = 0;
-        this.yoffset = 4;
+        this.yoffset = 5;
         this.xoffset = 3;
 
         this.startwalking = false;

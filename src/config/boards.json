@@ -7,7 +7,7 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": 0},
-        "isBreakingBoard": true
+        "isBreakingBoard": false
     },
     "board2": {
         "groundOffset": 210,
@@ -57,7 +57,7 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": -250, "y": 10},
-        "isBreakingBoard": true
+        "isBreakingBoard": false
     },
     "board7": {
         "groundOffset": 200,
@@ -66,7 +66,7 @@
         "teacherOffset": {"x": 0, "y": 0},
         "useTimer": true,
         "timerAmount": 60,
-        "timerOffset":  {"x": -250, "y": 10},
+        "timerOffset":  {"x": -250, "y": 100},
         "isBreakingBoard": false
     }
 }

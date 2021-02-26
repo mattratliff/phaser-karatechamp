@@ -9,9 +9,13 @@ export default class ChallengeObject extends GameObject {
         this.velocity = -3;
         this.active = false;
         this.rightedge = rightedge;
+
+        this.create();
       }
       preload(){}
-      create(){}
+      create(){
+        this.addAnimations();
+      }
       reset(RIGHTEDGE){
         this.active = false;
         this.x = RIGHTEDGE;
@@ -19,5 +23,13 @@ export default class ChallengeObject extends GameObject {
       update(){
         if(this.active)
             this.x += this.velocity;
+      }
+      addAnimations(){
+        this.anims.create(
+          { key: 'vase', 
+            frames: this.anims.generateFrameNames('vase', { prefix: 'vase', start:1, end: 5, zeroPad: 1 }),
+            frameRate: 8, 
+            repeat: 0
+        });
       }
 }

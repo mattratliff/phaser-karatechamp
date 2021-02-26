@@ -44,7 +44,7 @@ const LEFTEDGE = center.width - 462;
 
 export default class TrainingBoard extends SceneController {
   constructor() {
-    super({ scenekey: 'TrainingBoard' });
+    super('TrainingBoard');
     this.gamepad = null;
     this.practiceStarted = false;
     this.trainingCompleted = false;
@@ -173,21 +173,21 @@ checkMove(option, callback){
             option.rightactivecontrol.visible = false;
           }
           callback(this.line, this.movehereText);    
-          this.time.delayedCall(1000, this.startGood, [], this);
+          // this.time.delayedCall(1000, this.startGood, [], this);
           this.gameState++;
       }
   }
 
-  startGood(){
-    this.good = null;
-    if(utils.getRandomInt(3)==1)   // %33 chance of getting "Good"
-        this.good = this.add.image(center.width+50, center.height-200, 'good');
-    this.time.delayedCall(2000, function(){
-      if(this.good)
-        this.good.visible = false;
-      this.completeStep = false;
-    }, [], this);      
-  }
+  // startGood(){
+  //   this.good = null;
+  //   if(utils.getRandomInt(3)==1)   // %33 chance of getting "Good"
+  //       this.good = this.add.image(center.width+50, center.height-200, 'good');
+  //   this.time.delayedCall(2000, function(){
+  //     if(this.good)
+  //       this.good.visible = false;
+  //     this.completeStep = false;
+  //   }, [], this);      
+  // }
 
   playerVeryGood(){
     this.verygood = this.add.image(center.width+50, center.height-200, 'verygood');

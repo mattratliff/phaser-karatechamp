@@ -8,6 +8,7 @@ import sounds from '../assets/sounds/processed';
 import constants from '../config/constants';
 
 var utils = require('../helpers/util');
+const settings = require('../config/config.json');
 
 const { WIDTH, HEIGHT, SCALE } = constants;
 
@@ -26,7 +27,9 @@ const timeBeforeShowingLanding = 1000;
 export default class Start extends Phaser.Scene {
   constructor() {
     super({ key: 'Start' });
-    this.musicplaying = true;
+
+    console.log("music = ", settings['music'])
+    this.musicplaying = settings["music"];
     this.showleaderboard = false;
     this.selection = 0;
     this.page = 1;
@@ -60,7 +63,8 @@ export default class Start extends Phaser.Scene {
     this.addComponents();
     this.makeText();
     this.inputHandler();
-    this.playMusic();
+    if(this.musicplaying)
+      this.playMusic();
   }
   startGame(){
     if((this.selection == 3 && this.page==1) || (this.selection == 5 && this.page==2)){
@@ -222,7 +226,7 @@ export default class Start extends Phaser.Scene {
   render() {}
 
   playMusic = () => {
-    // this.backgroundMusic = sounds.play('Main_Menu');
+    this.backgroundMusic = sounds.play('Main_Menu');
     sounds.loop(true, this.backgroundMusic);
     sounds.volume(0.6, this.backgroundMusic);
   };
@@ -234,6 +238,7 @@ export default class Start extends Phaser.Scene {
       this.noaudio.visible = true;
     }
     else{
+      console.log("playing")
       sounds.volume(0.6, this.backgroundMusic);
       this.audio.visible = true;
       this.noaudio.visible = false;

@@ -18,7 +18,7 @@ const LEFTEDGE = center.width - 462;
 
 export default class Multiplayer extends SceneController {
   constructor() {
-    super({ scenekey: 'Multiplayer' });
+    super('Multiplayer');
     this.gamepad = null;
   }
 
