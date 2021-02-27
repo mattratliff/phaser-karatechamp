@@ -17,11 +17,15 @@ export default class Player extends GameObject {
         this.yoffset = 5;
         this.xoffset = 3;
 
+        this.direction = utils.Direction.RIGHT;
         this.startwalking = false;
         this.walking = false;
         this.startbowing = false;
         this.bowing = false;
         this.ready = false;
+
+        this.leftedge = 0;
+        this.rightedge = 0;
 
         this.chopping = false;
         this.chopped = false;
@@ -71,8 +75,18 @@ export default class Player extends GameObject {
           this.inputmanager.pause = false;
       }
 
+      canMoveForward(){ 
+        // return this.x < this.rightedge
+        return true;
+      }
+      canMoveBackward(){ 
+        // return this.x > this.leftedge 
+        return true;
+      }
+
       update(){
         this.inputmanager.checkForInput();
+
         if(!this.chopping && !this.breaking)
             this.entrance();
 

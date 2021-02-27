@@ -56,8 +56,13 @@
         "teacherOffset": {"x": 0, "y": -130},
         "useTimer": true,
         "timerAmount": 60,
+<<<<<<< HEAD
         "timerOffset":  {"x": -250, "y": 10},
         "isBreakingBoard": false
+=======
+        "timerOffset":  {"x": 250, "y": 30},
+        "isBreakingBoard": true
+>>>>>>> c3bcaaa1b1b935227627ddfcb99a34b87831e774
     },
     "board7": {
         "groundOffset": 200,

@@ -29,6 +29,7 @@ export default class BullBoard extends SceneController {
   }
 
   preload() {
+    console.log("preloading")
     super.preload();
 
     this.load.atlas('bull', bullPNG, bullJSON);

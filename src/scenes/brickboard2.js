@@ -58,6 +58,15 @@ export default class BrickBoard2 extends SceneController {
     this.bricks.setIgnoreGravity(true);
     this.bricks.setCollisionGroup(-1);
     this.bricks.breaking = false;
+<<<<<<< HEAD
+=======
+
+    // this.practiceText = this.add
+    // .text(center.width-20, center.height-253, '30', {
+    //   fill: '#ffffff',
+    //   font: `${20 * SCALE}pt Silom`
+    // });
+>>>>>>> c3bcaaa1b1b935227627ddfcb99a34b87831e774
   }
 
   update(){

@@ -36,15 +36,17 @@ export default class SinglePlayer extends SceneController {
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-this.groundOffset);
 
+    this.aiplayer = new AIPlayer(this, RIGHTEDGE-20, HEIGHT-200, center.width+150);
+    this.aiplayer.startwalking = true;
+
     this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-150);
     this.player.setGamePad(this.gamepad);
     this.player.setInputManager(this.inputmanager);
     this.player.startwalking = true;
+    this.player.leftedge = LEFTEDGE+50;
+    this.player.rightedge = RIGHTEDGE;
 
     super.player = this.player;
-
-    this.aiplayer = new AIPlayer(this, RIGHTEDGE-20, HEIGHT-200, center.width+150);
-    this.aiplayer.startwalking = true;
 
     super.addBorders();  
     super.updateGameObjects();  
@@ -57,9 +59,15 @@ export default class SinglePlayer extends SceneController {
    * after update check for collision
    */
   update(){
+    
+    //if player is facing right and aiplayer is facing left
+    this.player.rightedge = (this.aiplayer.x-30 < this.rightedge ? this.aiplayer.x-30 : this.rightedge);
+    this.aiplayer.leftedge = (this.player.x+30 > this.leftedge ? this.player.x+30 : this.leftedge);
+
     this.player.update();
     this.aiplayer.update();
     
+
     super.update();
   }
 

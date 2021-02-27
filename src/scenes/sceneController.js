@@ -4,6 +4,10 @@ import Phaser from 'phaser';
 import constants from '../config/constants';
 import ground from '../assets/backgrounds/game/practice/practice-ground.png';
 
+
+import spectatorsclap1 from '../assets/spectators-clap1.png';
+import spectatorsclap2 from '../assets/spectators-clap2.png';
+
 import spectators1 from '../assets/spectators1.png';
 import spectators2 from '../assets/spectators2.png';
 import spectators3 from '../assets/spectators3.png';
@@ -77,6 +81,7 @@ export default class SceneController extends Phaser.Scene {
     this.verticalBreakingBoard = false;
     this.spectators = [];
     this.useTimer = null;
+    this.spectatorClapping = false;
     this.timerAmount = 0;
   }
 
@@ -100,6 +105,9 @@ export default class SceneController extends Phaser.Scene {
     this.load.atlas('teacher', teacherPNG, teacherJSON);
 
     this.load.image('ground', ground);
+
+    this.load.image('spectatorsclap1', spectatorsclap1);
+    this.load.image('spectatorsclap2', spectatorsclap2);
 
     this.load.image('spectators1', spectators1);
     this.load.image('spectators2', spectators2);
@@ -196,6 +204,11 @@ export default class SceneController extends Phaser.Scene {
         spectator.visible = false;
       });
 
+      this.spectatorsClap1 = this.add.image(center.width, center.height+280, 'spectatorsclap1')
+      this.spectatorsClap1.visible = false;
+      this.spectatorsClap2 = this.add.image(center.width, center.height+280, 'spectatorsclap2')
+      this.spectatorsClap2.visible = false;
+
       if(this.hasSpectators && this.board!=null){
         this.animateSpectators();
       }
@@ -212,6 +225,10 @@ export default class SceneController extends Phaser.Scene {
 
   updateGameObjects(){
     this.sessionManager.setGameObjects(this.teacher, this.player, null);
+  }
+
+  getTeacher(){
+    return this.teacher;
   }
 
   createBoard(){
@@ -250,7 +267,16 @@ export default class SceneController extends Phaser.Scene {
       this.board = utils.getRandomInt(5);
     }
     this.spectators[this.board].visible = true;
-    this.time.delayedCall(3000, this.animateSpectators, [], this);
+    if(!this.spectatorClapping)
+      this.time.delayedCall(3000, this.animateSpectators, [], this);
+  }
+
+  startClapping(frame){
+    this.spectatorClapping = true;
+    frame = (frame==2) ? 1 : 2;
+    this.spectatorsClap1.visible = (frame==1)
+    this.spectatorsClap2.visible = (frame==2) 
+    this.time.delayedCall(300, this.startClapping, [frame], this);
   }
 
   addBorders(){

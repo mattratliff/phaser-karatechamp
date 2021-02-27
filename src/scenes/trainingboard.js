@@ -28,7 +28,7 @@ import girlJSON from '../assets/girls/girls.json';
 
 import Player from '../gameobjects/player';
 import Girl from '../gameobjects/girl';
-import { textChangeRangeIsUnchanged } from 'typescript';
+import { takeWhile } from 'lodash';
 
 var utils = require('../helpers/util');
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -47,9 +47,11 @@ export default class TrainingBoard extends SceneController {
     super('TrainingBoard');
     this.gamepad = null;
     this.practiceStarted = false;
+    this.startTrainingCompleted = false;
     this.trainingCompleted = false;
     this.deliverBelt = false;
     this.gameState = -1;
+    this.teacher = null;
   }
 
   preload() {
@@ -71,11 +73,11 @@ export default class TrainingBoard extends SceneController {
 
     this.load.atlas('girl', girlPNG, girlJSON);
 
-    this.load.image('begin', begin);
-    this.load.image('stop', stop);
-    this.load.image('good', good);
+    // this.load.image('begin', begin);
+    // this.load.image('stop', stop);
+    // this.load.image('good', good);
     this.load.image('line', line);
-    this.load.image('verygood', verygood);
+    // this.load.image('verygood', verygood);
   }
 
   create() {
@@ -198,15 +200,11 @@ checkMove(option, callback){
   }
 
   startBegin(){
-    sounds.play('Begin');
     this.player.active = true;
-    this.begin = this.add.image(center.width+50, center.height-200, 'begin');
-    this.time.delayedCall(2000, function(){ 
-        this.begin.visible = false; 
-        this.practiceStarted = true; 
-        this.gameState = 0;
-        this.completeStep = false;
-    }, [], this);
+    this.practiceStarted = true; 
+    this.gameState = 0;
+    this.completeStep = false;
+    this.teacher.playBegin();
   }
 
   addComponents(){
@@ -227,13 +225,16 @@ checkMove(option, callback){
         
     this.girl = new Girl(this, center.width+400, HEIGHT-200, 'girl');
         
+    this.teacher = super.getTeacher();
+
+
     this.addPracticeControllersComponent();
 
-    this.practiceText = this.add
-    .text(center.width-305, center.height-235, 'PRACTICE', {
-      fill: '#ffffff',
-      font: `${22 * SCALE}pt Silom`
-    });
+    // this.practiceText = this.add
+    // .text(center.width-305, center.height-235, 'PRACTICE', {
+    //   fill: '#ffffff',
+    //   font: `${22 * SCALE}pt Silom`
+    // });
 
     this.movementText = this.add
     .text(center.width-305, center.height+290, "", {
@@ -305,7 +306,7 @@ checkMove(option, callback){
   }
 
   completeTraining(){
-    this.playerVeryGood();
+    this.teacher.playerVeryGood();
     this.deliverBelt = true;
     this.girl.active = true;
     this.player.inputmanager.pause = true;
@@ -332,7 +333,10 @@ checkMove(option, callback){
         this.startBegin();
     }
     if(this.trainingCompleted){
-      this.time.delayedCall(3000, this.completeTraining, [], this);
+      if(!this.startTrainingCompleted){
+        this.startTrainingCompleted = true;
+        this.time.delayedCall(3000, this.completeTraining, [], this);
+      }
     }else
       this.checkPracticeStep();
   }
