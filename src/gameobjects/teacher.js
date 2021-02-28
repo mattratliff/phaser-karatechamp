@@ -5,6 +5,7 @@ var utils = require('../helpers/util');
 export default class Teacher extends GameObject {
     constructor(scene, startx, starty) {
         super(scene, startx, starty, 'teacher');
+        this.setCollisionGroup(-1);
         this.startx = startx;
         this.starty = starty;
         this.velocity = -0.5;
@@ -23,7 +24,7 @@ export default class Teacher extends GameObject {
         this.addAnimations();
       }
       addComponents(){
-        this.stopmatch = this.scene.add.image(this.x+50, this.x-65, 'stop');
+        this.stopmatch = this.scene.add.image(this.startx+50, this.starty-65, 'stop');
         this.stopmatch.visible = false;
         this.begin = this.scene.add.image(this.startx+50, this.starty-65, 'begin');
         this.begin.visible = false;
@@ -36,14 +37,16 @@ export default class Teacher extends GameObject {
         console.log("teacher x =",this.begin.x," y = ",this.begin.y);
 
         //50% of the time the teacher will stand still
-        this.canWalk = Boolean(utils.getRandomInt(2));
+        // this.canWalk = Boolean(utils.getRandomInt(2));
+        this.canWalk = true
       }
       playBegin(){
         sounds.play('Begin');
         this.begin.visible = true;
         this.scene.time.delayedCall(2000, function(){ 
           //TODO: Need to figure out why this animation isn't working
-            this.play('teacherwalking', true);
+          console.log("plyaing animation")
+            this.anims.play('teacherwalking', true);
             this.begin.visible = false; 
             this.isWalking = true;
         }, [], this);
@@ -53,7 +56,7 @@ export default class Teacher extends GameObject {
         this.good.x = this.x+50;
         this.good.y = this.y-65;
         this.scene.time.delayedCall(2000, function(){ 
-            this.stop('teacherwalking', true); 
+            // this.stop('teacherwalking', true); 
             this.good.visible = false; 
         }, [], this);
       }
@@ -62,7 +65,7 @@ export default class Teacher extends GameObject {
         this.verygood.x = this.x+50;
         this.verygood.y = this.y-65;
         this.scene.time.delayedCall(2000, function(){ 
-            this.stop('teacherwalking', true); 
+            this.anims.stop('teacherwalking', true); 
             this.verygood.visible = false; 
         }, [], this);
       }
@@ -73,7 +76,7 @@ export default class Teacher extends GameObject {
         this.stopmatch.y = this.y-65;
         this.stopmatch.visible = true;
         this.scene.time.delayedCall(3000, function(){ 
-            this.stop('teacherwalking', true); 
+            this.anims.stop('teacherwalking', true); 
             this.stopmatch.visible = false; 
         }, [], this);
       }
@@ -90,8 +93,8 @@ export default class Teacher extends GameObject {
       addAnimations(){
         this.anims.create(
           { key: 'teacherwalking', 
-            frames: this.anims.generateFrameNames('teacher', { prefix: 'teacher', start:1, end: 4, zeroPad: 1 }),
-            frameRate: 5, 
+            frames: this.anims.generateFrameNames('teacher', { prefix: 'walking', start:1, end: 4, zeroPad: 1 }),
+            frameRate: 5,
             repeat: -1
         });
       }

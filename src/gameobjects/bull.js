@@ -3,6 +3,7 @@ import GameObject from './gameobject';
 export default class Bull extends GameObject {
     constructor(scene, x, y, texturemap) {
         super(scene, x, y, texturemap);
+        this.setCollisionGroup(-1);
         this.active = false;
         this.velocity = -2;
       }

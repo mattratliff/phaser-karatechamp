@@ -113,7 +113,7 @@ export default class VaseBoard extends SceneController {
       console.log("exploding vase");
       this.vase.play('vase', true);
       this.vase.velocity = 0;
-      this.time.delayedCall(1000, this.resetVase, [], this);
+      this.time.delayedCall(500, this.resetVase, [], this);
 
       //vase hit player
       if(!collision.hit){

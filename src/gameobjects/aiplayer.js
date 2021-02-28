@@ -9,11 +9,13 @@ export default class AIPlayer extends GameObject {
         this.readyx = readyx;
         this.scene = scene;
 
+        this.setCollisionGroup(-1);
         this.startwalking = false;
         this.walking = false;
         this.startbowing = false;
         this.bowing = false;
         this.ready = false;
+        this.opponentx = 0;
 
         this.kickonce = false;
 

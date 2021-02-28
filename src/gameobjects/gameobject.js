@@ -10,7 +10,7 @@ export default class GameObject extends Phaser.Physics.Matter.Sprite {
         console.log("y = ",starty);
         super(scene.matter.world, startx, starty, texturemap, frame);
         this.setIgnoreGravity(true);
-        this.setCollisionGroup(-1);
+        
 
         this.scene = scene;
         this.direction = utils.Direction.RIGHT;

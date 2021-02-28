@@ -59,12 +59,14 @@ export default class KeyboardManager extends InputManager {
         this.player.x -= (this.isBackFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 10) ? 3 : 0;
         this.player.x += (this.isFlipping && this.player.anims.currentFrame.index > 1 && this.player.anims.currentFrame.index < 12) ? 3 : 0;
     
+        //SQUAT REVERSE PUNCH
+        if(this.isSquating && this.keyRightDown.isDown)this.squatPunch();
         //HIGH BLOCK
         if(this.keyLeftUp.isDown && this.keyRightUp.isDown)this.highBlock();
         //MIDDLE BLOCK
         else if(this.keyLeftLeft.isDown && this.keyRightLeft.isDown)this.middleBlock();
         //LOW BLOCK
-        else if(this.keyLeftDown.isDown && this.keyRightDown.isDown && !this.isFlipping)this.lowBlock();
+        else if(!this.isSquating && this.keyLeftDown.isDown && this.keyRightDown.isDown && !this.isFlipping)this.lowBlock();
 
         //LUNGE PUNCH
         else if(this.keyLeftRight.isDown && this.keyRightRight.isDown)this.lungePunch();
@@ -75,13 +77,13 @@ export default class KeyboardManager extends InputManager {
         //CHANGE DIRECTION
         else if(this.keySpace.isDown && !this.changingDirection)this.changeDirection();
         //BACK FLIP
-        else if(this.keyLeftUp.isDown && this.keyRightDown.isDown)this.backFlipping();
+        else if(!this.isSquating && this.keyLeftUp.isDown && this.keyRightDown.isDown)this.backFlipping();
         //FRONT FLIP
         else if(this.keyLeftDown.isDown && this.keyRightUp.isDown)this.flipping();
         //FRONT LEG SWEEP
         else if(this.keyLeftDown.isDown && this.keyRightRight.isDown && !this.isSpinningHealKick)this.frontLegSweep();
         //REVERSE LEG SWEEP
-        else if(this.keyLeftLeft.isDown && this.keyRightDown.isDown && !this.isLowKick)this.reverseSweep();
+        else if(!this.isSquating && this.keyLeftLeft.isDown && this.keyRightDown.isDown && !this.isLowKick)this.reverseSweep();
         //FLYING SIDE KICK
         else if(this.keyLeftUp.isDown && this.keyRightRight.isDown && !this.isSpinningHealKick)this.flyingSideKick();
         //FRONT KICK
@@ -91,7 +93,7 @@ export default class KeyboardManager extends InputManager {
         //BACK KICK
         else if(this.keyRightLeft.isDown && !this.isMiddleBlocking)this.backKick();
         //LOW KICK
-        else if(this.keyRightDown.isDown && !this.isBackFlipping && !this.isBackSweep)this.lowKick();
+        else if(!this.isSquating && this.keyRightDown.isDown && !this.isBackFlipping && !this.isBackSweep)this.lowKick();
         //FORWARD
         else if(this.keyLeftRight.isDown && !this.isLungePunching)this.forward();
         //BACKWARD

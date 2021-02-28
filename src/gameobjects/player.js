@@ -1,13 +1,11 @@
 var utils = require('../helpers/util');
 import GameObject from './gameobject';
 
-// import playerPNG from '../assets/white/spritesheet.png';
-// import playerJSON from '../assets/white/sprites.json';
-
 export default class Player extends GameObject {
     constructor(scene, startx, starty, readyx, frame) {
         super(scene, startx, starty, 'player', frame);
 
+        this.setCollisionGroup(-1);
         this.scene = scene;
         this.readyx = readyx;
         this.startx = startx;
@@ -16,6 +14,7 @@ export default class Player extends GameObject {
         this.horizontaldistance = 0;
         this.yoffset = 5;
         this.xoffset = 3;
+        this.opponentx = 0;
 
         this.direction = utils.Direction.RIGHT;
         this.startwalking = false;
@@ -75,13 +74,18 @@ export default class Player extends GameObject {
           this.inputmanager.pause = false;
       }
 
+      //TODO: may need to tweak -10 and 50 to take into account direction
       canMoveForward(){ 
-        // return this.x < this.rightedge
-        return true;
+        if(!this.opponentx)
+          return true;
+
+          return this.x < (this.x > this.opponentx.min.x ? this.rightedge : this.opponentx.min.x-10)
       }
       canMoveBackward(){ 
-        // return this.x > this.leftedge 
-        return true;
+        if(!this.opponentx)
+          return true;
+
+        return this.x > (this.x < this.opponentx.max.x ? this.leftedge : this.opponentx.max.x+50)
       }
 
       update(){
@@ -149,6 +153,13 @@ export default class Player extends GameObject {
           this.anims.create(
             { key: 'squat', 
               frames: this.anims.generateFrameNames('player', { prefix: 'squat', start:1, end: 5, zeroPad: 2 }),
+              frameRate: 10, 
+              repeat: 0 
+          });
+
+          this.anims.create(
+            { key: 'squatpunch', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'squatpunch', start:1, end: 9, zeroPad: 2 }),
               frameRate: 10, 
               repeat: 0 
           });
@@ -263,7 +274,13 @@ export default class Player extends GameObject {
               frameRate: 12, 
               repeat: 0 
           });
-  
+          this.anims.create(
+            { key: 'backkicked', 
+              frames: this.anims.generateFrameNames('player', { prefix: 'backkicked', start:1, end: 3, zeroPad: 1 }),
+              frameRate: 5, 
+              repeat: 0
+          });
+
           //MISC
           this.anims.create(
             { key: 'win', 

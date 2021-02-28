@@ -7,7 +7,8 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": 0},
-        "isBreakingBoard": false
+        "isBreakingBoard": false,
+        "isTrainingBoard": false
     },
     "board2": {
         "groundOffset": 210,
@@ -17,7 +18,8 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": 1, "y": -2},
-        "isBreakingBoard": true
+        "isBreakingBoard": true,
+        "isTrainingBoard": true
     },
     "board3": {
         "groundOffset": 170,
@@ -27,7 +29,8 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": -8},
-        "isBreakingBoard": true
+        "isBreakingBoard": true,
+        "isTrainingBoard": true
     },
     "board4": {
         "groundOffset": 120,
@@ -47,7 +50,8 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": -5},
-        "isBreakingBoard": true
+        "isBreakingBoard": true,
+        "isTrainingBoard": true
     },
     "board6": {
         "groundOffset": 200,
@@ -56,13 +60,9 @@
         "teacherOffset": {"x": 0, "y": -130},
         "useTimer": true,
         "timerAmount": 60,
-<<<<<<< HEAD
         "timerOffset":  {"x": -250, "y": 10},
-        "isBreakingBoard": false
-=======
-        "timerOffset":  {"x": 250, "y": 30},
-        "isBreakingBoard": true
->>>>>>> c3bcaaa1b1b935227627ddfcb99a34b87831e774
+        "isBreakingBoard": false,
+        "isTrainingBoard": true
     },
     "board7": {
         "groundOffset": 200,
@@ -72,6 +72,7 @@
         "useTimer": true,
         "timerAmount": 60,
         "timerOffset":  {"x": -250, "y": 100},
-        "isBreakingBoard": false
+        "isBreakingBoard": false,
+        "isTrainingBoard": true
     }
 }

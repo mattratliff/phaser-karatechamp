@@ -40,13 +40,12 @@ import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png'
 
 import border from '../assets/backgrounds/start/dojo-border.png';
 
-// import AnimationManager from '../managers/animationManager';
 import CollisionManager from '../managers/collisionmanager';
 
 import Teacher from '../gameobjects/teacher';
 import SessionManager from '../managers/sessionManager';
 
-import {begin, stop, good, verygood, fullpoint, halfpoint, white} from '../helpers/balloons';
+import {begin, stop, good, verygood, fullpoint, halfpoint, white, myhero} from '../helpers/balloons';
 
 const boardConfig = require('../config/boards.json');
 var utils = require('../helpers/util');
@@ -83,6 +82,7 @@ export default class SceneController extends Phaser.Scene {
     this.useTimer = null;
     this.spectatorClapping = false;
     this.timerAmount = 0;
+    this.isTrainingBoard = false;
   }
 
   preload() {
@@ -90,6 +90,7 @@ export default class SceneController extends Phaser.Scene {
     this.load.image('stop', stop);
     this.load.image('good', good);
     this.load.image('verygood', verygood);
+    this.load.image('myhero', myhero);
 
     this.load.image('board1', board1);
     this.load.image('board2', board2);
@@ -232,11 +233,16 @@ export default class SceneController extends Phaser.Scene {
   }
 
   createBoard(){
-    
-    // this.board=6
     var board = this.getRandomBoard();
     var index = "board"+(board+1);
-    while(this.verticalBreakingBoard==true && boardConfig[index].isBreakingBoard==false){
+    while(true){
+      if(this.verticalBreakingBoard && boardConfig[index].isBreakingBoard)
+        break;
+      if(this.isTrainingBoard && boardConfig[index].isTrainingBoard)
+        break;
+      if(!this.verticalBreakingBoard && board!=6)
+        break;
+
       board = this.getRandomBoard();
       index = "board"+(board+1);
     }

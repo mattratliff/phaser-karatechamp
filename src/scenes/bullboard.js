@@ -55,11 +55,11 @@ export default class BullBoard extends SceneController {
     
     super.addBorders();
     
-    this.practiceText = this.add
-    .text(center.width-150, center.height-300, 'CONQUER THE BULL', {
-      fill: '#000000',
-      font: `${26 * SCALE}pt Silom`
-    });
+    // this.practiceText = this.add
+    // .text(center.width-150, center.height-300, 'CONQUER THE BULL', {
+    //   fill: '#000000',
+    //   font: `${26 * SCALE}pt Silom`
+    // });
     
   }
 

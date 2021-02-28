@@ -157,6 +157,12 @@ export default class InputManager {
         this.isSquating = true;
         this.pause = true;
     }
+    squatPunch(){
+        console.log("squatpunching");
+        this.player.play('squatpunch', true);
+        //play squatplunch animation
+        this.isSquating = true;
+    }
     standup(){
         this.player.play('standup', true); 
         this.isSquating = false;
@@ -165,14 +171,21 @@ export default class InputManager {
 
     }
     changeDirection(){
+        if(this.changingDirection)
+            return;
+        this.changingDirection = true;
         this.scene.time.delayedCall(1000, this.finishChangeDirection, [], this);
         
-        if(this.player.direction == utils.Direction.RIGHT)
+        if(this.player.direction == utils.Direction.RIGHT){
             this.player.direction = utils.Direction.LEFT;
-        else
+            this.player.setFlipX(true)
+        }
+        else{
             this.player.direction = utils.Direction.RIGHT;
-
-        this.changingDirection = true;
+            this.player.setFlipX(false)
+        }
+        console.log("direction = ",this.player.direction);
+        
     }
     finishChangeDirection(){
         this.changingDirection = false;

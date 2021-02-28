@@ -19,8 +19,6 @@ import yellowarrowright from '../assets/backgrounds/game/practice/yellow-arrow-r
 import spectatorwhite from '../assets/backgrounds/game/practice/spectator-white.png';
 import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png';
 
-import {begin, stop, good, verygood} from '../helpers/balloons';
-
 import line from '../assets/line.png';
 
 import girlPNG from '../assets/girls/girlspritesheet.png';
@@ -28,9 +26,7 @@ import girlJSON from '../assets/girls/girls.json';
 
 import Player from '../gameobjects/player';
 import Girl from '../gameobjects/girl';
-import { takeWhile } from 'lodash';
 
-var utils = require('../helpers/util');
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 const center = {
@@ -52,6 +48,7 @@ export default class TrainingBoard extends SceneController {
     this.deliverBelt = false;
     this.gameState = -1;
     this.teacher = null;
+    super.isTrainingBoard = true;
   }
 
   preload() {
@@ -73,11 +70,7 @@ export default class TrainingBoard extends SceneController {
 
     this.load.atlas('girl', girlPNG, girlJSON);
 
-    // this.load.image('begin', begin);
-    // this.load.image('stop', stop);
-    // this.load.image('good', good);
     this.load.image('line', line);
-    // this.load.image('verygood', verygood);
   }
 
   create() {
@@ -175,21 +168,21 @@ checkMove(option, callback){
             option.rightactivecontrol.visible = false;
           }
           callback(this.line, this.movehereText);    
-          // this.time.delayedCall(1000, this.startGood, [], this);
+          this.time.delayedCall(1000, this.startGood, [], this);
           this.gameState++;
       }
   }
 
-  // startGood(){
-  //   this.good = null;
+  startGood(){
+    // this.good = null;
   //   if(utils.getRandomInt(3)==1)   // %33 chance of getting "Good"
   //       this.good = this.add.image(center.width+50, center.height-200, 'good');
-  //   this.time.delayedCall(2000, function(){
+    // this.time.delayedCall(2000, function(){
   //     if(this.good)
   //       this.good.visible = false;
-  //     this.completeStep = false;
-  //   }, [], this);      
-  // }
+      this.completeStep = false;
+    // }, [], this);      
+  }
 
   playerVeryGood(){
     this.verygood = this.add.image(center.width+50, center.height-200, 'verygood');
@@ -217,13 +210,9 @@ checkMove(option, callback){
     this.line.visible = false;
 
     //add the player here so that he walks between the spectators
-    this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-100);
-    this.player.setGamePad(this.gamepad);
-    this.player.setInputManager(this.inputmanager);
-    this.player.startwalking = true;
-    this.player.chopping = false;
+
         
-    this.girl = new Girl(this, center.width+400, HEIGHT-200, 'girl');
+    
         
     this.teacher = super.getTeacher();
 
@@ -249,6 +238,13 @@ checkMove(option, callback){
     });
     this.movehereText.visible = false;
     
+    this.player = new Player(this, LEFTEDGE+20, HEIGHT-200, center.width-100);
+    this.player.setGamePad(this.gamepad);
+    this.player.setInputManager(this.inputmanager);
+    this.player.startwalking = true;
+    this.player.chopping = false;
+    
+    this.girl = new Girl(this, center.width+400, HEIGHT-200, 'girl');
     
     this.moves = this.loadMoves();
 
@@ -331,6 +327,7 @@ checkMove(option, callback){
     if(this.gameState==-1){
         this.gameState = 0;
         this.startBegin();
+        // this.completeTraining();
     }
     if(this.trainingCompleted){
       if(!this.startTrainingCompleted){

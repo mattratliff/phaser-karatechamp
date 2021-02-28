@@ -55,11 +55,11 @@ export default class BrickBoard extends SceneController {
     this.bricks.breaking = false;
     
 
-    this.practiceText = this.add
-    .text(center.width-20, center.height-253, '30', {
-      fill: '#ffffff',
-      font: `${20 * SCALE}pt Silom`
-    });
+    // this.practiceText = this.add
+    // .text(center.width-20, center.height-253, '30', {
+    //   fill: '#ffffff',
+    //   font: `${20 * SCALE}pt Silom`
+    // });
   }
 
   update(){

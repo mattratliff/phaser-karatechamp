@@ -1,7 +1,7 @@
 {
     "frames": [
       {
-        "filename": "teacher1",
+        "filename": "walking1",
         "frame": {
           "x": 0,
           "y": 0,
@@ -22,7 +22,7 @@
         }
       },
       {
-        "filename": "teacher2",
+        "filename": "walking2",
         "frame": {
           "x": 173,
           "y": 0,
@@ -43,7 +43,7 @@
         }
       },
       {
-        "filename": "teacher3",
+        "filename": "walking3",
         "frame": {
           "x": 346,
           "y": 0,
@@ -64,7 +64,7 @@
         }
       },
       {
-        "filename": "teacher4",
+        "filename": "walking4",
         "frame": {
           "x": 519,
           "y": 0,

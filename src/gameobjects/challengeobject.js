@@ -5,6 +5,7 @@ var utils = require('../helpers/util');
 export default class ChallengeObject extends GameObject {
     constructor(scene, x, y, texturemap, rightedge) {
         super(scene, x, y, texturemap);
+        this.setCollisionGroup(1);
         this.active = false;
         this.velocity = -3;
         this.active = false;

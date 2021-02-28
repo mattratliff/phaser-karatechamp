@@ -4,6 +4,7 @@ import GameObject from './gameobject';
 export default class Brick extends GameObject {
     constructor(scene, x, y, texturemap, frame) {
         super(scene, x, y, texturemap, frame);
+        this.setCollisionGroup(-1);
         this.breaking = false;
       }
       preload(){}
