@@ -47,10 +47,12 @@ export default class KeyboardManager extends InputManager {
         //check to see if player is breaking a brick
         if(this.player.chopping){
             if(this.keyChop.isDown)this.chop();
+            return;
         }
 
         if(this.player.breaking){
             if(this.keyChop.isDown)this.break();
+            return;
         }
 
         if(this.pause)

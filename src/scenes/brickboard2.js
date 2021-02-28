@@ -64,22 +64,23 @@ export default class BrickBoard2 extends SceneController {
     // super.update();
     
     if(this.player.broke){
-      var distance = this.player.body.bounds.max.x - this.bricks.body.bounds.min.x;
+      var distance = this.bricks.x - this.player.body.bounds.max.x;
 
         if(!this.bricks.breaking){
           console.log('distance = ', distance);
-          if(distance < 0)this.bricks.play('horizontalbrick1', true);
-          if(distance > 0 && distance < 5)this.bricks.play('horizontalbrick2', true);
-          if(distance > 5 && distance < 10)this.bricks.play('horizontalbrick3', true);
-          if(distance > 10 && distance < 25)this.bricks.play('horizontalbrick4', true);
-          if(distance > 15 && distance < 30)this.bricks.play('horizontalbrick5', true);
-          if(distance > 20 && distance < 35)this.bricks.play('horizontalbrick6', true);
-          if(distance > 25 && distance < 30)this.bricks.play('horizontalbrick7', true);
-          if(distance > 30 && distance < 35)this.bricks.play('horizontalbrick8', true);
-          if(distance > 35 && distance < 40)this.bricks.play('horizontalbrick9', true);
-          if(distance > 40)this.bricks.play('horizontalbrick10', true);
+          if(distance <= 32)this.bricks.play('horizontalbrick10', true);
+          if(distance > 32 && distance <= 33)this.bricks.play('horizontalbrick9', true);
+          if(distance > 33 && distance <= 34)this.bricks.play('horizontalbrick8', true);
+          if(distance > 34 && distance <= 36)this.bricks.play('horizontalbrick7', true);
+          if(distance > 36 && distance <= 38)this.bricks.play('horizontalbrick6', true);
+          if(distance > 38 && distance <= 40)this.bricks.play('horizontalbrick5', true);
+          if(distance > 40 && distance <= 42)this.bricks.play('horizontalbrick4', true);
+          if(distance > 42 && distance <= 44)this.bricks.play('horizontalbrick3', true);
+          if(distance > 44 && distance <= 46)this.bricks.play('horizontalbrick2', true);
+          if(distance > 46 && distance <= 48)this.bricks.play('horizontalbrick1', true);
+
           
-          this.time.delayedCall(4000, this.checkSuccess(distance), [], this);
+          this.time.delayedCall(2000, this.checkSuccess, [distance], this);
 
           this.bricks.breaking = true;
         }
@@ -89,7 +90,9 @@ export default class BrickBoard2 extends SceneController {
   }
 
   checkSuccess(distance){
-    if(distance > 21){
+    if(distance <= 34){
+      super.getTeacher().playerVeryGood();
+      this.player.x = this.player.x - 50;
       this.player.play('win', true);
     }
     this.time.delayedCall(5000, this.changeScene, [], this);

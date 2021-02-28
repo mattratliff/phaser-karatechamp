@@ -2,19 +2,13 @@ import constants from '../config/constants';
 
 import SceneController from './sceneController';
 
-import beachscene from '../assets/backgrounds/game/beach_background.png';
-
-import practiceboard from '../assets/backgrounds/boards/board5.png';
-
-import shorelinePNG from '../assets/backgrounds/game/shore-spritesheet.png';
-import shorelineJSON from '../assets/backgrounds/game/shore.json';
-
 import vasePNG from '../assets/objects/spritesheet.png';
 import vaseJSON from '../assets/objects/sprites.json';
 
 import ChallengeObject from '../gameobjects/challengeobject';
 
 import Player from '../gameobjects/player';
+import { HighlightSpanKind } from 'typescript';
 var utils = require('../helpers/util');
 
 const { WIDTH, HEIGHT, SCALE } = constants;
@@ -32,7 +26,7 @@ export default class VaseBoard extends SceneController {
   constructor() {
     super('VaseBoard');
     this.gamepad = null;
-    this.numbervases = 5;
+    this.numbervases = 10;
     this.board = utils.getRandomInt(2);
   }
 
@@ -47,7 +41,6 @@ export default class VaseBoard extends SceneController {
   }
 
   addComponents(){
-
     super.addComponents();
 
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-180);
@@ -59,37 +52,33 @@ export default class VaseBoard extends SceneController {
     this.player.startwalking = true;
     this.player.chopping = false;
 
-    this.vase = new ChallengeObject(this, RIGHTEDGE, this.getVasePosition(), 'vase', RIGHTEDGE );
-    this.vase.setCollisionGroup(-1);
+    this.vase = new ChallengeObject(this, RIGHTEDGE, this.getVasePosition(), 'vase' );
     this.vase.setIgnoreGravity(true);
     this.vase.animated = false;
+    this.vase.leftedge = LEFTEDGE;
+    this.vase.rightedge = RIGHTEDGE;
+    this.vase.activate();
 
+    this.addText();
+    super.useTimer = false;
+
+    super.addBorders();
+  }
+
+  addText(){
     this.practiceText = this.add
     .text(center.width-230, center.height+300, 'Click where you want the vase to start', {
       fill: '#000000',
       font: `${16 * SCALE}pt Silom`
     });
-
-    this.registerDropVasesForDebug();
-
-    super.addBorders();
-  }
-
-    registerDropVasesForDebug(){
-    this.input.on('pointerdown', function (pointer) {  
-        this.vase.x = pointer.x;
-        // this.vase.y = this.getVasePosition();
-        this.vase.y = pointer.y;
-        this.vase.velocity = -3;
-        this.vase.active = true;
-    }, this);
   }
 
   /**
    * Randomly choose a y coordinate to start the vase
    */
   getVasePosition(){
-    return center.height + 120 - (Math.random() * 130);
+    //-20 to 110
+    return this.player.body.bounds.min.y + (-20 + utils.getRandomInt(130));
   }
 
   resetVase(){
@@ -104,38 +93,60 @@ export default class VaseBoard extends SceneController {
     return;
 
     this.player.update();
-    if(this.player.ready && this.vase.x > LEFTEDGE)
-        this.vase.update();
+    if(this.player.ready){
 
-    var collision = this.collisionManager.checkForSpriteToSpriteCollision(this.player, this.vase);
-    if(collision && collision.collided){
+    if(this.vase.x < LEFTEDGE || this.vase.x > RIGHTEDGE)
+      this.time.delayedCall(500, this.getNextVase, [], this);
+    
+    this.vase.update();
 
-      console.log("exploding vase");
-      this.vase.play('vase', true);
-      this.vase.velocity = 0;
-      this.time.delayedCall(500, this.resetVase, [], this);
+    if(Math.abs(this.player.x - this.vase.x) < 200){
+        var collision = this.collisionManager.checkForSpriteToBodyCollision(this.player, this.vase);
+        if(collision && collision.collided){
+          this.vase.play('vase', true);
+          this.vase.velocity = 0;
+          console.log('collision')
+          //player hit vase
+          if(collision.hit){
+            console.log('player hit')
+              //award points for hitting vase        
+          }
+          //vase hit player
+          else{
+            
+            this.numbervases--;
+            console.log('number vases = ', this.numbervases)
+            if(collision.fixture == "body-fixture")
+              this.player.play('gutkick');
+            else if(collision.fixture == "head-fixture")
+              this.player.play('facepunch');
+            else if(collision.fixture == "leg-fixture")
+              this.player.play('fall');
+          }
 
-      //vase hit player
-      if(!collision.hit){
-        if(collision.fixture == "body-fixture")
-          this.player.play('gutkick');
-        else if(collision.fixture == "head-fixture")
-          this.player.play('facepunch');
-        else if(collision.fixture == "leg-fixture")
-          this.player.play('fall');
+          if(this.numbervases > 0)
+            this.time.delayedCall(300, this.getNextVase, [], this);
+          else
+            this.time.delayedCall(3000, this.completeChallenge, [], this);
 
-        // this.time.delayedCall(2000, this.player.inputmanager.sweat, [], this);
-      }
-      else{
-        this.numbervases--;
-        if(this.numbervases==0){
-          this.player.inputmanager.pause = true;
-          this.time.delayedCall(500, this.player.inputmanager.win, [], this);
         }
-      }
-
     }
+  }
 
+  }
+
+  getNextVase(){
+    console.log("getting new vase")
+    // this.numbervases--;
+    this.direction = utils.getRandomInt(2);
+    this.vase.reset(this.direction, (this.direction==utils.Direction.LEFT ? RIGHTEDGE : LEFTEDGE), this.getVasePosition());
+  }
+
+  completeChallenge(){
+    //talley up points
+    // this.time.delayedCall(3000, this.player.inputmanager.win, [], this);
+    this.scene.stop('VaseBoard');
+    this.scene.start('VaseBoard');
   }
 
   render() {}

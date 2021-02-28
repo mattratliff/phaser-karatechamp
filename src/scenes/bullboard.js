@@ -54,16 +54,19 @@ export default class BullBoard extends SceneController {
     this.bull.rightedge = RIGHTEDGE;
     this.bull.activate();
     
+    this.addText();
+    super.useTimer = false;
+
     super.addBorders();
-    
+  }
+
+  addText(){
     this.practiceText = this.add
     .text(center.width-305, center.height-235, 'CONQUER', {
       fill: '#ffffff',
       font: `${22 * SCALE}pt Silom`
     });
-    super.useTimer = false;
   }
-
   /**
    * scene controller handles the player and this handles the vase
    * after update check for collision
@@ -75,37 +78,32 @@ export default class BullBoard extends SceneController {
 
     //only check for collision if player and bull are close to each other
     if(Math.abs(this.player.x - this.bull.x) < 200){
-    var collision = this.collisionManager.checkForSpriteToSpriteCollision(this.player, this.bull);
-    if(collision && collision.collided){
-      console.log('collided')
-        
-        if(collision.hit){
-          this.bull.play('bullfall', true);
-          this.bull.velocity = 0;
-          super.clapping = true;
-          super.startClapping(1);
-          if(this.numberBulls > 0)
-            this.time.delayedCall(8000, this.getNextBull, [], this);
-          else
-            this.time.delayedCall(8000, this.completeChallenge, [], this);
-        }
-        else{
-          this.player.inputmanager.facePunch();
-          this.player.inputmanager.pause = true;
-          this.numberBulls--;
-        }
-      }
+        var collision = this.collisionManager.checkForSpriteToSpriteCollision(this.player, this.bull);
+        if(collision && collision.collided){
+            if(collision.hit){
+              this.bull.play('bullfall', true);
+              this.bull.velocity = 0;
+              // super.clapping = true;
+              // super.startClapping(1);
+              if(this.numberBulls > 0)
+                this.time.delayedCall(8000, this.getNextBull, [], this);
+              else
+                this.time.delayedCall(8000, this.completeChallenge, [], this);
+            }
+            else{
+              this.player.inputmanager.facePunch();
+              this.player.inputmanager.pause = true;
+              this.numberBulls--;
+            }
+          }
     }
   }
   
   getNextBull(){
-    console.log('getting next bull')
     this.numberBulls--;
-    //bull will randomly come from either direction
     this.bull.play('bull', true);
     this.direction = utils.getRandomInt(2);
-    console.log("DIRECTION = ",this.direction);
-    super.stopClapping()
+    // super.stopClapping()
     this.bull.reset(this.direction, (this.direction==utils.Direction.LEFT ? RIGHTEDGE : LEFTEDGE));
   }
 

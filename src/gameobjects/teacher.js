@@ -33,9 +33,6 @@ export default class Teacher extends GameObject {
         this.verygood = this.scene.add.image(this.startx+50, this.starty-65, 'verygood');
         this.verygood.visible = false;
 
-        console.log("teacher x =",this.startx," y = ",this.starty);
-        console.log("teacher x =",this.begin.x," y = ",this.begin.y);
-
         //50% of the time the teacher will stand still
         // this.canWalk = Boolean(utils.getRandomInt(2));
         this.canWalk = true

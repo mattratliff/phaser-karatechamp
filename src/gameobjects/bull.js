@@ -17,9 +17,6 @@ export default class Bull extends GameObject {
       activate(){this.active = true;}
       deactivate(){this.velocity = 0;}
       reset(newdirection, startx){
-        console.log("direction = ", newdirection)
-        console.log("left = ", utils.Direction.LEFT)
-        
         if(newdirection == utils.Direction.LEFT){
             this.velocity = -2;
             this.x = startx;
@@ -34,9 +31,7 @@ export default class Bull extends GameObject {
         if(this.active){
           this.x += this.velocity;
           if(this.x < this.leftedge || this.x > this.rightedge){
-            console.log("ran out of screen")
             var direction = utils.getRandomInt(2);
-            console.log("DIRECTION = ",direction);
             this.reset(direction, (direction==utils.Direction.LEFT ? this.rightedge : this.leftedge));
           }
         }

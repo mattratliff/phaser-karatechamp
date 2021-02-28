@@ -266,8 +266,6 @@ export default class SceneController extends Phaser.Scene {
       index = "board"+(board+1);
     }
     this.board = board;
-    this.board = 5
-    index = "board6"
     return index;
   }
 

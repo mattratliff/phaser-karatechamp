@@ -27,6 +27,8 @@ import girlJSON from '../assets/girls/girls.json';
 import Player from '../gameobjects/player';
 import Girl from '../gameobjects/girl';
 
+var utils = require('../helpers/util');
+
 const { WIDTH, HEIGHT, SCALE } = constants;
 
 const center = {
@@ -48,6 +50,8 @@ export default class TrainingBoard extends SceneController {
     this.deliverBelt = false;
     this.gameState = -1;
     this.teacher = null;
+    this.numberSteps = 17;
+    this.completed = [];
     super.isTrainingBoard = true;
   }
 
@@ -75,11 +79,39 @@ export default class TrainingBoard extends SceneController {
 
   create() {
     super.create();
+    for(var i=0; i<this.numberSteps; i++){
+      this.completed[i]=false;
+    }
+    this.gameState = this.getNextMove();
+  }
+
+  getNextMove(){
+      var nextstep = utils.getRandomInt(this.numberSteps);   //0 through this.numberSteps moves
+      var completedTraining = true;
+      for(var i=0; i<this.numberSteps; i++){
+        if(!this.completed[i]){
+          completedTraining = false;
+          break;
+        }
+      }
+      this.trainingCompleted = completedTraining;
+      if(completedTraining)return -1;
+
+      while(this.completed[nextstep]){
+        nextstep = utils.getRandomInt(this.numberSteps);
+      }
+      nextstep=nextstep-1;
+      console.log("nextstep = ",nextstep);
+      console.log(this.completed[nextstep]);
+      return nextstep;
   }
 
   checkPracticeStep(){
     if(!this.completeStep){
+      
         switch(this.gameState){
+            case -1:
+              break;
             case 0:
                 this.line.visible = true;
                 this.movehereText.visible = true;
@@ -143,9 +175,6 @@ export default class TrainingBoard extends SceneController {
             case 16:
               this.checkMove(this.moves['BACKFLIP'], function(){});
               break;
-            case 17:
-                this.trainingCompleted = true;
-                break;
         }
     }
   }
@@ -170,7 +199,10 @@ checkMove(option, callback){
             option.rightcontrol.visible = true;
             option.rightactivecontrol.visible = false;
           }
-          callback(this.line, this.movehereText);    
+          callback(this.line, this.movehereText);  
+          this.completed[this.gameState] = true;
+          console.log(this.completed);
+          this.gameState = this.getNextMove();
           this.time.delayedCall(1000, this.startGood, [], this);
           this.gameState++;
       }
