@@ -29,7 +29,7 @@ export default class BullBoard extends SceneController {
     console.log("preloading")
     super.preload();
 
-    this.numberBulls = 1;   //the number of bulls on the challenge
+    this.numberBulls = 6;   //the number of bulls on the challenge
 
     this.load.atlas('bull', bullPNG, bullJSON);
   }
@@ -57,9 +57,9 @@ export default class BullBoard extends SceneController {
     super.addBorders();
     
     this.practiceText = this.add
-    .text(center.width-150, center.height+300, 'CONQUER THE BULL', {
-      fill: '#000000',
-      font: `${26 * SCALE}pt Silom`
+    .text(center.width-305, center.height-235, 'CONQUER', {
+      fill: '#ffffff',
+      font: `${22 * SCALE}pt Silom`
     });
     super.useTimer = false;
   }
@@ -82,6 +82,8 @@ export default class BullBoard extends SceneController {
         if(collision.hit){
           this.bull.play('bullfall', true);
           this.bull.velocity = 0;
+          super.clapping = true;
+          super.startClapping(1);
           if(this.numberBulls > 0)
             this.time.delayedCall(8000, this.getNextBull, [], this);
           else
@@ -103,13 +105,13 @@ export default class BullBoard extends SceneController {
     this.bull.play('bull', true);
     this.direction = utils.getRandomInt(2);
     console.log("DIRECTION = ",this.direction);
+    super.stopClapping()
     this.bull.reset(this.direction, (this.direction==utils.Direction.LEFT ? RIGHTEDGE : LEFTEDGE));
   }
 
   completeChallenge(){
     //talley up points
     // this.time.delayedCall(3000, this.player.inputmanager.win, [], this);
-    console.log("challenge complete")
     this.scene.stop('BullBoard');
     this.scene.start('BullBoard');
   }

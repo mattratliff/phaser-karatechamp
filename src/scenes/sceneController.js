@@ -82,6 +82,7 @@ export default class SceneController extends Phaser.Scene {
     this.useTimer = null;
     this.spectatorClapping = false;
     this.timerAmount = 60;
+    this.clapping = false;
     this.isTrainingBoard = false;
   }
 
@@ -283,11 +284,20 @@ export default class SceneController extends Phaser.Scene {
   }
 
   startClapping(frame){
-    this.spectatorClapping = true;
-    frame = (frame==2) ? 1 : 2;
-    this.spectatorsClap1.visible = (frame==1)
-    this.spectatorsClap2.visible = (frame==2) 
-    this.time.delayedCall(300, this.startClapping, [frame], this);
+    if(this.clapping){
+      console.log('clapping')
+      this.spectatorClapping = true;
+      frame = (frame==2) ? 1 : 2;
+      this.spectatorsClap1.visible = (frame==1)
+      this.spectatorsClap2.visible = (frame==2) 
+      this.time.delayedCall(200, this.startClapping, [frame], this);
+    }
+  }
+  stopClapping(){
+    console.log('not clapping')
+    this.clapping = false;
+    this.spectatorsClap1.visible = false;
+    this.spectatorsClap2.visible = false;
   }
 
   addBorders(){
