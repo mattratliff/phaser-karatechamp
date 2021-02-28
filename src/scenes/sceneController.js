@@ -81,7 +81,7 @@ export default class SceneController extends Phaser.Scene {
     this.spectators = [];
     this.useTimer = null;
     this.spectatorClapping = false;
-    this.timerAmount = 0;
+    this.timerAmount = 60;
     this.isTrainingBoard = false;
   }
 
@@ -136,13 +136,11 @@ export default class SceneController extends Phaser.Scene {
     this.collisionManager = new CollisionManager(this.matter, this);
 
     this.sessionManager = new SessionManager(this);
-    this.sessionManager.setCallbackOnComplete(this.completeMatch);
     this.sessionManager.setState(utils.GameState.NEW);
 
     this.checkForGamePad();
 
     this.addComponents();
-    // this.addAnimations();
   }
 
   render() {}
@@ -183,9 +181,8 @@ export default class SceneController extends Phaser.Scene {
 
     this.boardConfig = this.createBoard();
     this.useTimer = this.boardConfig.useTimer;
-    this.timerAmount = this.boardConfig.timerAmount;
 
-    this.sessionManager.timerAmount = this.timerAmount;
+    // this.sessionManager.timerAmount = this.timerAmount;
     this.sessionManager.setTimerLocation(this.boardConfig.timerOffset);
 
     var teacherOffsetX = this.boardConfig.teacherOffset.x;
@@ -226,13 +223,34 @@ export default class SceneController extends Phaser.Scene {
 
   updateGameObjects(){
     this.sessionManager.setGameObjects(this.teacher, this.player, null);
+    this.sessionManager.setCallbackOnComplete(this.completeMatch(this.teacher, this.player));
+    this.sessionManager.timerAmount = this.timerAmount;
   }
 
   getTeacher(){
     return this.teacher;
   }
+  stopTimer(){
+    this.sessionManager.sessionComplete();
+    this.player.ready = false;
+  }
 
   createBoard(){
+    var index = this.getBoard();
+
+    if(this.board==6){
+      this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+      this.shoreline.setIgnoreGravity(true);
+      this.shoreline.setCollisionGroup(-1);
+      // this.anims.play('shore', true);
+    }
+
+    this.groundOffset = boardConfig[index].groundOffset;
+    this.add.image(center.width, center.height, index);
+    return boardConfig[index];
+  }
+
+  getBoard(){
     var board = this.getRandomBoard();
     var index = "board"+(board+1);
     while(true){
@@ -247,22 +265,9 @@ export default class SceneController extends Phaser.Scene {
       index = "board"+(board+1);
     }
     this.board = board;
-
-    if(this.board==6){
-      this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-      this.shoreline.setIgnoreGravity(true);
-      this.shoreline.setCollisionGroup(-1);
-      // this.anims.play('shore', true);
-    }
-
-
-    this.groundOffset = boardConfig[index].groundOffset;
-    this.add.image(center.width, center.height, index);
-    return boardConfig[index];
-  }
-
-  addAnimations(){
-
+    this.board = 5
+    index = "board6"
+    return index;
   }
 
   animateSpectators(){

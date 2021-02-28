@@ -50,7 +50,7 @@ export function getRandomInt(max) {
 
   export const Direction = {
     RIGHT: 1,
-    LEFT: -1
+    LEFT: 0
   };
 
   export const GameState = {

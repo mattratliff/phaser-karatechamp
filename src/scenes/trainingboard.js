@@ -120,27 +120,30 @@ export default class TrainingBoard extends SceneController {
                 this.checkMove(this.moves['LUNGEPUNCH'], function(){});
                 break;
             case 9:
-                this.checkMove(this.moves['HIGHBLOCK'], function(){});
+                this.checkMove(this.moves['SQUATPUNCH'], function(){});
                 break;
             case 10:
-                this.checkMove(this.moves['MIDDLEBLOCK'], function(){});
+                this.checkMove(this.moves['HIGHBLOCK'], function(){});
                 break;
             case 11:
-                this.checkMove(this.moves['LOWBLOCK'], function(){});
+                this.checkMove(this.moves['MIDDLEBLOCK'], function(){});
                 break;
             case 12:
+                this.checkMove(this.moves['LOWBLOCK'], function(){});
+                break;
+            case 13:
               this.checkMove(this.moves['FLYINGSIDEKICK'], function(){});
               break;
-            case 13:
+            case 14:
                 this.checkMove(this.moves['SPINNINGHEALKICK'], function(){});
                 break;
-            case 14:
+            case 15:
               this.checkMove(this.moves['FRONTFLIP'], function(){});
               break;
-            case 15:
+            case 16:
               this.checkMove(this.moves['BACKFLIP'], function(){});
               break;
-            case 16:
+            case 17:
                 this.trainingCompleted = true;
                 break;
         }
@@ -203,6 +206,8 @@ checkMove(option, callback){
   addComponents(){
 
     super.addComponents();
+
+    super.timerAmount = 90;     //give player 90 seconds to complete training
     
     this.matter.world.setBounds(0, 0, WIDTH, HEIGHT-200);
 
@@ -219,11 +224,11 @@ checkMove(option, callback){
 
     this.addPracticeControllersComponent();
 
-    // this.practiceText = this.add
-    // .text(center.width-305, center.height-235, 'PRACTICE', {
-    //   fill: '#ffffff',
-    //   font: `${22 * SCALE}pt Silom`
-    // });
+    this.practiceText = this.add
+    .text(center.width-305, center.height-235, 'PRACTICE', {
+      fill: '#ffffff',
+      font: `${22 * SCALE}pt Silom`
+    });
 
     this.movementText = this.add
     .text(center.width-305, center.height+290, "", {
@@ -243,16 +248,17 @@ checkMove(option, callback){
     this.player.setInputManager(this.inputmanager);
     this.player.startwalking = true;
     this.player.chopping = false;
-    
+
     this.girl = new Girl(this, center.width+400, HEIGHT-200, 'girl');
     
     this.moves = this.loadMoves();
 
     super.addBorders();
+    super.updateGameObjects();  
   }
 
   addPracticeControllersComponent(){
-    this.add.image(center.width, center.height+278, 'controllers').setScale(assetScale);
+    this.controllerboard = this.add.image(center.width, center.height+278, 'controllers').setScale(assetScale);
 
     //left arrows
     this.leftarrowup = this.add.image(center.width-58, center.height+282, 'arrowup');
@@ -289,6 +295,31 @@ checkMove(option, callback){
     this.yellowrightarrowright.visible = false;
   }
 
+  hideControllers(){
+    this.controllerboard.visible = false;
+
+    this.movementText.visible = false;
+
+    this.leftarrowup.visible = false;
+    this.leftarrowdown.visible = false;
+    this.leftarrowleft.visible = false;
+    this.leftarrowright.visible = false;
+
+    this.rightarrowup.visible = false;
+    this.rightarrowdown.visible = false;
+    this.rightarrowleft.visible = false;
+    this.rightarrowright.visible = false;
+
+    this.yellowleftarrowup.visible = false;
+    this.yellowleftarrowdown.visible = false;
+    this.yellowleftarrowleft.visible = false;
+    this.yellowleftarrowright.visible = false;
+
+    this.yellowrightarrowup.visible = false;
+    this.yellowrightarrowdown.visible = false;
+    this.yellowrightarrowleft.visible = false;
+    this.yellowrightarrowright.visible = false;
+  }
   addSpectators(){
     //add spectators
     this.whitespectator1 = this.add.image(center.width-250, center.height-30, 'spectatorwhite').setScale(assetScale);
@@ -303,6 +334,8 @@ checkMove(option, callback){
 
   completeTraining(){
     this.teacher.playerVeryGood();
+    this.hideControllers();
+    super.startClapping(1);
     this.deliverBelt = true;
     this.girl.active = true;
     this.player.inputmanager.pause = true;
@@ -320,17 +353,21 @@ checkMove(option, callback){
     }
 
     this.player.update();
-
     this.girl.update();
+
     if(!this.player.ready)
         return;
+
+    super.update();
+
     if(this.gameState==-1){
         this.gameState = 0;
-        this.startBegin();
+        // this.startBegin();
         // this.completeTraining();
     }
     if(this.trainingCompleted){
       if(!this.startTrainingCompleted){
+        super.stopTimer();
         this.startTrainingCompleted = true;
         this.time.delayedCall(3000, this.completeTraining, [], this);
       }
@@ -414,6 +451,14 @@ checkMove(option, callback){
             'leftactivecontrol':this.yellowleftarrowright,
             'condition':function(player){return player.inputmanager.isLungePunching;}
             };
+    data['SQUATPUNCH'] = {
+      'statusText':'SQUAT PUNCH', 
+      'rightcontrol':this.rightarrowdown, 
+      'rightactivecontrol':this.yellowrightarrowdown,
+      'leftcontrol':this.leftarrowdown,
+      'leftactivecontrol':this.yellowleftarrowdown,
+      'condition':function(player){return player.inputmanager.isSquatPunching;}
+      };
       data['FRONTSWEEP'] = {
         'statusText':'FRONT SWEEP', 
         'leftcontrol':this.leftarrowdown,

@@ -22,6 +22,7 @@ export default class SessionManager{
         this.timerOffset = {"x": 0, "y": 0};
 
         this.gameState = GameState.NEW
+        this.sessionActive = false;
         this.sceneCallback = null;
 
         //game objects
@@ -49,10 +50,15 @@ export default class SessionManager{
         this.timerOffset = offset;
     }
 
+    sessionComplete(){
+        this.sessionActive = false;
+    }
     createTimer(x, y, SCALE){
         this.timerText = this.scene.add.text(x+parseInt(this.timerOffset.x), y+parseInt(this.timerOffset.y), this.timerAmount.toString(), {fill: '#ffffff',font: `${16 * SCALE}pt Silom`});
+        this.sessionActive = true;
     }
     startTimer(){
+        if(this.sessionActive){
         if(this.timerAmount == 0){
             this.gameState = GameState.COMPLETE;
             this.sceneCallback(this.teacher, this.whiteplayer);
@@ -63,5 +69,6 @@ export default class SessionManager{
           this.timerText.setText(this.timerAmount);
           this.scene.time.delayedCall(1000, this.startTimer, [], this);
         }
+    }
     }
 }

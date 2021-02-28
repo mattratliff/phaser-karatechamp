@@ -29,6 +29,7 @@ export default class InputManager {
             if(this.isHighBlocking)this.isHighBlocking = false;
             if(this.isMiddleBlocking)this.isMiddleBlocking = false;
             if(this.isLowBlocking)this.isLowBlocking = false;
+            if(this.isSquatPunching)this.isSquatPunching = false;
             this.pause = false;
         }, this);
     }
@@ -51,6 +52,7 @@ export default class InputManager {
         this.isLowBlocking = false;
         this.isMiddleBlocking = false;
         this.isLungePunching = false;
+        this.isSquatPunching = false;
     }
 
     flipping(){
@@ -158,10 +160,14 @@ export default class InputManager {
         this.pause = true;
     }
     squatPunch(){
-        console.log("squatpunching");
+        if(!this.isSquatPunching){
+            var frontkick = sounds.play('Front_Kick', false);
+            sounds.volume(0.3, frontkick);
+        }
         this.player.play('squatpunch', true);
         //play squatplunch animation
         this.isSquating = true;
+        this.isSquatPunching = true;
     }
     standup(){
         this.player.play('standup', true); 

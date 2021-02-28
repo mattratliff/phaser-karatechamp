@@ -1,4 +1,5 @@
 import GameObject from './gameobject';
+var utils = require('../helpers/util');
 
 export default class Bull extends GameObject {
     constructor(scene, x, y, texturemap) {
@@ -6,6 +7,8 @@ export default class Bull extends GameObject {
         this.setCollisionGroup(-1);
         this.active = false;
         this.velocity = -2;
+        this.leftedge = 0;
+        this.rightedge = 0;
       }
       preload(){}
       create(){
@@ -13,9 +16,31 @@ export default class Bull extends GameObject {
       }
       activate(){this.active = true;}
       deactivate(){this.velocity = 0;}
+      reset(newdirection, startx){
+        console.log("direction = ", newdirection)
+        console.log("left = ", utils.Direction.LEFT)
+        
+        if(newdirection == utils.Direction.LEFT){
+            this.velocity = -2;
+            this.x = startx;
+            this.setFlipX(false);
+        }else{
+          this.velocity = 2;
+          this.x = startx;
+          this.setFlipX(true);
+        }
+      }
       update(){
-        if(this.active)
-            this.x += this.velocity;
+        if(this.active){
+          this.x += this.velocity;
+          if(this.x < this.leftedge || this.x > this.rightedge){
+            console.log("ran out of screen")
+            var direction = utils.getRandomInt(2);
+            console.log("DIRECTION = ",direction);
+            this.reset(direction, (direction==utils.Direction.LEFT ? this.rightedge : this.leftedge));
+          }
+        }
+            
       }
       addAnimations(){
         this.anims.create(

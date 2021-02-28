@@ -107,7 +107,7 @@ export default class VaseBoard extends SceneController {
     if(this.player.ready && this.vase.x > LEFTEDGE)
         this.vase.update();
 
-    var collision = this.collisionManager.checkForSpriteToBodyCollision(this.player, this.vase);
+    var collision = this.collisionManager.checkForSpriteToSpriteCollision(this.player, this.vase);
     if(collision && collision.collided){
 
       console.log("exploding vase");

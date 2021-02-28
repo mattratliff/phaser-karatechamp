@@ -5,7 +5,6 @@
         "hasSideLineSpectators": false,
         "teacherOffset": {"x": 220, "y": -100},
         "useTimer": true,
-        "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": 0},
         "isBreakingBoard": false,
         "isTrainingBoard": false
@@ -16,7 +15,6 @@
         "hasSideLineSpectators": false,
         "teacherOffset": {"x": 0, "y": 0},
         "useTimer": true,
-        "timerAmount": 60,
         "timerOffset":  {"x": 1, "y": -2},
         "isBreakingBoard": true,
         "isTrainingBoard": true
@@ -27,7 +25,6 @@
         "hasSideLineSpectators": false,
         "teacherOffset": {"x": 0, "y": 0},
         "useTimer": true,
-        "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": -8},
         "isBreakingBoard": true,
         "isTrainingBoard": true
@@ -38,7 +35,6 @@
         "hasSideLineSpectators": false,
         "teacherOffset": {"x": 0, "y": 0},
         "useTimer": true,
-        "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": -5},
         "isBreakingBoard": true
     },
@@ -48,7 +44,6 @@
         "hasSideLineSpectators": false,
         "teacherOffset": {"x": 0, "y": 0},
         "useTimer": true,
-        "timerAmount": 60,
         "timerOffset":  {"x": 0, "y": -5},
         "isBreakingBoard": true,
         "isTrainingBoard": true
@@ -59,8 +54,7 @@
         "hasSideLineSpectators": true,
         "teacherOffset": {"x": 0, "y": -130},
         "useTimer": true,
-        "timerAmount": 60,
-        "timerOffset":  {"x": -250, "y": 10},
+        "timerOffset":  {"x": 0, "y": -55},
         "isBreakingBoard": false,
         "isTrainingBoard": true
     },
@@ -70,7 +64,6 @@
         "hasSideLineSpectators": false,
         "teacherOffset": {"x": 0, "y": 0},
         "useTimer": true,
-        "timerAmount": 60,
         "timerOffset":  {"x": -250, "y": 100},
         "isBreakingBoard": false,
         "isTrainingBoard": true
