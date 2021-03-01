@@ -41,7 +41,7 @@ export default class Bull extends GameObject {
         this.anims.create(
           { key: 'bull', 
             frames: this.anims.generateFrameNames('bull', { prefix: 'bull', start:1, end: 8, zeroPad: 2 }),
-            frameRate: 8, 
+            frameRate: 15, 
             repeat: -1
         });
 

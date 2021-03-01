@@ -25,12 +25,18 @@ export default class SessionManager{
         this.sessionActive = false;
         this.sceneCallback = null;
 
+        this.numberlives = 3;
+
         //game objects
         this.teacher = null;
         this.whiteplayer = null;
         this.redplayer = null;
     }
 
+    getNumberLivesLeft(){
+        return this.numberlives;
+    }
+    
     setGameObjects(teacher, whiteplayer, redplayer){
         this.teacher = teacher;
         this.whiteplayer = whiteplayer;

@@ -41,6 +41,7 @@ import spectatorred from '../assets/backgrounds/game/practice/spectator-red.png'
 import border from '../assets/backgrounds/start/dojo-border.png';
 
 import CollisionManager from '../managers/collisionmanager';
+import ScoringManager from '../managers/scoringmanager';
 
 import Teacher from '../gameobjects/teacher';
 import SessionManager from '../managers/sessionManager';
@@ -93,6 +94,8 @@ export default class SceneController extends Phaser.Scene {
     this.load.image('verygood', verygood);
     this.load.image('myhero', myhero);
 
+    this.load.image('ground', ground);
+
     this.load.image('board1', board1);
     this.load.image('board2', board2);
     this.load.image('board3', board3);
@@ -100,13 +103,14 @@ export default class SceneController extends Phaser.Scene {
     this.load.image('board5', board5);
     this.load.image('board6', board6);
     this.load.image('board7', board7);
+    
     this.load.atlas('shoreline', shorelinePNG, shorelineJSON);
 
     this.load.atlas('player', playerPNG, playerJSON);
     this.load.atlas('aiplayer', AIplayerPNG, AIplayerJSON);
     this.load.atlas('teacher', teacherPNG, teacherJSON);
 
-    this.load.image('ground', ground);
+    
 
     this.load.image('spectatorsclap1', spectatorsclap1);
     this.load.image('spectatorsclap2', spectatorsclap2);
@@ -120,6 +124,7 @@ export default class SceneController extends Phaser.Scene {
 
     this.load.image('spectatorwhite', spectatorwhite);
     this.load.image('spectatorred', spectatorred);
+
 
     this.load.image('leftborder', border);
     this.load.image('rightborder', border);
@@ -135,6 +140,7 @@ export default class SceneController extends Phaser.Scene {
 
   create() {
     this.collisionManager = new CollisionManager(this.matter, this);
+    this.scoringManager = new ScoringManager(this);
 
     this.sessionManager = new SessionManager(this);
     this.sessionManager.setState(utils.GameState.NEW);
@@ -142,6 +148,10 @@ export default class SceneController extends Phaser.Scene {
     this.checkForGamePad();
 
     this.addComponents();
+  }
+
+  getScoringManager(){
+    return this.scoringManager;
   }
 
   render() {}
@@ -214,6 +224,13 @@ export default class SceneController extends Phaser.Scene {
 
       if(this.boardConfig.hasSideLineSpectators)
         this.addSideLineSpectators();
+
+      if(this.board==6){
+        this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
+        this.shoreline.setIgnoreGravity(true);
+        this.shoreline.setCollisionGroup(-1);
+        // this.play('shore', true);
+      }
     }
 
     this.sessionManager.createTimer(center.width-15, center.height-245, SCALE);
@@ -224,10 +241,16 @@ export default class SceneController extends Phaser.Scene {
 
   updateGameObjects(){
     this.sessionManager.setGameObjects(this.teacher, this.player, null);
-    this.sessionManager.setCallbackOnComplete(this.completeMatch(this.teacher, this.player));
+    // this.sessionManager.setCallbackOnComplete(this.completeMatch(this.teacher, this.player));
     this.sessionManager.timerAmount = this.timerAmount;
+    
   }
 
+  initializeScoreBoard(){
+    this.scoringManager.addScoreBoard(this.sessionManager.getNumberLivesLeft(), this.player.score, {x: center.width, y: center.height, scale: SCALE });
+  }
+
+  getBoardConfig(){ return this.boardConfig; }
   getTeacher(){
     return this.teacher;
   }
@@ -238,14 +261,6 @@ export default class SceneController extends Phaser.Scene {
 
   createBoard(){
     var index = this.getBoard();
-
-    if(this.board==6){
-      this.shoreline = this.matter.add.sprite(center.width, center.height-75, 'shoreline');
-      this.shoreline.setIgnoreGravity(true);
-      this.shoreline.setCollisionGroup(-1);
-      // this.anims.play('shore', true);
-    }
-
     this.groundOffset = boardConfig[index].groundOffset;
     this.add.image(center.width, center.height, index);
     return boardConfig[index];
@@ -266,6 +281,8 @@ export default class SceneController extends Phaser.Scene {
       index = "board"+(board+1);
     }
     this.board = board;
+    this.board = 6
+    index="board7"
     return index;
   }
 
@@ -291,6 +308,7 @@ export default class SceneController extends Phaser.Scene {
       this.time.delayedCall(200, this.startClapping, [frame], this);
     }
   }
+
   stopClapping(){
     console.log('not clapping')
     this.clapping = false;

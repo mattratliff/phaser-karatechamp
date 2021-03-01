@@ -56,7 +56,9 @@ export default class BullBoard extends SceneController {
     
     this.addText();
     super.useTimer = false;
-
+    this.boardConfig = super.getBoardConfig();
+    this.scoringManager = super.getScoringManager();
+    super.initializeScoreBoard();
     super.addBorders();
   }
 
@@ -80,30 +82,46 @@ export default class BullBoard extends SceneController {
     if(Math.abs(this.player.x - this.bull.x) < 200){
         var collision = this.collisionManager.checkForSpriteToSpriteCollision(this.player, this.bull);
         if(collision && collision.collided){
-            if(collision.hit){
-              this.bull.play('bullfall', true);
-              this.bull.velocity = 0;
-              // super.clapping = true;
-              // super.startClapping(1);
-              if(this.numberBulls > 0)
-                this.time.delayedCall(8000, this.getNextBull, [], this);
-              else
-                this.time.delayedCall(8000, this.completeChallenge, [], this);
-            }
-            else{
-              this.player.inputmanager.facePunch();
-              this.player.inputmanager.pause = true;
-              this.numberBulls--;
-            }
+            if(collision.hit)
+              this.playerHitBull();
+            else
+              this.bullHitPlayer();
           }
-    }
+      }
   }
   
+  playerHitBull(){
+    this.bull.play('bullfall', true);
+    this.bull.velocity = 0;
+    
+    //award player points here
+    //need to pass current 
+    this.scoringManager.awardPoints(this.player);
+    //scoreing is based on the movement that was used during collision (round 2 will look at the proximity)
+
+
+    if(this.boardConfig.hasSpectators){
+      super.clapping = true;
+      super.startClapping(1);
+    }
+    if(this.numberBulls > 0)
+      this.time.delayedCall(8000, this.getNextBull, [], this);
+    else
+      this.time.delayedCall(8000, this.completeChallenge, [], this);
+  }
+
+  bullHitPlayer(){
+    this.player.inputmanager.facePunch();
+    this.player.inputmanager.pause = true;
+    this.numberBulls--;
+  }
+
   getNextBull(){
     this.numberBulls--;
     this.bull.play('bull', true);
     this.direction = utils.getRandomInt(2);
-    // super.stopClapping()
+    if(this.boardConfig.hasSpectators)
+      super.stopClapping()
     this.bull.reset(this.direction, (this.direction==utils.Direction.LEFT ? RIGHTEDGE : LEFTEDGE));
   }
 

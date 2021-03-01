@@ -15,6 +15,7 @@ export default class Player extends GameObject {
         this.yoffset = 5;
         this.xoffset = 3;
         this.opponentx = 0;
+        this.score = 0;
 
         this.direction = utils.Direction.RIGHT;
         this.startwalking = false;

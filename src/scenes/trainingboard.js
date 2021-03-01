@@ -49,7 +49,6 @@ export default class TrainingBoard extends SceneController {
     this.trainingCompleted = false;
     this.deliverBelt = false;
     this.gameState = -1;
-    this.teacher = null;
     this.numberSteps = 17;
     this.completed = [];
     super.isTrainingBoard = true;
@@ -108,7 +107,6 @@ export default class TrainingBoard extends SceneController {
 
   checkPracticeStep(){
     if(!this.completeStep){
-      
         switch(this.gameState){
             case -1:
               break;
@@ -203,36 +201,9 @@ checkMove(option, callback){
           this.completed[this.gameState] = true;
           console.log(this.completed);
           this.gameState = this.getNextMove();
-          this.time.delayedCall(1000, this.startGood, [], this);
+          this.time.delayedCall(1500, function(){this.completeStep=false;}, [], this);
           this.gameState++;
       }
-  }
-
-  startGood(){
-    // this.good = null;
-  //   if(utils.getRandomInt(3)==1)   // %33 chance of getting "Good"
-  //       this.good = this.add.image(center.width+50, center.height-200, 'good');
-    // this.time.delayedCall(2000, function(){
-  //     if(this.good)
-  //       this.good.visible = false;
-      this.completeStep = false;
-    // }, [], this);      
-  }
-
-  playerVeryGood(){
-    this.verygood = this.add.image(center.width+50, center.height-200, 'verygood');
-    this.time.delayedCall(2000, function(){
-        this.verygood.visible = false;
-        this.completeStep = false;
-    }, [], this);     
-  }
-
-  startBegin(){
-    this.player.active = true;
-    this.practiceStarted = true; 
-    this.gameState = 0;
-    this.completeStep = false;
-    this.teacher.playBegin();
   }
 
   addComponents(){
@@ -246,18 +217,10 @@ checkMove(option, callback){
     this.line = this.add.image(center.width, center.height+120, 'line').setScale(assetScale * .5);
     this.line.visible = false;
 
-    //add the player here so that he walks between the spectators
-
-        
-    
-        
-    this.teacher = super.getTeacher();
-
-
     this.addPracticeControllersComponent();
 
     this.practiceText = this.add
-    .text(center.width-305, center.height-235, 'PRACTICE', {
+    .text(center.width-225, center.height-235, 'PRACTICE', {
       fill: '#ffffff',
       font: `${22 * SCALE}pt Silom`
     });
@@ -352,6 +315,7 @@ checkMove(option, callback){
     this.yellowrightarrowleft.visible = false;
     this.yellowrightarrowright.visible = false;
   }
+
   addSpectators(){
     //add spectators
     this.whitespectator1 = this.add.image(center.width-250, center.height-30, 'spectatorwhite').setScale(assetScale);
@@ -365,7 +329,7 @@ checkMove(option, callback){
   }
 
   completeTraining(){
-    this.teacher.playerVeryGood();
+    super.getTeacher().playerVeryGood();
     this.hideControllers();
     super.startClapping(1);
     this.deliverBelt = true;
@@ -394,8 +358,6 @@ checkMove(option, callback){
 
     if(this.gameState==-1){
         this.gameState = 0;
-        // this.startBegin();
-        // this.completeTraining();
     }
     if(this.trainingCompleted){
       if(!this.startTrainingCompleted){
